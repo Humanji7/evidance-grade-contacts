@@ -1,0 +1,64 @@
+{
+  "description": "Mini Evidence Package - 7 required fields for each verified record.\n\nRecords missing any required field are marked UNVERIFIED and excluded \nfrom exports per PoC specification.",
+  "properties": {
+    "source_url": {
+      "description": "Source page URL where data was extracted",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "selector_or_xpath": {
+      "description": "CSS selector or XPath used for extraction",
+      "title": "Selector Or Xpath",
+      "type": "string"
+    },
+    "verbatim_quote": {
+      "description": "Verbatim innerText content from the DOM node",
+      "title": "Verbatim Quote",
+      "type": "string"
+    },
+    "dom_node_screenshot": {
+      "description": "Path/reference to DOM node screenshot",
+      "title": "Dom Node Screenshot",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "ISO 8601 extraction timestamp",
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "parser_version": {
+      "description": "Tool version for reproducibility (e.g., '0.1.0-poc')",
+      "title": "Parser Version",
+      "type": "string"
+    },
+    "content_hash": {
+      "description": "SHA-256 hash of normalized node text",
+      "title": "Content Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_url",
+    "selector_or_xpath",
+    "verbatim_quote",
+    "dom_node_screenshot",
+    "timestamp",
+    "parser_version",
+    "content_hash"
+  ],
+  "title": "Evidence",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "source_url": "https://example.com/company/leadership",
+      "selector_or_xpath": "div.card:has(h3:contains('Jane Doe'))",
+      "verbatim_quote": "Jane Doe — Head of Marketing",
+      "dom_node_screenshot": "evidence/example_jane_doe.png",
+      "timestamp": "2025-09-04T10:15:00Z",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a1b2c3d4e5f67890123456789012345678901234567890123456789012345678"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "company": "Jackson Lewis P.C.",
+  "domain": "jacksonlewis.com",
+  "source_url": "https://www.jacksonlewis.com/people/evan-d-beecher",
+  "person_name": "Evan D. Beecher",
+  "role_title": "Principal",
+  "location": "Sacramento, California office",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "Evan.Beecher@jacksonlewis.com",
+      "verification_status": "VERIFIED",
+      "evidence": {
+        "source_url": "https://www.jacksonlewis.com/people/evan-d-beecher",
+        "selector_or_xpath": "header contact section", 
+        "verbatim_quote": "Evan.Beecher@jacksonlewis.com",
+        "dom_node_screenshot": "evidence/jackson_lewis_beecher_email.png",
+        "timestamp": "2025-09-08T17:25:52Z",
+        "parser_version": "manual-gold-0.1.0",
+        "content_hash": "7fc7b308942ec6300319ff2fa3bd0d1f89f11550659e8dcb548cb50b1b3c8b2c"
+      }
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "916-288-3010",
+      "verification_status": "VERIFIED",
+      "evidence": {
+        "source_url": "https://www.jacksonlewis.com/people/evan-d-beecher",
+        "selector_or_xpath": "header contact section",
+        "verbatim_quote": "P 916-288-3010",
+        "dom_node_screenshot": "evidence/jackson_lewis_beecher_phone.png", 
+        "timestamp": "2025-09-08T17:25:52Z",
+        "parser_version": "manual-gold-0.1.0",
+        "content_hash": "7fc7b308942ec6300319ff2fa3bd0d1f89f11550659e8dcb548cb50b1b3c8b2c"
+      }
+    },
+    {
+      "contact_type": "fax",
+      "contact_value": "916-341-0141",
+      "verification_status": "VERIFIED", 
+      "evidence": {
+        "source_url": "https://www.jacksonlewis.com/people/evan-d-beecher",
+        "selector_or_xpath": "header contact section",
+        "verbatim_quote": "F 916-341-0141",
+        "dom_node_screenshot": "evidence/jackson_lewis_beecher_fax.png",
+        "timestamp": "2025-09-08T17:25:52Z", 
+        "parser_version": "manual-gold-0.1.0",
+        "content_hash": "7fc7b308942ec6300319ff2fa3bd0d1f89f11550659e8dcb548cb50b1b3c8b2c"
+      }
+    }
+  ],
+  "decision_maker_level": "Partner-level",
+  "notes": "Individual lawyer page with direct contact info. Clear structure with phone, fax, email prominently displayed.",
+  "manually_verified": true,
+  "extraction_difficulty": "easy",
+  "page_type": "individual_profile"
+}

@@ -1,0 +1,86 @@
+# Evidence-Grade Contacts PoC Configuration
+# Based on README.md and WARP.md specifications
+
+parser_version: "0.1.0-poc"
+
+# Input configuration
+inputs:
+  urls_file: "./input_urls.txt"
+
+# Processing scope - corporate website sections
+scope:
+  include_paths:
+    - "/about"
+    - "/team" 
+    - "/leadership"
+    - "/management"
+    - "/contacts"
+    - "/contact"
+    - "/imprint"
+    - "/impressum"
+    - "/news"      # Optional from README
+    - "/press"     # Optional from README
+
+# Compliance and legal framework
+compliance:
+  enforce_robots_and_tos: true
+  data_minimization: "business_contacts_only"
+  deletion_requests: "manual"
+  red_flag_domains:
+    - "linkedin.com"
+    - "x.com"
+    - "twitter.com"
+    - "facebook.com"
+    - "meta.com"
+    - "instagram.com"
+
+# Rendering strategy (static-first with targeted escalation)
+renderer:
+  mode: "static-first"
+  static:
+    burst_rps: 1.0
+  headless:
+    enabled: true
+    max_pct_per_domain: 0.2     # ≤ 20% per domain
+    burst_rps: 0.2
+
+# Timeouts and budgets
+timeouts:
+  budget_ms_per_url: 12000
+
+# Backoff and retry policy
+backoff:
+  cooldown_on_403:
+    - "5m"
+    - "15m" 
+    - "60m"
+
+# Mini Evidence Package configuration
+evidence_pack:
+  required_fields:
+    - "source_url"
+    - "selector_or_xpath"
+    - "verbatim_quote"
+    - "dom_node_screenshot"
+    - "timestamp"
+    - "parser_version"
+    - "content_hash"
+  storage_dir: "./out/evidence"
+  screenshot_format: "png"
+  content_hash_algorithm: "sha256"
+
+# SMTP probe configuration
+smtp_probe:
+  enabled: true
+  free_providers_blocklist: true
+  cache_ttl_days: 7
+
+# Output configuration
+exports:
+  out_dir: "./out"
+  formats: ["csv", "json"]
+  exclude_unverified: true
+
+# Logging
+logging:
+  level: "INFO"

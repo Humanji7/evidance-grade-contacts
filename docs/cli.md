@@ -1,0 +1,418 @@
+# CLI Contract - Evidence-Grade Contacts PoC
+
+Complete command-line interface specification for the EGC proof-of-concept system.
+
+## Overview
+
+EGC provides a suite of CLI tools for extracting, validating, and exporting business contact information from corporate websites with evidence-grade traceability.
+
+**Core principle**: Static-first approach with targeted Playwright escalation, Mini Evidence Package (7 fields) for each verified record.
+
+## Quick Start
+
+```bash
+# 1. Prepare input file
+echo "https://example.com" > input_urls.txt
+
+# 2. Run the pipeline
+python -m egc.run --input input_urls.txt --config config/example.yaml --out ./output
+
+# 3. Check results
+ls output/
+# contacts.csv  contacts.json  evidence/
+```
+
+## Commands
+
+### Main Pipeline: `egc.run`
+
+Extract contacts from corporate websites with evidence packages.
+
+**Syntax:**
+```bash
+python -m egc.run --input <urls_file> --config <config_file> --out <output_dir> [OPTIONS]
+```
+
+**Required Arguments:**
+- `--input` / `-i`: Path to file containing URLs (one per line)
+- `--config` / `-c`: Configuration file (YAML format)
+- `--out` / `-o`: Output directory for results
+
+**Optional Arguments:**
+- `--verbose` / `-v`: Enable verbose logging
+- `--dry-run`: Validate configuration without processing
+- `--max-workers`: Override worker count (default: from config)
+
+**Example:**
+```bash
+python -m egc.run \
+  --input input_urls.txt \
+  --config config/example.yaml \
+  --out ./output \
+  --verbose
+```
+
+**Output Structure:**
+```
+output/
+├── contacts.csv          # Flattened export with evidence fields
+├── contacts.json         # Full Contact records with nested evidence
+└── evidence/             # DOM node screenshots
+    ├── screenshot_001.png
+    └── screenshot_002.png
+```
+
+**Exit Codes:**
+- `0`: Success
+- `1`: Configuration error
+- `2`: Input validation error
+- `3`: Processing error (see logs)
+
+---
+
+### Debug Selectors: `egc.debug.selectors`
+
+Debug CSS/XPath selectors on specific pages.
+
+**Syntax:**
+```bash
+python scripts/debug_selectors.py --url <target_url> --selector <css_selector> [OPTIONS]
+```
+
+**Required Arguments:**
+- `--url`: Target webpage URL
+- `--selector`: CSS selector or XPath to test
+
+**Optional Arguments:**
+- `--headless`: Force Playwright mode (default: static first)
+- `--screenshot`: Save screenshot of matched elements
+
+**Example:**
+```bash
+python scripts/debug_selectors.py \
+  --url https://example.com/team \
+  --selector "div.person-card" \
+  --screenshot
+```
+
+**Exit Codes:**
+- `0`: Selector matched elements
+- `1`: No matches found
+- `2`: Page load error
+
+---
+
+### ECR Compliance Check: `egc.check.ecr`
+
+Validate Evidence Completeness Rate for processed records.
+
+**Syntax:**
+```bash
+python scripts/check_ecr.py --threshold <rate> [OPTIONS]
+```
+
+**Required Arguments:**
+- `--threshold`: Minimum ECR threshold (0.0-1.0, e.g., 0.95 for 95%)
+
+**Optional Arguments:**
+- `--input-dir`: Directory containing contacts.json (default: ./output)
+- `--report`: Generate detailed compliance report
+
+**Example:**
+```bash
+python scripts/check_ecr.py --threshold 0.95 --input-dir ./output --report
+```
+
+**Exit Codes:**
+- `0`: ECR meets threshold
+- `1`: ECR below threshold
+- `2`: Invalid input data
+
+---
+
+### SMTP Probe: `egc.smtp.probe`
+
+Validate email deliverability without sending messages.
+
+**Syntax:**
+```bash
+python scripts/smtp_probe.py --emails-file <csv_file> [OPTIONS]
+```
+
+**Required Arguments:**
+- `--emails-file`: CSV file with email addresses
+
+**Optional Arguments:**
+- `--cache-ttl`: MX record cache TTL in days (default: 7)
+- `--parallel`: Number of parallel probes (default: 5)
+- `--output`: Output file for results
+
+**Example:**
+```bash
+python scripts/smtp_probe.py \
+  --emails-file output/contacts.csv \
+  --output email_validation.json \
+  --parallel 3
+```
+
+**Exit Codes:**
+- `0`: Validation complete
+- `1`: SMTP connection errors
+- `2`: Invalid email format
+
+**Individual Email Debug:**
+```bash
+python scripts/debug_smtp.py --email test@example.com
+```
+
+---
+
+### Schema Export: `egc.schemas.export`
+
+Generate JSON Schema files from Pydantic models.
+
+**Syntax:**
+```bash
+python scripts/export_json_schema.py
+```
+
+**No arguments required** - reads from `src/schemas.py`, outputs to `schemas/`.
+
+**Output:**
+```
+schemas/
+├── contact.schema.json        # Contact model schema
+├── evidence.schema.json       # Evidence model schema
+├── contact_export.schema.json # Export model schema
+└── README.md                  # Usage documentation
+```
+
+**Exit Codes:**
+- `0`: Schema generation successful
+- `1`: Model import error
+
+---
+
+## Global Configuration
+
+### Config File Precedence
+
+1. Command-line `--config` argument
+2. Environment variable: `EGC_CONFIG_FILE`
+3. Default: `config/example.yaml`
+
+### Environment Variables
+
+**Required for secrets:**
+```bash
+export SMTP_PROBE_SENDER={{YOUR_EMAIL}}        # SMTP probe sender address
+export PROXY_URL={{PROXY_URL}}                 # Optional proxy (format: http://host:port)
+```
+
+**Optional overrides:**
+```bash
+export EGC_LOG_LEVEL=DEBUG                     # Override logging level
+export EGC_MAX_WORKERS=4                       # Override worker count
+export EGC_HEADLESS_BUDGET=10000              # Override headless timeout (ms)
+```
+
+### Security Rules
+
+- ✅ **All secrets via environment variables only**
+- ✅ **Never hardcode credentials in commands**
+- ✅ **Use non-paginated output**: `git --no-pager`, avoid interactive prompts
+- ❌ **Never commit data files** (covered by .gitignore)
+
+## Exit Codes Summary
+
+| Code | Meaning |
+|------|---------|
+| 0    | Success |
+| 1    | Configuration/validation error |
+| 2    | Input data error |
+| 3    | Processing/runtime error |
+| 4    | Network/connectivity error |
+
+## Examples
+
+### Complete Workflow
+
+```bash
+# Step 1: Prepare configuration
+cp config/example.yaml config/production.yaml
+# Edit config/production.yaml as needed
+
+# Step 2: Set environment variables
+export SMTP_PROBE_SENDER={{YOUR_EMAIL}}
+
+# Step 3: Prepare input
+cat > input_urls.txt << EOF
+https://atlassian.com
+https://stripe.com
+https://shopify.com
+EOF
+
+# Step 4: Run extraction
+python -m egc.run \
+  --input input_urls.txt \
+  --config config/production.yaml \
+  --out ./results \
+  --verbose
+
+# Step 5: Validate quality
+python scripts/check_ecr.py --threshold 0.95 --input-dir ./results
+
+# Step 6: SMTP validation
+python scripts/smtp_probe.py --emails-file results/contacts.csv
+
+# Step 7: Update schemas (if models changed)
+python scripts/export_json_schema.py
+```
+
+### Testing Individual Sites
+
+```bash
+# Test selector on specific page
+python scripts/debug_selectors.py \
+  --url https://example.com/about \
+  --selector "div.team-member" \
+  --screenshot
+
+# Check specific email
+python scripts/debug_smtp.py --email ceo@example.com
+```
+
+### CI/CD Integration
+
+```bash
+#!/bin/bash
+# ci-pipeline.sh
+
+set -e  # Exit on error
+
+# Validate configuration
+python -m egc.run --dry-run --config config/ci.yaml --input test_urls.txt --out /tmp/test
+
+# Run on test dataset
+python -m egc.run --input test_urls.txt --config config/ci.yaml --out ./test_output
+
+# Quality gates
+python scripts/check_ecr.py --threshold 0.95 --input-dir ./test_output
+if [ $? -ne 0 ]; then
+  echo "ECR below threshold - failing build"
+  exit 1
+fi
+
+echo "Pipeline passed"
+```
+
+## Configuration Reference
+
+Key sections from `config/example.yaml` that affect CLI behavior:
+
+```yaml
+# Static-first rendering
+renderer:
+  mode: "static-first"
+  static:
+    burst_rps: 1.0
+  headless:
+    enabled: true
+    max_pct_per_domain: 0.2
+    burst_rps: 0.2
+
+# Evidence requirements
+evidence_pack:
+  required_fields:
+    - "source_url"
+    - "selector_or_xpath"
+    - "verbatim_quote"
+    - "dom_node_screenshot"
+    - "timestamp"
+    - "parser_version" 
+    - "content_hash"
+
+# SMTP probe settings
+smtp_probe:
+  enabled: true
+  free_providers_blocklist: true
+  cache_ttl_days: 7
+
+# Output configuration
+exports:
+  formats: ["csv", "json"]
+  exclude_unverified: true
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**"No matches found" with selectors:**
+```bash
+# Debug the selector
+python scripts/debug_selectors.py --url <url> --selector <selector> --headless
+# Try escalation to headless mode
+```
+
+**ECR below threshold:**
+```bash
+# Generate detailed report
+python scripts/check_ecr.py --threshold 0.95 --report
+# Review failed records and update selectors
+```
+
+**SMTP probe failures:**
+```bash
+# Check individual email
+python scripts/debug_smtp.py --email problem@domain.com
+# Verify DNS resolution and MX records
+```
+
+**Configuration errors:**
+```bash
+# Validate config syntax
+python -c "import yaml; yaml.safe_load(open('config/example.yaml'))"
+# Run dry-run to catch config issues
+python -m egc.run --dry-run --config config/example.yaml --input test.txt --out /tmp
+```
+
+### Log Analysis
+
+Logs follow structured format with correlation IDs:
+
+```bash
+# Filter by component
+grep "component=crawler" egc.log
+
+# Filter by domain
+grep "domain=example.com" egc.log  
+
+# Find escalation events
+grep "escalation=true" egc.log
+```
+
+### Performance Optimization
+
+**High memory usage:**
+- Reduce `max_workers` in config
+- Lower `max_pct_per_domain` for headless
+
+**Slow processing:**
+- Increase `max_workers` if CPU available
+- Check `budget_ms_per_url` setting
+- Monitor escalation percentage per domain
+
+**Rate limiting:**
+- Adjust `burst_rps_static` and `burst_rps_headless`
+- Implement `cooldown_on_403` backoff
+
+---
+
+## Related Files
+
+- Configuration: `config/example.yaml`
+- Schemas: `schemas/*.schema.json`
+- Schema generator: `scripts/export_json_schema.py` 
+- Data models: `src/schemas.py`
+- Test data: `data/gold_datasets/`

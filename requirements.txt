@@ -1,0 +1,27 @@
+# Evidence-Grade Contacts PoC Requirements
+# Python 3.11+ required
+# Based on README.md and WARP.md specifications
+
+# Core dependencies
+pydantic>=2.5.0,<3.0      # v2 for modern validation
+httpx>=0.24.0
+trafilatura>=1.6.0
+selectolax>=0.3.0
+playwright>=1.30.0
+extruct>=0.13.0
+
+# Data validation and processing
+email-validator>=2.0.0
+
+# Optional dependencies for queue processing
+redis>=4.5.0
+rq>=1.15.0
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-playwright>=0.3.0   # For browser tests
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+pre-commit>=3.0.0

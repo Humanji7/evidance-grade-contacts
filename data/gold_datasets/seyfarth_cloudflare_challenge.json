@@ -1,0 +1,46 @@
+{
+  "company": "Seyfarth Shaw LLP",
+  "domain": "seyfarth.com",
+  "challenge_type": "cloudflare_javascript_challenge",
+  "extraction_difficulty": "hard",
+  "requires_headless": true,
+  "escalation_reason": "dynamic/anti-bot markers detected",
+  "urls_tested": [
+    {
+      "source_url": "https://www.seyfarth.com/people/lorie-almon.html",
+      "person_name_expected": "Lorie Almon",
+      "static_fetch_result": "FAILED - Cloudflare challenge",
+      "requires_playwright": true,
+      "challenge_evidence": {
+        "title": "Just a moment...",
+        "challenge_text": "Enable JavaScript and cookies to continue",
+        "cloudflare_ray": "97c03b206bbcdc99",
+        "challenge_type": "managed",
+        "timestamp": "2025-09-08T17:40:57Z"
+      }
+    },
+    {
+      "source_url": "https://www.seyfarth.com/people/laura-j-maechtlen.html", 
+      "person_name_expected": "Laura J. Maechtlen",
+      "static_fetch_result": "FAILED - Cloudflare challenge",
+      "requires_playwright": true
+    },
+    {
+      "source_url": "https://www.seyfarth.com/people/andrew-lucano.html",
+      "person_name_expected": "Andrew Lucano", 
+      "static_fetch_result": "FAILED - Cloudflare challenge",
+      "requires_playwright": true
+    }
+  ],
+  "robots_txt_compliance": "ALLOWED with crawl-delay: 10",
+  "escalation_metrics": {
+    "static_success_rate": 0.0,
+    "headless_required_pct": 1.0,
+    "domain_budget_impact": "HIGH - all URLs require Playwright"
+  },
+  "notes": "Perfect test case for escalation rules. Domain requires headless for all pages due to Cloudflare protection. Tests static-first → Playwright escalation workflow.",
+  "test_scenario": "escalation_required",
+  "manually_verified": false,
+  "verification_method": "requires_playwright_to_complete",
+  "expected_contacts": "TBD - need Playwright to extract actual contact data"
+}
