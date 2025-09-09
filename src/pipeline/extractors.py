@@ -93,7 +93,7 @@ class ContactExtractor:
         # Extract company name from page
         company_name = self._extract_company_name_static(parser, source_url)
         
-        # Find person containers
+        # Find person containers first
         for selector in self.person_selectors:
             person_nodes = parser.css(selector)
             
@@ -102,6 +102,13 @@ class ContactExtractor:
                     person_node, source_url, company_name, selector
                 )
                 contacts.extend(person_contacts)
+        
+        # If no structured person containers found, try fallback extraction
+        if not contacts:
+            fallback_contacts = self._extract_fallback_contacts_static(
+                parser, source_url, company_name
+            )
+            contacts.extend(fallback_contacts)
         
         return contacts
     
@@ -465,3 +472,153 @@ class ContactExtractor:
             pass
         
         return phones
+    
+    def _extract_fallback_contacts_static(
+        self, 
+        parser: HTMLParser, 
+        source_url: str, 
+        company_name: str
+    ) -> List[Contact]:
+        """
+        Fallback extraction for pages without clear person containers.
+        
+        Looks for emails and phones anywhere on the page and tries to associate
+        them with names found nearby.
+        """
+        contacts = []
+        
+        # Find all mailto links on the page
+        mailto_links = parser.css('a[href*="mailto:"]')
+        
+        for link in mailto_links:
+            href = link.attrs.get('href', '')
+            if not href.startswith('mailto:'):
+                continue
+                
+            email = href[7:]  # Remove 'mailto:'
+            if not self.email_pattern.match(email):
+                continue
+            
+            # Try to find associated name by looking at nearby text
+            person_name = self._find_associated_name_static(link, parser)
+            person_title = self._find_associated_title_static(link, parser)
+            
+            # Create evidence package
+            evidence = self.evidence_builder.create_evidence_static(
+                source_url=source_url,
+                selector='a[href*="mailto:"]',
+                node=link,
+                verbatim_text=link.text() or email
+            )
+            
+            contacts.append(Contact(
+                company=company_name,
+                person_name=person_name or "Contact Person",
+                role_title=person_title or "Not specified",
+                contact_type=ContactType.EMAIL,
+                contact_value=email,
+                evidence=evidence,
+                captured_at=evidence.timestamp
+            ))
+        
+        # Find phone numbers in tel links
+        tel_links = parser.css('a[href*="tel:"]')
+        
+        for link in tel_links:
+            href = link.attrs.get('href', '')
+            if not href.startswith('tel:'):
+                continue
+                
+            phone = href[4:]  # Remove 'tel:'
+            
+            # Try to find associated name
+            person_name = self._find_associated_name_static(link, parser)
+            person_title = self._find_associated_title_static(link, parser)
+            
+            # Create evidence package
+            evidence = self.evidence_builder.create_evidence_static(
+                source_url=source_url,
+                selector='a[href*="tel:"]',
+                node=link,
+                verbatim_text=link.text() or phone
+            )
+            
+            contacts.append(Contact(
+                company=company_name,
+                person_name=person_name or "Contact Person",
+                role_title=person_title or "Not specified",
+                contact_type=ContactType.PHONE,
+                contact_value=phone,
+                evidence=evidence,
+                captured_at=evidence.timestamp
+            ))
+        
+        return contacts
+    
+    def _find_associated_name_static(self, contact_node: Node, parser: HTMLParser) -> Optional[str]:
+        """
+        Try to find a person name associated with a contact link.
+        
+        Looks in parent elements and nearby text for name patterns.
+        """
+        # Check parent elements for names
+        parent = contact_node.parent
+        while parent and parent.tag != 'body':
+            # Look for name patterns in parent text
+            parent_text = parent.text() or ''
+            
+            # Look for patterns like "John Doe Email: john@example.com"
+            name_pattern = r'([A-Z][a-z]+ [A-Z][a-z]+(?:,? [A-Z]\.?[A-Z]\.?)?)'
+            names = re.findall(name_pattern, parent_text)
+            
+            for name in names:
+                if len(name) > 5 and not any(word in name.lower() for word in 
+                    ['email', 'phone', 'contact', 'mailto', 'tel']):
+                    return name.strip()
+            
+            # Look for headers (h1-h4) in the same parent
+            for level in range(1, 5):
+                header = parent.css_first(f'h{level}')
+                if header and header.text():
+                    header_text = header.text().strip()
+                    # Basic name validation
+                    if (len(header_text) > 5 and len(header_text) < 50 and 
+                        not any(word in header_text.lower() for word in 
+                        ['team', 'about', 'contact', 'email', 'phone'])):
+                        return header_text
+            
+            parent = parent.parent
+        
+        return None
+    
+    def _find_associated_title_static(self, contact_node: Node, parser: HTMLParser) -> Optional[str]:
+        """
+        Try to find a job title associated with a contact link.
+        
+        Looks for common title patterns near the contact information.
+        """
+        # Check parent elements for titles
+        parent = contact_node.parent
+        while parent and parent.tag != 'body':
+            parent_text = parent.text() or ''
+            
+            # Look for title patterns
+            title_keywords = [
+                'partner', 'associate', 'manager', 'director', 'president', 'ceo', 'cto',
+                'engineer', 'architect', 'consultant', 'specialist', 'analyst', 'coordinator'
+            ]
+            
+            for keyword in title_keywords:
+                if keyword.lower() in parent_text.lower():
+                    # Extract sentence containing the keyword
+                    sentences = parent_text.split('.')
+                    for sentence in sentences:
+                        if keyword.lower() in sentence.lower():
+                            # Clean and return the title part
+                            title = sentence.strip()
+                            if len(title) > 5 and len(title) < 100:
+                                return title
+            
+            parent = parent.parent
+        
+        return None
