@@ -1,0 +1,364 @@
+{
+  "source_url": "https://www.jacksonlewis.com/firm/firm-leadership",
+  "timestamp": "2025-09-08T19:12:46Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "Ana.Sh%69eld%73@jacksonlewis.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "Christo%70he%72.%56alen%74%69no@jacksonlewis.co",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4047",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-885-1360",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5124",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5139",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "617-367-0025",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "404-525-8200",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4071",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "402-827-4233",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "864-672-8048",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "631-247-4657",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "631-247-4653",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "312-803-2512",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5125",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4017",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "617-367-0025",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "916-341-0404",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213-630-8233",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5205",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-885-1369",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "303-225-2382",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "407-246-8440",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "267-319-7818",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "216-750-4338",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513-322-5035",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4000",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "404-586-1835",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "412-338-5142",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "860-331-1554",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-259-7897",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-872-6767",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "267-319-7803",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-872-3587",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4068",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-299-4140",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4047",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-885-1360",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5124",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5139",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "617-367-0025",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "404-525-8200",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4071",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "402-827-4233",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "864-672-8048",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "631-247-4657",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "631-247-4653",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "312-803-2512",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5125",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4017",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "617-367-0025",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "916-341-0404",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213-630-8233",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "908-795-5205",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-885-1369",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "303-225-2382",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "407-246-8440",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "267-319-7818",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "216-750-4338",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513-322-5035",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4000",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "404-586-1835",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "412-338-5142",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "860-331-1554",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-259-7897",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-872-6767",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "267-319-7803",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "914-872-3587",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "212-545-4068",
+      "extraction_method": "selector_.phone"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "949-299-4140",
+      "extraction_method": "selector_.phone"
+    }
+  ],
+  "errors": [],
+  "page_title": "Firm Leadership - Jackson Lewis",
+  "person_name": "Firm Leadership",
+  "role_title": "Secondary Menu",
+  "content_hash": "cbe481d5f8cf34ed",
+  "company": "Jacksonlewis"
+}

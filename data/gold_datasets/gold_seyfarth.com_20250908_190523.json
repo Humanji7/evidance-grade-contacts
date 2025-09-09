@@ -1,0 +1,24 @@
+{
+  "source_url": "https://www.seyfarth.com/people/andrew-lucano.html",
+  "timestamp": "2025-09-08T19:05:15Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "alucano@seyfarth.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "%2B1%20(212)%20218-6492",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Andrew Lucano | People | Seyfarth Shaw LLP",
+  "person_name": "Andrew\nLucano",
+  "role_title": "More About Andrew",
+  "content_hash": "7dcabb262ffb0034",
+  "company": "Seyfarth"
+}

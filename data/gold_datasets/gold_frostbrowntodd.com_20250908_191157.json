@@ -1,0 +1,24 @@
+{
+  "source_url": "https://frostbrowntodd.com/people/theresa-canaday/",
+  "timestamp": "2025-09-08T19:11:43Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "tcanaday@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0369",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Theresa A. Canaday | Frost Brown Todd",
+  "person_name": "Theresa A. Canaday",
+  "role_title": "Other Info About Theresa",
+  "content_hash": "0417e936207c3c98",
+  "company": "Frostbrowntodd"
+}

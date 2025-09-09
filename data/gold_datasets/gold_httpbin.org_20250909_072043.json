@@ -1,0 +1,11 @@
+{
+  "source_url": "https://httpbin.org/user-agent",
+  "timestamp": "2025-09-09T07:20:28Z",
+  "extraction_method": "playwright",
+  "status": "partial",
+  "contacts": [],
+  "errors": [
+    "No person name found"
+  ],
+  "page_title": ""
+}

@@ -1,0 +1,24 @@
+{
+  "source_url": "https://www.seyfarth.com/people/steven-r-meier.html",
+  "timestamp": "2025-09-08T19:10:55Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "smeier@seyfarth.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "%2B1%20(312)%20460-5548",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Steven R. Meier | People | Seyfarth Shaw LLP",
+  "person_name": "Steven R.\nMeier",
+  "role_title": "More About Steve",
+  "content_hash": "0cb3c62f56966d02",
+  "company": "Seyfarth"
+}

@@ -1,0 +1,24 @@
+{
+  "source_url": "https://frostbrowntodd.com/people/noel-shepard/",
+  "timestamp": "2025-09-08T19:12:16Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "nshepard@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "614.559.7223",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Noel C. Shepard | Frost Brown Todd",
+  "person_name": "Noel C. Shepard",
+  "role_title": "Other Info About Noel",
+  "content_hash": "41be28c67651c276",
+  "company": "Frostbrowntodd"
+}

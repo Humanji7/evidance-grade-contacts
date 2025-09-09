@@ -1,0 +1,24 @@
+{
+  "source_url": "https://frostbrowntodd.com/people/christopher-habel/",
+  "timestamp": "2025-09-08T19:12:06Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "chabel@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6993",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Christopher S. Habel | Frost Brown Todd",
+  "person_name": "Christopher S. Habel",
+  "role_title": "Chris's Relevant Experience",
+  "content_hash": "f4cfea607e037448",
+  "company": "Frostbrowntodd"
+}

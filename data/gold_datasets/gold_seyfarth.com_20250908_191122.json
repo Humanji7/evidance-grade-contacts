@@ -1,0 +1,24 @@
+{
+  "source_url": "https://www.seyfarth.com/people/laura-wilson-shelby.html",
+  "timestamp": "2025-09-08T19:11:14Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "lshelby@seyfarth.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "%2B1%20(310)%20201-5203",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Laura Wilson Shelby | People | Seyfarth Shaw LLP",
+  "person_name": "Laura Wilson\nShelby",
+  "role_title": "More About Laura",
+  "content_hash": "f41d51612ceee562",
+  "company": "Seyfarth"
+}

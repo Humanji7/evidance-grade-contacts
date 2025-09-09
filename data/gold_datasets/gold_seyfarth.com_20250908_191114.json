@@ -1,0 +1,24 @@
+{
+  "source_url": "https://www.seyfarth.com/people/brian-l-michaelis.html",
+  "timestamp": "2025-09-08T19:11:04Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "bmichaelis@seyfarth.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "%2B1%20(617)%20946-4830",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Brian L. Michaelis | People | Seyfarth Shaw LLP",
+  "person_name": "Brian L.\nMichaelis",
+  "role_title": "More About Brian",
+  "content_hash": "379c9c6ff505caf4",
+  "company": "Seyfarth"
+}

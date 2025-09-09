@@ -1,0 +1,24 @@
+{
+  "source_url": "https://www.seyfarth.com/people/lorie-almon.html",
+  "timestamp": "2025-09-08T19:04:58Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "lalmon@seyfarth.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "%2B1%20(212)%20218-5517",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Lorie Almon | People | Seyfarth Shaw LLP",
+  "person_name": "Lorie\nAlmon",
+  "role_title": "More About Lorie",
+  "content_hash": "612d305bd81a35db",
+  "company": "Seyfarth"
+}

@@ -1,0 +1,24 @@
+{
+  "source_url": "https://frostbrowntodd.com/people/jeffrey-hallos/",
+  "timestamp": "2025-09-08T19:11:57Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "jhallos@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.244.3256",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Jeffrey L. Hallos | Frost Brown Todd",
+  "person_name": "Jeffrey L. Hallos",
+  "role_title": "Jeff's Relevant Experience",
+  "content_hash": "05a935003a148736",
+  "company": "Frostbrowntodd"
+}

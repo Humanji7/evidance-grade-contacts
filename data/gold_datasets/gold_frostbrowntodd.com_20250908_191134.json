@@ -1,0 +1,989 @@
+{
+  "source_url": "https://frostbrowntodd.com/about/leadership/",
+  "timestamp": "2025-09-08T19:11:22Z",
+  "extraction_method": "playwright",
+  "status": "success",
+  "contacts": [
+    {
+      "contact_type": "email",
+      "contact_value": "msmith@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "cbare@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "ndove@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "aodubeko@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "khidde@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "wwilliams@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "yashrawi@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "nshepard@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "kbullock@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jhiggins@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "cgalvin@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "ahoffer@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jhallos@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "pnortham@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "npatel@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "sphillips@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "tbacon@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "mseverini@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "chaas@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "bhines@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "npappas@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jgiesel@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "scrawford@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "kmcmurray@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "bvisconte@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "rsmith@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "dlund@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "mharrison@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "gwhite@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "cgoodwin@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jblask@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "tcanaday@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jbyrne@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "rmoore@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "gshumate@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "rsalinas@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jmiller@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "khibbard@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "msommer@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "csprecher@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jwilliams@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jbarber@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jwagster@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "mblickensderfer@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "chodge@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "mmontgomery@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "rsartin@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jmartin@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "ahall@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "chabel@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jdebeer@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "pcummins@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "bmasterson@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "tchow@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "ceckhardt@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "jfrooman@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "email",
+      "contact_value": "ewmoore@fbtlaw.com",
+      "extraction_method": "regex_content"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5553",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6784",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6784",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5553",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8407",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3844",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6707",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6414",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8578",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "614.559.7223",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3888",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6784",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5553",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8407",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3844",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6707",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6414",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8578",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "614.559.7223",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3888",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6784",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5553",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8407",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8420",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "713.590.9318",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6806",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3896",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3844",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "202.292.4155",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8420",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "713.590.9318",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6806",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3896",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3844",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "202.292.4155",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8420",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "713.590.9318",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6806",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3896",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0369",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.244.3256",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "214.580.5842",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213.229.2404",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.817.5917",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "714.852.6812",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "614.559.7202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213.629.7076",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8154",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.244.3247",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "412.513.4268",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "713.590.9336",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.870.8242",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "304.348.2422",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6993",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3843",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5588",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "202.292.4147",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "214.580.5842",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213.229.2404",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.817.5917",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "714.852.6812",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "614.559.7202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213.629.7076",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8154",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.244.3247",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "412.513.4268",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "713.590.9336",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.870.8242",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "304.348.2422",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6993",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3843",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5588",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "202.292.4147",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "214.580.5842",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "213.229.2404",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "859.817.5917",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "714.852.6812",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6876",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8170",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5586",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0344",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6876",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8170",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5586",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0344",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6876",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8170",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5586",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0202",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8150",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6105",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6849",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3815",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6162",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8129",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8190",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0307",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6950",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8533",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3940",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6160",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5585",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "214.580.5842",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8147",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.369.4805",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.870.8206",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8150",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6105",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6849",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3815",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6162",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8129",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8190",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.568.0307",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6950",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8533",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3940",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6160",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5585",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "214.580.5842",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8147",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.369.4805",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.870.8206",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8150",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6105",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6849",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "317.237.3815",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "202.292.4155",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6706",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "502.779.8121",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "714.852.6812",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "513.651.6162",
+      "extraction_method": "selector_[href^='tel:']"
+    },
+    {
+      "contact_type": "phone",
+      "contact_value": "615.251.5587",
+      "extraction_method": "selector_[href^='tel:']"
+    }
+  ],
+  "errors": [],
+  "page_title": "Firm Leadership | Frost Brown Todd Attorneys",
+  "person_name": "Meet Our Leadership Team",
+  "role_title": "Meet Our Leadership Team",
+  "content_hash": "bce1de8c88d3bfae",
+  "company": "Frostbrowntodd"
+}
