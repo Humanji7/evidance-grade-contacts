@@ -132,37 +132,68 @@ python scripts/check_ecr.py --threshold 0.95 --input-dir ./output --report
 
 ### SMTP Probe: `egc.smtp.probe`
 
-Validate email deliverability without sending messages.
+Non-sending RCPT TO check with MX lookup, caching, and policy guardrails.
 
 **Syntax:**
 ```bash
-python scripts/smtp_probe.py --emails-file <csv_file> [OPTIONS]
+python scripts/smtp_probe.py [--email <addr> | --emails-file <path>] [OPTIONS]
 ```
 
-**Required Arguments:**
-- `--emails-file`: CSV file with email addresses
+**Inputs (one of):**
+- `--email` — одиночный адрес
+- `--emails-file` — путь к txt/csv (любой столбец с email попадёт в список)
 
-**Optional Arguments:**
-- `--cache-ttl`: MX record cache TTL in days (default: 7)
-- `--parallel`: Number of parallel probes (default: 5)
-- `--output`: Output file for results
+**Key Options:**
+- `--out` PATH — вывод в JSON (по умолчанию stdout) или CSV (если *.csv)
+- `--timeout` SEC — таймаут SMTP (по умолчанию из env SMTP_TIMEOUT или 10)
+- `--mx-ttl-days` N — TTL кэша MX и RCPT (по умолчанию из env SMTP_MX_TTL_DAYS или 7)
+- `--max-per-domain` N — лимит попыток RCPT на домен за запуск (по умолчанию 5)
+- `--skip-free` / `--no-skip-free` — пропускать бесплатные домены (дефолт: включено; можно отключить)
+- `--mx` HOST — явный MX для отладки (обычно не нужен; скрипт сам делает lookup)
+- `--verbose` — подробные сообщения в stderr
 
-**Example:**
-```bash
-python scripts/smtp_probe.py \
-  --emails-file output/contacts.csv \
-  --output email_validation.json \
-  --parallel 3
+**Environment overrides:**
+- `SMTP_TIMEOUT` — таймаут SMTP в секундах
+- `SMTP_MX_TTL_DAYS` — TTL кэша для MX и email результатов
+- `EGC_SKIP_FREE=1|0` — включить/отключить политику пропуска бесплатных доменов
+
+**Behavior:**
+- Кэш: .egc_cache.db (таблицы mx_cache, email_cache) в корне репозитория
+- MX lookup: сначала свежий кэш → иначе DNS → запись в кэш
+- RCPT probe: по порядку MX до первого успеха; 4xx → in-memory backoff в рамках запуска
+- Политики: пропуск бесплатных доменов (если включено), лимит попыток на домен
+
+**Output record (JSON/CSV):**
+```
+{
+  "email": "user@example.com",
+  "domain": "example.com",
+  "mx_found": true,
+  "mx_used": "mx.example.com",
+  "accepts_rcpt": false,
+  "smtp_code": 550,
+  "smtp_message": "No such user",
+  "error_category": "perm",
+  "rtt_ms": 42,
+  "checked_at": "<epoch or omitted>"
+}
 ```
 
 **Exit Codes:**
-- `0`: Validation complete
-- `1`: SMTP connection errors
-- `2`: Invalid email format
+- `0` — успех (скрипт отработал корректно, даже если есть недоставляемые адреса)
+- `2` — ошибка входных данных (нет валидных emails)
+- `3` — системная ошибка (DNS/сеть/SQLite недоступны)
 
-**Individual Email Debug:**
+**Examples:**
 ```bash
-python scripts/debug_smtp.py --email test@example.com
+# Оффлайн проверка (без сети): JSON в файл
+python scripts/smtp_probe.py --email user@example.com --out test_out/probe.json
+
+# Политика бесплатных доменов отключена
+EGC_SKIP_FREE=0 python scripts/smtp_probe.py --email user@gmail.com --out test_out/probe_gmail.json
+
+# Пакетная проверка и CSV-вывод
+python scripts/smtp_probe.py --emails-file output/contacts.csv --out test_out/probe.csv
 ```
 
 ---
