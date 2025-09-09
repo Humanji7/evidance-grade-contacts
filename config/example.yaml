@@ -10,14 +10,36 @@ inputs:
 # Processing scope - corporate website sections
 scope:
   include_paths:
+    # General company info
     - "/about"
-    - "/team" 
+    - "/who-we-are"
+    - "/overview"
+
+    # People/Team variants
+    - "/team"
+    - "/our-team"
+    - "/people"
+    - "/our-people"
+    - "/staff"
+    - "/professionals"
+    - "/attorneys"
+    - "/lawyers"
+
+    # Leadership/Management variants
     - "/leadership"
+    - "/leadership-team"
     - "/management"
+    - "/management-team"
+    - "/executives"
+    - "/board"
+
+    # Contact/Imprint
     - "/contacts"
     - "/contact"
     - "/imprint"
     - "/impressum"
+
+    # Optional news/press
     - "/news"      # Optional from README
     - "/press"     # Optional from README
 
