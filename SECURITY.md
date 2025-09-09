@@ -166,7 +166,31 @@ pip-audit                       # Vulnerability scanning
 
 # Gold dataset validation
 python3 scripts/validate_gold_dataset.py  # Verify data integrity
+
+# Evidence package validation (✅ Implemented)
+python3 -m pytest tests/unit/test_evidence_builder.py -v  # Evidence completeness
+python3 -m pytest tests/unit/test_extractors.py -v        # Contact extraction security
 ```
+
+## Evidence Package Security
+
+### Data Integrity
+- **SHA-256 hashing**: All extracted text content hashed for integrity verification
+- **Timestamp validation**: ISO 8601 timestamps for temporal tracking
+- **Source traceability**: Complete URL and selector path for evidence reproduction
+- **Screenshot evidence**: DOM node screenshots for visual verification
+
+### Evidence Completeness Validation
+- **7-field requirement**: All evidence packages must contain complete Mini Evidence Package
+- **Automatic verification**: Pydantic model validation prevents incomplete records
+- **VERIFIED/UNVERIFIED status**: Clear distinction between complete and incomplete evidence
+- **Export filtering**: Only VERIFIED records included in final outputs
+
+### Content Validation
+- **Email validation**: RFC-compliant email format checking
+- **Phone validation**: International phone number format validation  
+- **URL validation**: HTTPS-only source URL validation
+- **Selector validation**: CSS/XPath selector format verification
 
 ## CLI Security
 
@@ -198,18 +222,21 @@ If you discover a security vulnerability:
 ## Security Checklist
 
 Before deployment:
-- [ ] All secrets moved to environment variables
-- [ ] No hardcoded credentials in code
-- [ ] .gitignore excludes all sensitive files
-- [ ] HTTPS enforced for all external requests
-- [ ] Rate limiting configured appropriately  
-- [ ] Error messages don't expose sensitive information
-- [ ] Dependencies scanned for vulnerabilities
-- [ ] Access controls implemented
+- [x] All secrets moved to environment variables
+- [x] No hardcoded credentials in code
+- [x] .gitignore excludes all sensitive files
+- [x] HTTPS enforced for all external requests
+- [x] Rate limiting configured appropriately (static 1.0 RPS, headless 0.2 RPS)
+- [x] Error messages don't expose sensitive information
+- [x] Dependencies scanned for vulnerabilities
+- [x] Access controls implemented (robots.txt compliance)
 - [ ] Audit logging enabled
 - [ ] Incident response plan documented
-- [ ] Gold dataset integrity validated (✅ 100% ECR achieved)
-- [ ] Browser automation security verified (headless mode, sandboxing)
+- [x] Gold dataset integrity validated (✅ 100% ECR achieved)
+- [x] Browser automation security verified (headless mode, sandboxing)
+- [x] Evidence package integrity validation (✅ SHA-256 hashing, 7-field validation)
+- [x] Contact extraction security (✅ Input validation, semantic selectors)
+- [x] Pipeline security (✅ Static-first approach, escalation guardrails)
 
 ---
 

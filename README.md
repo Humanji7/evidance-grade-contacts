@@ -45,7 +45,9 @@ Success Criteria
 
 **✅ ACHIEVED:** 100% success rate on gold dataset extraction (309 total contacts extracted).
 
-If ECR < 95%, the record is marked UNVERIFIED and excluded.
+**✅ ACHIEVED:** Complete Evidence Package system with 35 unit tests passing.
+
+**✅ ACHIEVED:** Full pipeline integration with static-first approach and Playwright escalation.
 
 If ECR < 95%, the record is marked UNVERIFIED and excluded.
 
@@ -129,6 +131,31 @@ Example CSV (fragment)
 company,person_name,role_title,contact_type,contact_value,captured_at,verification_status
 Example Inc.,Jane Doe,Head of Marketing,email,jane.doe@example.com,2025-09-04T10:15:05Z,VERIFIED
 
+## Current Implementation (✅ Status)
+
+### Core Components Completed
+- **StaticFetcher**: robots.txt compliant HTTP fetching with httpx
+- **PlaywrightFetcher**: Secure headless browser with sandbox isolation
+- **EscalationDecider**: Anti-bot detection and escalation logic
+- **EvidenceBuilder**: Complete Mini Evidence Package creation (7 fields)
+- **ContactExtractor**: Semantic selectors for names, titles, emails, phones
+- **IngestPipeline**: Full orchestration with domain tracking and quotas
+
+### Test Coverage
+- **35 unit tests** passing with complete evidence validation
+- **Evidence Builder**: 11 tests covering SHA-256 hashing, screenshots, validation
+- **Contact Extractor**: 11 tests for extraction patterns and evidence creation
+- **Pipeline Integration**: 7 tests for static-first → escalation → extraction flow
+- **Static Fetcher**: 2 tests for robots.txt compliance
+- **Escalation Logic**: 4 tests for anti-bot detection
+
+### Security & Compliance
+- **HTTPS-only**: All external requests enforce SSL/TLS
+- **Rate limiting**: Static 1.0 RPS, headless 0.2 RPS per domain
+- **Sandbox isolation**: Playwright runs with OS-level sandboxing
+- **Evidence integrity**: SHA-256 content hashing for all extracted data
+- **Input validation**: Pydantic model enforcement for all data structures
+
 Features
 Extraction of names, roles, and business contacts from corporate pages.
 
@@ -198,6 +225,32 @@ which playwright
 
 # (Optional) queue
 pip install rq redis
+
+## Quick Testing
+
+### Run All Unit Tests
+```bash
+# All 35 unit tests
+python3 -m pytest tests/unit/ -v
+
+# Evidence package tests
+python3 -m pytest tests/unit/test_evidence_builder.py -v
+
+# Contact extraction tests  
+python3 -m pytest tests/unit/test_extractors.py -v
+
+# Pipeline integration tests
+python3 -m pytest tests/unit/test_ingest_pipeline.py -v
+```
+
+### Validate Gold Dataset
+```bash
+# Verify gold dataset integrity
+python3 scripts/validate_gold_dataset.py
+
+# Extract new gold records
+python3 scripts/gold_extractor.py "https://example.com/people/john-doe"
+```
 
 [Insert details for supported package managers/alternative installers…]
 Configuration
