@@ -184,7 +184,8 @@ def _parse_args(argv=None):
     ap.add_argument("--mx", help="explicit MX host (temporary until MX lookup block)")
     ap.add_argument("--out", help="output file (.json or .csv); default stdout JSON")
     ap.add_argument("--timeout", type=int, default=env_timeout, help=f"timeout seconds (env SMTP_TIMEOUT, default {env_timeout})")
-    ap.add_argument("--mx-ttl-days", type=int, default=env_ttl, help=f"MX cache TTL in days (env SMTP_MX_TTL_DAYS, default {env_ttl})")
+    ap.add_argument("--mx-ttl-days", type=int, default=env_ttl, help=f"Cache TTL in days for MX and email results (env SMTP_MX_TTL_DAYS, default {env_ttl})")
+    ap.add_argument("--max-per-domain", type=int, default=5, help="max RCPT probes per domain in a single run")
     ap.add_argument("--skip-free", dest="skip_free", action="store_true", default=env_skip_free, help="skip free email domains (env EGC_SKIP_FREE=1)")
     ap.add_argument("--no-skip-free", dest="skip_free", action="store_false", help="do not skip free domains")
     ap.add_argument("--verbose", action="store_true")
@@ -257,6 +258,7 @@ def _init_cache(db_path: str):
     try:
         cur = con.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS mx_cache (domain TEXT PRIMARY KEY, hosts_json TEXT NOT NULL, checked_at INTEGER NOT NULL)")
+        cur.execute("CREATE TABLE IF NOT EXISTS email_cache (email TEXT PRIMARY KEY, result_json TEXT NOT NULL, checked_at INTEGER NOT NULL)")
         con.commit()
     finally:
         con.close()
@@ -293,6 +295,32 @@ def _is_fresh(checked_at: int, ttl_days: int) -> bool:
     return (now - checked_at) < (ttl_days * 24 * 3600)
 
 
+def _load_email(db_path: str, email: str):
+    import sqlite3, json
+    con = sqlite3.connect(db_path)
+    try:
+        cur = con.cursor()
+        cur.execute("SELECT result_json, checked_at FROM email_cache WHERE email=?", (email,))
+        row = cur.fetchone()
+        if not row:
+            return None
+        result = json.loads(row[0])
+        return {"result": result, "checked_at": int(row[1])}
+    finally:
+        con.close()
+
+
+def _save_email(db_path: str, email: str, result: Dict[str, Any]):
+    import sqlite3, json, time
+    con = sqlite3.connect(db_path)
+    try:
+        cur = con.cursor()
+        cur.execute("REPLACE INTO email_cache(email, result_json, checked_at) VALUES(?,?,?)", (email, json.dumps(result), int(time.time())))
+        con.commit()
+    finally:
+        con.close()
+
+
 def main(argv=None) -> int:
     import sys
 
@@ -306,6 +334,9 @@ def main(argv=None) -> int:
 
     db_path = _cache_path()
     _init_cache(db_path)
+
+    domain_counts: Dict[str, int] = {}
+    domain_backoff_until: Dict[str, float] = {}
 
     for email in emails:
         try:
@@ -338,6 +369,47 @@ def main(argv=None) -> int:
             })
             continue
 
+        # Enforce per-domain quota
+        cnt = domain_counts.get(domain, 0)
+        if cnt >= int(args.max_per_domain):
+            results.append({
+                "email": email,
+                "domain": domain,
+                "mx_used": None,
+                "accepts_rcpt": False,
+                "smtp_code": None,
+                "smtp_message": "domain quota exceeded",
+                "error_category": "policy",
+                "rtt_ms": None,
+                "mx_found": False,
+            })
+            continue
+
+        # Check domain backoff
+        now = time.time()
+        until = domain_backoff_until.get(domain, 0)
+        if now < until:
+            results.append({
+                "email": email,
+                "domain": domain,
+                "mx_used": None,
+                "accepts_rcpt": False,
+                "smtp_code": None,
+                "smtp_message": "backoff active",
+                "error_category": "policy",
+                "rtt_ms": None,
+                "mx_found": False,
+            })
+            continue
+
+        # Email-level cache
+        e_entry = _load_email(db_path, email)
+        if e_entry and _is_fresh(int(e_entry["checked_at"]), int(args.mx_ttl_days)):
+            results.append(e_entry["result"])
+            continue
+
+        domain_counts[domain] = cnt + 1
+
         if not args.mx:
             # Try cache first
             mx_entry = _load_mx(db_path, domain)
@@ -369,9 +441,16 @@ def main(argv=None) -> int:
                 pr = probe_rcpt(host, email, timeout=args.timeout)
                 pr.setdefault("mx_found", True)
                 probe_result = pr
+                # Simple backoff handling on temp errors
+                if pr.get("error_category") == "temp":
+                    # backoff grows with attempts on this domain in this run
+                    backoff_seconds = min(60, 2 ** max(1, domain_counts.get(domain, 1)))
+                    domain_backoff_until[domain] = time.time() + backoff_seconds
                 # Stop at first 2xx accept
                 if pr.get("accepts_rcpt"):
                     break
+            if probe_result is not None:
+                _save_email(db_path, email, probe_result)
             results.append(probe_result)
             continue
 
@@ -379,6 +458,7 @@ def main(argv=None) -> int:
         res = probe_rcpt(args.mx, email, timeout=args.timeout)
         # Ensure mx_found flag present for output consistency
         res.setdefault("mx_found", True)
+        _save_email(db_path, email, res)
         results.append(res)
 
     _write_output(results, args.out)
