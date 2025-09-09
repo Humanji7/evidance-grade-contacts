@@ -381,6 +381,13 @@ python scripts/debug_smtp.py --email test@example.com
 - VERIFIED status requires complete Mini Evidence Package (all 7 fields)
 - Use ContactExport model for CSV/JSON exports
 
+**Verification Status Semantics (Authoritative):**
+- `verification_status` is computed from Evidence completeness during model initialization; it cannot be trusted from input.
+- Any attempt to set `verification_status` manually is ignored; status is derived strictly from the 7-field Mini Evidence Package.
+- Evidence completeness = all 7 fields present and non-empty (strings trimmed), with valid types (e.g., timestamp is a datetime).
+- Downstream code must not rely on manual overrides of `verification_status`.
+- All exports include VERIFIED only by default; UNVERIFIED are excluded per PoC policy.
+
 **Model principles:**
 - Evidence-first for contact data: extracted personal info requires complete proof package
 - Auto-validation: invalid contact data raises errors immediately  

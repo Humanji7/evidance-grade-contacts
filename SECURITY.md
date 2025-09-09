@@ -182,6 +182,7 @@ python3 -m pytest tests/unit/test_extractors.py -v        # Contact extraction s
 
 ### Evidence Completeness Validation
 - **7-field requirement**: All evidence packages must contain complete Mini Evidence Package
+- **Computed verification**: `verification_status` is model-enforced and computed from evidence completeness; manual overrides are ignored.
 - **Automatic verification**: Pydantic model validation prevents incomplete records
 - **VERIFIED/UNVERIFIED status**: Clear distinction between complete and incomplete evidence
 - **Export filtering**: Only VERIFIED records included in final outputs
