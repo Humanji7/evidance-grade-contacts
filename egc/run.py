@@ -151,12 +151,27 @@ def main(argv: list[str] | None = None) -> int:
     if args.db == "sqlite":
         db_path = args.db_path or str(out_dir / "egc.sqlite")
 
+    # Optional quick URL existence/MIME pre-check
+    def _quick_url_ok(u: str) -> bool:
+        try:
+            import httpx
+            with httpx.Client(timeout=5.0, follow_redirects=True, headers={"User-Agent": "EGC-CLI/0.1"}) as c:
+                r = c.get(u)
+                if r.status_code >= 400:
+                    return False
+                ct = r.headers.get('Content-Type', '').lower()
+                return ct.startswith('text/html')
+        except Exception:
+            return True  # Fail-open for PoC
+
     all_contacts = []
     total_pages = 0
     try:
         for base in urls:
             candidates = expand_candidate_urls(base, include_paths)
-            for url in candidates:
+            # Pre-filter candidates quickly
+            filtered = [u for u in candidates if _quick_url_ok(u)]
+            for url in filtered:
                 total_pages += 1
                 print(f"➡️  Processing: {url}")
                 result = pipeline.ingest(url)
