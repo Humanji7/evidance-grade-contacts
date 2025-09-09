@@ -266,6 +266,9 @@ mypy src/
 # Unit tests (fast feedback)
 python -m pytest tests/unit/ -v
 
+# Export pipeline tests
+python -m pytest tests/unit/test_export.py -v
+
 # Integration tests (with Playwright)
 python -m pytest tests/integration/ --browser chromium
 
@@ -285,12 +288,14 @@ python -m pytest tests/e2e/ --slow
 - ✅ **Evidence Package Builder**: Complete Mini Evidence Package system
 - ✅ **Contact Extractor**: Semantic selectors for names, titles, emails, phones
 - ✅ **Pipeline Orchestration**: IngestPipeline with domain tracking and quotas
-- ✅ **Unit Test Coverage**: 35 tests passing with evidence validation
+- ✅ **Export Pipeline**: ContactExporter with CSV/JSON output and VERIFIED filtering
+- ✅ **Unit Test Coverage**: 49 tests passing with complete evidence validation
 
 ### Testing Infrastructure
 - ✅ **Evidence Builder Tests**: 11 tests covering all 7 required fields
 - ✅ **Contact Extractor Tests**: 11 tests for extraction and validation
 - ✅ **Pipeline Integration Tests**: 7 tests for end-to-end orchestration
+- ✅ **Export Pipeline Tests**: 14 tests for CSV/JSON export with evidence
 - ✅ **Static Fetcher Tests**: 2 tests for robots.txt compliance
 - ✅ **Escalation Tests**: 4 tests for anti-bot detection logic
 

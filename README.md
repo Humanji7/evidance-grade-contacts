@@ -49,6 +49,8 @@ Success Criteria
 
 **✅ ACHIEVED:** Full pipeline integration with static-first approach and Playwright escalation.
 
+**✅ ACHIEVED:** Export Pipeline with CSV/JSON output and VERIFIED contacts filtering.
+
 If ECR < 95%, the record is marked UNVERIFIED and excluded.
 
 
@@ -140,12 +142,14 @@ Example Inc.,Jane Doe,Head of Marketing,email,jane.doe@example.com,2025-09-04T10
 - **EvidenceBuilder**: Complete Mini Evidence Package creation (7 fields)
 - **ContactExtractor**: Semantic selectors for names, titles, emails, phones
 - **IngestPipeline**: Full orchestration with domain tracking and quotas
+- **ContactExporter**: CSV/JSON export with VERIFIED filtering and evidence validation
 
 ### Test Coverage
-- **35 unit tests** passing with complete evidence validation
+- **49 unit tests** passing with complete evidence validation
 - **Evidence Builder**: 11 tests covering SHA-256 hashing, screenshots, validation
 - **Contact Extractor**: 11 tests for extraction patterns and evidence creation
 - **Pipeline Integration**: 7 tests for static-first → escalation → extraction flow
+- **Export Pipeline**: 14 tests for CSV/JSON export with VERIFIED filtering
 - **Static Fetcher**: 2 tests for robots.txt compliance
 - **Escalation Logic**: 4 tests for anti-bot detection
 
@@ -230,7 +234,7 @@ pip install rq redis
 
 ### Run All Unit Tests
 ```bash
-# All 35 unit tests
+# All 49 unit tests
 python3 -m pytest tests/unit/ -v
 
 # Evidence package tests
@@ -241,6 +245,9 @@ python3 -m pytest tests/unit/test_extractors.py -v
 
 # Pipeline integration tests
 python3 -m pytest tests/unit/test_ingest_pipeline.py -v
+
+# Export pipeline tests
+python3 -m pytest tests/unit/test_export.py -v
 ```
 
 ### Validate Gold Dataset

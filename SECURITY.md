@@ -192,6 +192,26 @@ python3 -m pytest tests/unit/test_extractors.py -v        # Contact extraction s
 - **URL validation**: HTTPS-only source URL validation
 - **Selector validation**: CSS/XPath selector format verification
 
+## Export Security
+
+### Data Export Controls
+- **VERIFIED-only exports**: Only contacts with complete evidence packages exported
+- **UNVERIFIED filtering**: Incomplete records automatically excluded from all exports
+- **UTF-8 encoding**: Proper character encoding for international contact data
+- **File permissions**: Output files created with restricted permissions
+
+### Export Validation
+- **Integrity checks**: Verify exported record count matches source data
+- **Format validation**: CSV/JSON structure validation before file creation
+- **Evidence completeness**: All 7 evidence fields validated in exports
+- **Data sanitization**: Proper escaping for CSV fields and JSON encoding
+
+### Output File Security
+- **Temporary directories**: Export files in restricted-access directories
+- **Auto-cleanup**: Configurable cleanup of temporary export files
+- **No sensitive data**: Business contacts only, no personal information
+- **Audit trails**: Export actions logged with timestamps and record counts
+
 ## CLI Security
 
 ### Input Validation
@@ -237,6 +257,8 @@ Before deployment:
 - [x] Evidence package integrity validation (✅ SHA-256 hashing, 7-field validation)
 - [x] Contact extraction security (✅ Input validation, semantic selectors)
 - [x] Pipeline security (✅ Static-first approach, escalation guardrails)
+- [x] Export pipeline security (✅ VERIFIED-only filtering, UTF-8 encoding, integrity checks)
+- [x] Output file security (✅ Restricted permissions, data sanitization, audit trails)
 
 ---
 
