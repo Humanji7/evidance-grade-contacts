@@ -158,6 +158,24 @@ python -m pytest tests/regression/ --gold-data=data/gold_datasets/
 python scripts/smtp_probe.py --emails-file output/contacts.csv
 ```
 
+### Mini-check: SMTP Probe (≤ 1 minute)
+Use when you need to verify the module quickly without thinking.
+
+```bash
+# 1) Run only smtp_probe unit tests (no network)
+python3 -m pytest -q tests/unit/test_smtp_probe*.py
+
+# 2) Offline CLI proof (no network): writes JSON
+python3 scripts/smtp_probe.py --email user@example.com --out test_out/probe.json
+
+# 3) Disable free-domain policy (env override) and probe a free domain
+EGC_SKIP_FREE=0 python3 scripts/smtp_probe.py --email user@gmail.com --out test_out/probe_gmail.json
+```
+Expected:
+- Tests: all passed
+- probe.json exists; JSON with fields email, domain, mx_found, error_category
+- probe_gmail.json exists; policy off → you get smtp_code/error_category from live RCPT attempt (depending on network)
+
 ## API Documentation
 
 For the PoC, API is optional. If implemented, basic endpoints would be:
