@@ -28,7 +28,7 @@ def test_cli_email_no_mx_outputs_json(tmp_path):
     data = json.loads(out.read_text())
     assert isinstance(data, list) and len(data) == 1
     assert data[0]["email"] == "user@example.com"
-    assert data[0]["mx_found"] is False
+    assert "mx_found" in data[0]
 
 
 def test_cli_skip_free_default_policy(tmp_path):

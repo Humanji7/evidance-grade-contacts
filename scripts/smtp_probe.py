@@ -15,7 +15,7 @@ import re
 import time
 import smtplib
 from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Tuple
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -75,6 +75,34 @@ def _classify(code: Optional[int], exc: Optional[BaseException] = None) -> str:
     if exc is not None:
         return "network"
     return "unknown"
+
+
+def resolve_mx(domain: str) -> List[str]:
+    """Resolve MX records for a domain and return a list of hosts ordered by preference.
+    Tries dnspython if available; otherwise returns an empty list (PoC fallback).
+    """
+    # Try dnspython if present
+    try:
+        import dns.resolver  # type: ignore
+    except Exception:
+        return []
+
+    try:
+        answers = dns.resolver.resolve(domain, 'MX')  # type: ignore[attr-defined]
+        pairs: List[Tuple[int, str]] = []
+        for rdata in answers:
+            # rdata.preference, rdata.exchange.to_text()
+            try:
+                pref = int(getattr(rdata, 'preference', 10))
+                exch = getattr(rdata, 'exchange')
+                host = exch.to_text(omit_final_dot=True) if hasattr(exch, 'to_text') else str(exch).rstrip('.')
+            except Exception:
+                continue
+            pairs.append((pref, host))
+        pairs.sort(key=lambda x: x[0])
+        return [h for _, h in pairs]
+    except Exception:
+        return []
 
 
 def probe_rcpt(mx_host: str, email: str, timeout: int = 10) -> Dict[str, Any]:
@@ -215,6 +243,56 @@ def _write_output(rows: list[dict], out_path: Optional[str]):
             json.dump(rows, f, ensure_ascii=False)
 
 
+# --- Simple SQLite cache for MX and (future) email results ---
+
+def _cache_path() -> str:
+    # Place cache at repo root next to scripts/.egc_cache.db
+    from pathlib import Path
+    return str((Path(__file__).resolve().parents[1] / ".egc_cache.db"))
+
+
+def _init_cache(db_path: str):
+    import sqlite3
+    con = sqlite3.connect(db_path)
+    try:
+        cur = con.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS mx_cache (domain TEXT PRIMARY KEY, hosts_json TEXT NOT NULL, checked_at INTEGER NOT NULL)")
+        con.commit()
+    finally:
+        con.close()
+
+
+def _load_mx(db_path: str, domain: str):
+    import sqlite3, json
+    con = sqlite3.connect(db_path)
+    try:
+        cur = con.cursor()
+        cur.execute("SELECT hosts_json, checked_at FROM mx_cache WHERE domain=?", (domain,))
+        row = cur.fetchone()
+        if not row:
+            return None
+        hosts = json.loads(row[0])
+        return {"hosts": hosts, "checked_at": int(row[1])}
+    finally:
+        con.close()
+
+
+def _save_mx(db_path: str, domain: str, hosts: List[str]):
+    import sqlite3, json, time
+    con = sqlite3.connect(db_path)
+    try:
+        cur = con.cursor()
+        cur.execute("REPLACE INTO mx_cache(domain, hosts_json, checked_at) VALUES(?,?,?)", (domain, json.dumps(hosts), int(time.time())))
+        con.commit()
+    finally:
+        con.close()
+
+
+def _is_fresh(checked_at: int, ttl_days: int) -> bool:
+    now = int(time.time())
+    return (now - checked_at) < (ttl_days * 24 * 3600)
+
+
 def main(argv=None) -> int:
     import sys
 
@@ -225,6 +303,10 @@ def main(argv=None) -> int:
         return 2
 
     results: list[dict] = []
+
+    db_path = _cache_path()
+    _init_cache(db_path)
+
     for email in emails:
         try:
             domain = parse_domain(email)
@@ -257,21 +339,43 @@ def main(argv=None) -> int:
             continue
 
         if not args.mx:
-            # Until MX lookup block, we emit placeholder without probing
-            results.append({
-                "email": email,
-                "domain": domain,
-                "mx_used": None,
-                "accepts_rcpt": False,
-                "smtp_code": None,
-                "smtp_message": "no MX provided (lookup not implemented)",
-                "error_category": "policy",
-                "rtt_ms": None,
-                "mx_found": False,
-            })
+            # Try cache first
+            mx_entry = _load_mx(db_path, domain)
+            hosts: List[str] = []
+            if mx_entry and _is_fresh(int(mx_entry["checked_at"]), int(args.mx_ttl_days)):
+                hosts = list(mx_entry["hosts"]) or []
+            else:
+                hosts = resolve_mx(domain)
+                if hosts:
+                    _save_mx(db_path, domain, hosts)
+
+            if not hosts:
+                results.append({
+                    "email": email,
+                    "domain": domain,
+                    "mx_used": None,
+                    "accepts_rcpt": False,
+                    "smtp_code": None,
+                    "smtp_message": "no MX records found",
+                    "error_category": "network",
+                    "rtt_ms": None,
+                    "mx_found": False,
+                })
+                continue
+
+            # Probe first available MX, simple PoC iteration until success/last
+            probe_result = None
+            for host in hosts:
+                pr = probe_rcpt(host, email, timeout=args.timeout)
+                pr.setdefault("mx_found", True)
+                probe_result = pr
+                # Stop at first 2xx accept
+                if pr.get("accepts_rcpt"):
+                    break
+            results.append(probe_result)
             continue
 
-        # Real probe path
+        # Real probe path using explicit MX
         res = probe_rcpt(args.mx, email, timeout=args.timeout)
         # Ensure mx_found flag present for output consistency
         res.setdefault("mx_found", True)
