@@ -1,23 +1,31 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from .fetchers.static import StaticFetcher, FetchResult  
 from .fetchers.playwright import PlaywrightFetcher, PlaywrightResult
 from .escalation import decide_escalation, EscalationDecision
+from .extractors import ContactExtractor
+from ..schemas import Contact
+from ..evidence import EvidenceBuilder
 
 
 @dataclass
 class IngestResult:
-    """Result of ingestion pipeline with method tracking."""
+    """Result of ingestion pipeline with method tracking and extracted contacts."""
     url: str
     method: str  # "static" or "playwright"
     success: bool
     html: str | None
     status_code: int
+    contacts: List[Contact] = None  # Extracted contacts with evidence packages
     escalation_decision: Optional[EscalationDecision] = None
     error: Optional[str] = None
+    
+    def __post_init__(self):
+        if self.contacts is None:
+            self.contacts = []
 
 
 class DomainTracker:
@@ -64,10 +72,16 @@ class IngestPipeline:
         static_fetcher: Optional[StaticFetcher] = None,
         playwright_fetcher: Optional[PlaywrightFetcher] = None,
         domain_tracker: Optional[DomainTracker] = None,
+        contact_extractor: Optional[ContactExtractor] = None,
+        evidence_builder: Optional[EvidenceBuilder] = None,
     ):
         self.static_fetcher = static_fetcher or StaticFetcher()
         self.playwright_fetcher = playwright_fetcher or PlaywrightFetcher()
         self.domain_tracker = domain_tracker or DomainTracker()
+        
+        # Initialize evidence and extraction components
+        self.evidence_builder = evidence_builder or EvidenceBuilder()
+        self.contact_extractor = contact_extractor or ContactExtractor(self.evidence_builder)
     
     def _extract_domain(self, url: str) -> str:
         """Extract domain from URL for tracking."""
@@ -106,6 +120,7 @@ class IngestPipeline:
                     success=False,
                     html=None,
                     status_code=0,
+                    contacts=[],
                     error="Blocked by robots.txt"
                 )
             
@@ -116,6 +131,7 @@ class IngestPipeline:
                     success=False,
                     html=static_result.html,
                     status_code=static_result.status_code,
+                    contacts=[],
                     error=f"HTTP {static_result.status_code}"
                 )
             
@@ -124,13 +140,18 @@ class IngestPipeline:
             escalation = decide_escalation(static_result, selector_hits)
             
             if not escalation.escalate:
-                # Static success - no escalation needed
+                # Static success - extract contacts from HTML
+                contacts = self.contact_extractor.extract_from_static_html(
+                    static_result.html, url
+                )
+                
                 return IngestResult(
                     url=url,
                     method="static",
                     success=True,
                     html=static_result.html,
                     status_code=static_result.status_code,
+                    contacts=contacts,
                     escalation_decision=escalation
                 )
             
@@ -142,6 +163,7 @@ class IngestPipeline:
                     success=False,
                     html=static_result.html,
                     status_code=static_result.status_code,
+                    contacts=[],
                     escalation_decision=escalation,
                     error=f"Headless quota exceeded for {domain}"
                 )
@@ -157,9 +179,16 @@ class IngestPipeline:
                     success=False,
                     html=playwright_result.html,
                     status_code=playwright_result.status_code,
+                    contacts=[],
                     escalation_decision=escalation,
                     error=playwright_result.error
                 )
+            
+            # Playwright success - extract contacts from HTML
+            # For PoC: use HTML extraction even for Playwright results
+            contacts = self.contact_extractor.extract_from_static_html(
+                playwright_result.html, url
+            )
             
             return IngestResult(
                 url=url,
@@ -167,6 +196,7 @@ class IngestPipeline:
                 success=True,
                 html=playwright_result.html,
                 status_code=playwright_result.status_code,
+                contacts=contacts,
                 escalation_decision=escalation
             )
         
@@ -177,6 +207,7 @@ class IngestPipeline:
                 success=False, 
                 html=None,
                 status_code=0,
+                contacts=[],
                 error=f"Pipeline error: {str(e)}"
             )
     

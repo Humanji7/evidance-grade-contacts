@@ -6,6 +6,7 @@ from src.pipeline.ingest import IngestPipeline, DomainTracker
 from src.pipeline.fetchers.static import FetchResult
 from src.pipeline.fetchers.playwright import PlaywrightResult
 from src.pipeline.escalation import EscalationDecision
+from src.schemas import Contact
 
 
 def test_domain_tracker_allows_first_headless():
@@ -40,14 +41,28 @@ def test_pipeline_static_success_no_escalation():
         blocked_by_robots=False
     )
     
-    pipeline = IngestPipeline(static_fetcher=static_fetcher)
+    # Mock contact extractor to return empty list (no contacts in simple HTML)
+    contact_extractor = Mock()
+    contact_extractor.extract_from_static_html.return_value = []
+    
+    pipeline = IngestPipeline(
+        static_fetcher=static_fetcher,
+        contact_extractor=contact_extractor
+    )
     result = pipeline.ingest("https://example.com/team")
     
     assert result.success is True
     assert result.method == "static"
     assert result.html is not None
+    assert result.contacts == []  # Check contacts list is present
     assert result.escalation_decision is not None
     assert result.escalation_decision.escalate is False  # Has team content, no escalation
+    
+    # Verify contact extractor was called
+    contact_extractor.extract_from_static_html.assert_called_once_with(
+        "<html><body><h1>Our Team</h1><div>Leadership team...</div></body></html>",
+        "https://example.com/team"
+    )
 
 
 def test_pipeline_escalates_on_anti_bot():
@@ -65,26 +80,39 @@ def test_pipeline_escalates_on_anti_bot():
     
     # Mock playwright fetcher success
     playwright_fetcher = Mock()
-    playwright_fetcher.fetch.return_value = PlaywrightResult(
+    playwright_result = PlaywrightResult(
         url="https://example.com/team",
         status_code=200,
         html="<html><body><h1>Our Team</h1><div class='team-members'>Real content</div></body></html>",
         page_title="Team - Example Corp",
         error=None
     )
+    playwright_fetcher.fetch.return_value = playwright_result
+    
+    # Mock contact extractor for HTML extraction (even from Playwright results)
+    contact_extractor = Mock()
+    contact_extractor.extract_from_static_html.return_value = []
     
     pipeline = IngestPipeline(
         static_fetcher=static_fetcher,
-        playwright_fetcher=playwright_fetcher
+        playwright_fetcher=playwright_fetcher,
+        contact_extractor=contact_extractor
     )
     
     result = pipeline.ingest("https://example.com/team")
     
     assert result.success is True
     assert result.method == "playwright"
+    assert result.contacts == []  # Check contacts list is present
     assert result.escalation_decision is not None
     assert result.escalation_decision.escalate is True
     assert "anti-bot" in " ".join(result.escalation_decision.reasons)
+    
+    # Verify contact extractor was called with HTML from Playwright
+    contact_extractor.extract_from_static_html.assert_called_once_with(
+        "<html><body><h1>Our Team</h1><div class='team-members'>Real content</div></body></html>",
+        "https://example.com/team"
+    )
 
 
 def test_pipeline_respects_headless_quota():
@@ -134,3 +162,70 @@ def test_pipeline_handles_robots_block():
     assert result.success is False
     assert result.method == "static" 
     assert "robots.txt" in result.error
+    assert result.contacts == []  # Should have empty contacts list
+
+
+def test_pipeline_extracts_contacts_from_static_html():
+    """Test that pipeline extracts contacts when using static HTML."""
+    # Mock static fetcher returning HTML with contact info
+    static_fetcher = Mock()
+    static_fetcher.fetch.return_value = FetchResult(
+        url="https://example.com/team",
+        status_code=200,
+        mime="text/html",
+        content_length=5000,
+        html="""<html><body>
+            <h1>Our Team</h1>
+            <div class="team-member">
+                <h3>John Doe</h3>
+                <p class="title">CEO</p>
+                <a href="mailto:john@example.com">Email</a>
+            </div>
+        </body></html>""",
+        headers={},
+        blocked_by_robots=False
+    )
+    
+    # Mock contact extractor to return sample contacts
+    from datetime import datetime, timezone
+    from src.schemas import Evidence, ContactType
+    
+    mock_evidence = Evidence(
+        source_url="https://example.com/team",
+        selector_or_xpath=".team-member a[href*='mailto:']",
+        verbatim_quote="john@example.com", 
+        dom_node_screenshot="evidence/test.png",
+        timestamp=datetime.now(timezone.utc),
+        parser_version="0.1.0-test",
+        content_hash="a" * 64
+    )
+    
+    mock_contact = Contact(
+        company="Example Inc.",
+        person_name="John Doe",
+        role_title="CEO",
+        contact_type=ContactType.EMAIL,
+        contact_value="john@example.com",
+        evidence=mock_evidence,
+        captured_at=datetime.now(timezone.utc)
+    )
+    
+    contact_extractor = Mock()
+    contact_extractor.extract_from_static_html.return_value = [mock_contact]
+    
+    pipeline = IngestPipeline(
+        static_fetcher=static_fetcher,
+        contact_extractor=contact_extractor
+    )
+    
+    result = pipeline.ingest("https://example.com/team")
+    
+    assert result.success is True
+    assert result.method == "static"
+    assert len(result.contacts) == 1
+    assert result.contacts[0].person_name == "John Doe"
+    assert result.contacts[0].contact_type == ContactType.EMAIL
+    assert result.contacts[0].contact_value == "john@example.com"
+    
+    # Verify contact extractor was called with correct HTML
+    contact_extractor.extract_from_static_html.assert_called_once()
