@@ -89,6 +89,51 @@ class TestContact:
         assert contact.contact_type == ContactType.EMAIL
         assert contact.verification_status == VerificationStatus.VERIFIED
     
+    def test_incomplete_evidence_marks_unverified(self):
+        """Evidence with empty selector_or_xpath should mark contact as UNVERIFIED."""
+        incomplete_evidence = Evidence(
+            source_url="https://example.com/team",
+            selector_or_xpath="",  # Empty -> incomplete evidence
+            verbatim_quote="Jane Smith - CTO",
+            dom_node_screenshot="evidence/jane_smith.png",
+            timestamp=datetime.now(),
+            parser_version="0.1.0-poc",
+            content_hash="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+        )
+        contact = Contact(
+            company="Tech Corp",
+            person_name="Jane Smith",
+            role_title="Chief Technology Officer",
+            contact_type=ContactType.EMAIL,
+            contact_value="jane.smith@techcorp.com",
+            evidence=incomplete_evidence,
+            captured_at=datetime.now(),
+        )
+        assert contact.verification_status == VerificationStatus.UNVERIFIED
+    
+    def test_manual_verification_status_ignored_when_evidence_incomplete(self):
+        """Even if user tries to set VERIFIED, incomplete evidence forces UNVERIFIED."""
+        incomplete_evidence = Evidence(
+            source_url="https://example.com/team",
+            selector_or_xpath="",  # Empty -> incomplete evidence
+            verbatim_quote="Jane Smith - CTO",
+            dom_node_screenshot="evidence/jane_smith.png",
+            timestamp=datetime.now(),
+            parser_version="0.1.0-poc",
+            content_hash="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+        )
+        contact = Contact(
+            company="Tech Corp",
+            person_name="Jane Smith",
+            role_title="Chief Technology Officer",
+            contact_type=ContactType.EMAIL,
+            contact_value="jane.smith@techcorp.com",
+            evidence=incomplete_evidence,
+            captured_at=datetime.now(),
+            verification_status=VerificationStatus.VERIFIED  # Should be ignored
+        )
+        assert contact.verification_status == VerificationStatus.UNVERIFIED
+    
     def test_email_validation(self, valid_evidence):
         """Test email validation for EMAIL contact type."""
         # Valid email should work

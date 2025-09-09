@@ -73,6 +73,19 @@ class Evidence(BaseModel):
         description="SHA-256 hash of normalized node text"
     )
 
+    def is_complete(self) -> bool:
+        """Return True if all 7 evidence fields are present and non-empty."""
+        str_fields = [
+            self.source_url,
+            self.selector_or_xpath,
+            self.verbatim_quote,
+            self.dom_node_screenshot,
+            self.parser_version,
+            self.content_hash,
+        ]
+        # All string fields must be non-empty after trimming; timestamp must be a datetime
+        return all(bool(str(v).strip()) for v in str_fields) and isinstance(self.timestamp, datetime)
+
     @field_validator('source_url')
     @classmethod
     def validate_source_url(cls, v):
@@ -166,10 +179,14 @@ class Contact(BaseModel):
             if not self.contact_value.startswith(('http://', 'https://')):
                 raise ValueError('Links must start with http:// or https://')
         
-        # Set verification status based on evidence completeness
-        if self.evidence:
-            self.verification_status = VerificationStatus.VERIFIED
-        else:
+        # Set verification status based on evidence completeness (7 required fields)
+        try:
+            if self.evidence and self.evidence.is_complete():
+                self.verification_status = VerificationStatus.VERIFIED
+            else:
+                self.verification_status = VerificationStatus.UNVERIFIED
+        except Exception:
+            # Any validation exception implies UNVERIFIED
             self.verification_status = VerificationStatus.UNVERIFIED
 
     class ConfigDict:

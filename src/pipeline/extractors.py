@@ -94,8 +94,11 @@ class ContactExtractor:
         company_name = self._extract_company_name_static(parser, source_url)
         
         # Find person containers first
+        found_person_containers = False
         for selector in self.person_selectors:
             person_nodes = parser.css(selector)
+            if person_nodes:
+                found_person_containers = True
             
             for person_node in person_nodes:
                 person_contacts = self._extract_person_contacts_static(
@@ -103,8 +106,8 @@ class ContactExtractor:
                 )
                 contacts.extend(person_contacts)
         
-        # If no structured person containers found, try fallback extraction
-        if not contacts:
+        # If no structured person containers were found at all, try fallback extraction
+        if not found_person_containers:
             fallback_contacts = self._extract_fallback_contacts_static(
                 parser, source_url, company_name
             )
