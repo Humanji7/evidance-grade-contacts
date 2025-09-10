@@ -58,6 +58,7 @@ class PlaywrightFetcher:
                 response = page.goto(url, wait_until="load", timeout=self.timeout_ms)
                 
                 if not response:
+                    browser.close()
                     return PlaywrightResult(url=url, status_code=0, html=None, page_title=None, error="No response received")
                 
                 status_code = response.status
