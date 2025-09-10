@@ -32,7 +32,7 @@ except Exception:  # pragma: no cover
 # Pipeline imports
 from src.pipeline.ingest import IngestPipeline
 from src.pipeline.discovery import discover_from_root, discover_links
-from src.pipeline.export import ContactExporter
+from src.pipeline.export import ContactExporter, dedupe_contacts_for_export, consolidate_per_person
 
 
 def validate_input(input_path: Path) -> None:
@@ -134,14 +134,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--include-all", action="store_true", help="Export UNVERIFIED contacts as well (default: VERIFIED only)")
     parser.add_argument("--db", choices=["sqlite", "none"], default="sqlite", help="DB integration: sqlite or none (default: sqlite)")
     parser.add_argument("--db-path", default=None, help="Path to SQLite DB file (default: <out>/egc.sqlite)")
-    # Performance/behavior knobs
+    # Performance/behavior knobs (service flags retained)
     parser.add_argument("--no-discovery", action="store_true", help="Disable adaptive link discovery; use only include_paths expansion")
     parser.add_argument("--no-prefilter", action="store_true", help="Disable pre-filter HTTP checks for candidate pages")
     parser.add_argument("--no-headless", action="store_true", help="Disable Playwright escalation (static-only)")
     parser.add_argument("--static-timeout", type=float, default=12.0, help="Static fetch timeout seconds (default 12.0)")
     parser.add_argument("--prefilter-timeout", type=float, default=5.0, help="Prefilter check timeout seconds (default 5.0)")
-    parser.add_argument("--aggressive-static", action="store_true", help="Enable static++ heuristics")
+    parser.add_argument("--aggressive-static", action="store_true", help="Enable static++ heuristics (Smart mode enables this by default)")
     parser.add_argument("--max-pages-per-domain", type=int, default=10, help="Limit number of candidate pages per domain (default 10)")
+    parser.add_argument("--consolidate-per-person", action="store_true", help="Produce consolidated per-person exports (1 row per person)")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -168,17 +169,48 @@ def main(argv: list[str] | None = None) -> int:
         "/about", "/team", "/leadership", "/management", "/contacts", "/contact", "/imprint", "/impressum"
     ])
 
-    # Initialize pipeline and exporter
-    pipeline = IngestPipeline(enable_headless=(not args.no_headless), static_timeout_s=float(args.static_timeout), aggressive_static=bool(args.aggressive_static))
+    # Initialize pipeline and exporter (Smart defaults)
+    smart_aggressive_static = True  # Static++ ON by default
+    headless_domain_cap = 2
+    headless_global_cap = 10
+    pipeline = IngestPipeline(
+        enable_headless=(not args.no_headless),
+        static_timeout_s=float(args.static_timeout),
+        aggressive_static=smart_aggressive_static,
+        headless_budget=IngestPipeline.HeadlessBudget(domain_cap=headless_domain_cap, global_cap=headless_global_cap),
+    )
     exporter = ContactExporter(output_dir=out_dir)
+
+    # Smart mode profile log
+    print("Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10")
 
     # Resolve DB path if enabled
     db_path = None
     if args.db == "sqlite":
         db_path = args.db_path or str(out_dir / "egc.sqlite")
 
+    # Helper: target URL check (path contains key people pages)
+    def _is_target_url(u: str) -> bool:
+        try:
+            p = urlparse(u)
+            path = (p.path or '').lower()
+            targets = ("team", "our-team", "people", "leadership", "management", "contacts", "imprint", "impressum")
+            return any(t in path for t in targets)
+        except Exception:
+            return False
+
     # Optional quick URL existence/MIME pre-check
-    def _quick_url_ok(u: str) -> bool:
+    def _quick_url_ok(u: str, timeout_s: float) -> bool:
+        try:
+            import httpx
+            with httpx.Client(timeout=float(timeout_s), follow_redirects=True, headers={"User-Agent": "EGC-CLI/0.1"}) as c:
+                r = c.head(u)
+                if r.status_code >= 400:
+                    return False
+                ct = r.headers.get('Content-Type', '').lower()
+                return ct.startswith('text/html')
+        except Exception:
+            return True  # Fail-open for PoC
         try:
             import httpx
             with httpx.Client(timeout=float(args.prefilter_timeout), follow_redirects=True, headers={"User-Agent": "EGC-CLI/0.1"}) as c:
@@ -194,14 +226,19 @@ def main(argv: list[str] | None = None) -> int:
     total_pages = 0
     try:
         for base in urls:
-            # If base is a domain root, try adaptive discovery first, then include_paths fallback
+            # Smart discovery:
+            # - If input URL already target → do not run discovery; process only this URL
+            # - Otherwise → discover links to target pages (limit 4) with fast HEAD prefilter (2s)
             discovered: list[str] = []
-            if (not args.no_discovery) and (base.startswith("http://") or base.startswith("https://")):
+            if (not args.no_discovery) and (base.startswith("http://") or base.startswith("https://")) and (not _is_target_url(base)):
                 try:
                     discovered = discover_from_root(base)
                 except Exception:
                     discovered = []
-            candidates = (discovered or []) + expand_candidate_urls(base, include_paths)
+                # Limit discovery to first 4 target-like pages
+                discovered = discovered[:4]
+            # Build candidates
+            candidates = ([] if _is_target_url(base) else (discovered or [])) + expand_candidate_urls(base, include_paths)
             # Normalize and dedupe candidates
             norm_seen = set()
             norm_candidates: list[str] = []
@@ -210,8 +247,11 @@ def main(argv: list[str] | None = None) -> int:
                 if nu and nu.startswith(('http://','https://')) and nu not in norm_seen:
                     norm_seen.add(nu)
                     norm_candidates.append(nu)
-            # Pre-filter candidates quickly
-            prefiltered = norm_candidates if args.no_prefilter else [u for u in norm_candidates if _quick_url_ok(u)]
+            # Pre-filter candidates quickly (2s for Smart mode)
+            if args.no_prefilter:
+                prefiltered = norm_candidates
+            else:
+                prefiltered = [u for u in norm_candidates if _quick_url_ok(u, timeout_s=2.0)]
             # Enforce per-domain limit
             max_per_domain = int(getattr(args, 'max_pages_per_domain', 10) or 10)
             limited = prefiltered[:max_per_domain]
@@ -219,6 +259,9 @@ def main(argv: list[str] | None = None) -> int:
                 total_pages += 1
                 print(f"➡️  Processing: {url}")
                 result = pipeline.ingest(url)
+                # Surface escalation reasons in logs
+                if result.escalation_decision and result.escalation_decision.escalate and result.method == 'playwright':
+                    print(f"  via playwright: reasons={result.escalation_decision.reasons}")
                 if not result.success:
                     reason = result.error or "unknown error"
                     print(f"  ⚠️  Skipped: {url} — {reason}")
@@ -255,6 +298,18 @@ def main(argv: list[str] | None = None) -> int:
         print(f"💾 JSON: {json_path}")
     except Exception as e:
         print(f"Export error: {e}", file=sys.stderr)
+        return 3
+
+    # Always produce per-person consolidation exports in Smart mode (in addition to base exports)
+    try:
+        deduped = dedupe_contacts_for_export(contacts_for_export)
+        consolidated = consolidate_per_person(deduped)
+        people_csv = exporter.to_people_csv(consolidated)
+        people_json = exporter.to_people_json(consolidated)
+        print(f"👤 People CSV: {people_csv}")
+        print(f"👤 People JSON: {people_json}")
+    except Exception as e:
+        print(f"Consolidation export error: {e}", file=sys.stderr)
         return 3
 
     # Export to SQLite if enabled (use the same filtered set)

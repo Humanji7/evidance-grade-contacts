@@ -298,12 +298,12 @@ input_urls.txt — one base company URL per line.
 
 2) Run the pipeline (CLI example)
 # Example: single process, local export to out/
-python -m egc.run --input input_urls.txt --config config.yaml --out ./out --dry-run
+python -m egc.run --input input_urls.txt --config config.yaml --out ./out
 
-Note: Currently implemented as stub (use --dry-run for validation).
 See docs/cli.md for complete command reference and examples.
 3) Results
-out/contacts.json and/or out/contacts.csv.
+out/contacts_*.json and out/contacts_*.csv
+and people consolidation files: out/contacts_people_*.json and out/contacts_people_*.csv.
 
 
 DOM node screenshots in out/evidence/.

@@ -29,7 +29,7 @@ class IngestResult:
 
 
 class DomainTracker:
-    """Tracks per-domain headless usage for guardrails."""
+    """Tracks per-domain headless usage for guardrails (percentage-based)."""
     
     def __init__(self, max_headless_pct: float = 0.2):
         self.max_headless_pct = max_headless_pct
@@ -46,7 +46,7 @@ class DomainTracker:
             self._domain_stats[domain]["static"] += 1
     
     def can_use_headless(self, domain: str) -> bool:
-        """Check if headless usage is within guardrails."""
+        """Check if headless usage is within guardrails (percentage)."""
         stats = self._domain_stats.get(domain, {"static": 0, "headless": 0})
         total = stats["static"] + stats["headless"]
         
@@ -66,6 +66,27 @@ class IngestPipeline:
     - Escalation only on specific conditions
     """
     
+    class HeadlessBudget:
+        """Global headless budget with per-domain and global caps."""
+        def __init__(self, domain_cap: int = 2, global_cap: int = 10):
+            self.domain_cap = int(domain_cap)
+            self.global_cap = int(global_cap)
+            self._per_domain: Dict[str, int] = {}
+            self._global_used = 0
+        
+        def can_spend(self, domain: str) -> bool:
+            if self._global_used >= self.global_cap:
+                return False
+            used = self._per_domain.get(domain, 0)
+            return used < self.domain_cap
+        
+        def spend(self, domain: str) -> None:
+            self._global_used += 1
+            self._per_domain[domain] = self._per_domain.get(domain, 0) + 1
+        
+        def remaining(self, domain: str) -> tuple[int, int]:
+            return (max(0, self.domain_cap - self._per_domain.get(domain, 0)), max(0, self.global_cap - self._global_used))
+
     def __init__(
         self,
         *,
@@ -77,6 +98,7 @@ class IngestPipeline:
         enable_headless: bool = True,
         static_timeout_s: float | None = None,
         aggressive_static: bool = False,
+        headless_budget: Optional[HeadlessBudget] = None,
     ):
         # Allow overriding static timeout for faster demos/runs
         if static_fetcher is None:
@@ -91,12 +113,21 @@ class IngestPipeline:
         self.aggressive_static = bool(aggressive_static)
         self.contact_extractor = contact_extractor or ContactExtractor(self.evidence_builder, aggressive_static=self.aggressive_static)
         self.enable_headless = bool(enable_headless)
+        # New guarded budgets
+        self.headless_budget = headless_budget or IngestPipeline.HeadlessBudget()
     
     def _extract_domain(self, url: str) -> str:
         """Extract domain from URL for tracking."""
         from urllib.parse import urlparse
         parsed = urlparse(url)
         return parsed.netloc.lower()
+    
+    def _is_target_url(self, url: str) -> bool:
+        from urllib.parse import urlparse
+        p = urlparse(url)
+        path = (p.path or '').lower()
+        targets = ("team", "our-team", "people", "leadership", "management", "contacts", "imprint", "impressum")
+        return any(t in path for t in targets)
     
     def _count_selector_hits(self, html: str | None) -> int:
         """Count hits for target selectors (people/team pages).
@@ -144,42 +175,67 @@ class IngestPipeline:
                     error=f"HTTP {static_result.status_code}"
                 )
             
-            # Step 2: Check escalation conditions
+            # Step 2: Check initial escalation conditions
             selector_hits = self._count_selector_hits(static_result.html)
             escalation = decide_escalation(static_result, selector_hits)
-            
-            if (not escalation.escalate) or (not self.enable_headless):
-                # Static success - extract contacts from HTML
-                contacts = self.contact_extractor.extract_from_static_html(
+
+            contacts_static: List[Contact] | None = None
+            # Only extract contacts from static HTML when we are not already escalating
+            if not escalation.escalate:
+                contacts_static = self.contact_extractor.extract_from_static_html(
                     static_result.html, url
                 )
-                
+                # Smart escalation rule — target URL with 0 contacts
+                if self.enable_headless and self._is_target_url(url) and len(contacts_static) == 0:
+                    escalation = EscalationDecision(escalate=True, reasons=(escalation.reasons + ["target_url_no_contacts"]))
+
+            # If still no escalation or headless disabled, finish with static
+            if (not escalation.escalate) or (not self.enable_headless):
+                # Ensure contacts list is not None
+                final_contacts = contacts_static if contacts_static is not None else []
                 return IngestResult(
                     url=url,
                     method="static",
                     success=True,
                     html=static_result.html,
                     status_code=static_result.status_code,
-                    contacts=contacts,
-                    escalation_decision=escalation
+                    contacts=final_contacts,
+                    escalation_decision=escalation,
                 )
             
-            # Step 3: Escalation needed - check guardrails
+            # Step 5: Escalation needed - check guardrails (percentage + hard budgets)
             if not self.domain_tracker.can_use_headless(domain):
+                print("headless budget exhausted")
+                final_contacts = contacts_static if contacts_static is not None else []
                 return IngestResult(
                     url=url,
                     method="static",
                     success=False,
                     html=static_result.html,
                     status_code=static_result.status_code,
-                    contacts=[],
+                    contacts=final_contacts,
                     escalation_decision=escalation,
                     error=f"Headless quota exceeded for {domain}"
                 )
+            if not self.headless_budget.can_spend(domain):
+                print("headless budget exhausted")
+                final_contacts = contacts_static if contacts_static is not None else []
+                return IngestResult(
+                    url=url,
+                    method="static",
+                    success=False,
+                    html=static_result.html,
+                    status_code=static_result.status_code,
+                    contacts=final_contacts,
+                    escalation_decision=escalation,
+                    error=f"Headless budget exhausted (domain={domain})"
+                )
             
-            # Step 4: Escalate to Playwright
+            # Step 6: Escalate to Playwright
+            print(f"via playwright: reasons={escalation.reasons}")
             playwright_result = self.playwright_fetcher.fetch(url)
             self.domain_tracker.record_fetch(domain, "playwright")
+            self.headless_budget.spend(domain)
             
             if playwright_result.error:
                 return IngestResult(
@@ -193,8 +249,7 @@ class IngestPipeline:
                     error=playwright_result.error
                 )
             
-            # Playwright success - extract contacts from HTML
-            # For PoC: use HTML extraction even for Playwright results
+            # Playwright success - extract contacts from HTML (reuse static parser)
             contacts = self.contact_extractor.extract_from_static_html(
                 playwright_result.html, url
             )

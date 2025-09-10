@@ -315,18 +315,19 @@ def consolidate_per_person(contacts: List[Contact]) -> List[dict]:
         # Output: one best email and one best phone (phone normalized to digits if present)
         out_phone = ''
         if phone_best is not None:
-            # Prefer digits from href/tel when anchor is present; fallback to contact_value
+            # Prefer digits from verbatim when anchor is present; fallback to contact_value
             sel_best = (phone_best.evidence.selector_or_xpath or '') if phone_best.evidence else ''
             if _is_anchor_selector(sel_best.lower(), "a[href*='tel:']"):
                 # Try to parse digits from verbatim (often mirrors the href or the displayed number)
                 verb = (phone_best.evidence.verbatim_quote or '') if phone_best.evidence else ''
                 digits_from_verb = _digits_only(verb)
-                if 10 <= len(digits_from_verb) <= 15 and not _looks_like_date_number(digits_from_verb):
-                    out_phone = digits_from_verb
-                else:
-                    out_phone = _digits_only(phone_best.contact_value)
+                candidate = digits_from_verb if (10 <= len(digits_from_verb) <= 15 and not _looks_like_date_number(digits_from_verb)) else _digits_only(phone_best.contact_value)
             else:
-                out_phone = _digits_only(phone_best.contact_value)
+                candidate = _digits_only(phone_best.contact_value)
+            # Normalize to strip leading US country code '1' if present (11-digit NANP)
+            if len(candidate) == 11 and candidate.startswith('1'):
+                candidate = candidate[1:]
+            out_phone = candidate
 
         row = {
             'company': company_disp,
