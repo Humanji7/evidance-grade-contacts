@@ -62,8 +62,12 @@ class PlaywrightFetcher:
                 
                 status_code = response.status
                 
-                # Wait for content to settle
-                page.wait_for_timeout(2000)
+                # Wait for likely team/member sections to render, then a micro pause for lazy content
+                try:
+                    page.wait_for_selector("section, .team, [class*=team], [class*=member], article", timeout=2000)
+                except Exception:
+                    pass
+                page.wait_for_timeout(200)
                 
                 # Extract content
                 html = page.content()

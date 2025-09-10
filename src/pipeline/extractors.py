@@ -16,6 +16,7 @@ import re
 import os
 import html
 import difflib
+import time
 from typing import List, Dict, Optional, Union, Tuple
 from urllib.parse import urljoin, urlparse
 
@@ -45,6 +46,9 @@ class ContactExtractor:
         self.evidence_builder = evidence_builder or EvidenceBuilder()
         self.aggressive_static = bool(aggressive_static)
         
+        # D=1 follow-up budget (reset per top-level extract call)
+        self._d1_budget: Optional[int] = None
+        
         # Common selectors for person information
         self.person_selectors = [
             # Prefer full entry cards first
@@ -57,6 +61,9 @@ class ContactExtractor:
             '.card .person-info, .member-card, .profile-card, .team-card',
             '[data-person], [data-team-member]',
             'article.person, section.team-member, article.profile',
+            # WordPress builders (Elementor/Avada/WPBakery)
+            '.elementor-team-member, .team-member__content, .elementor-widget-team-member, .our-team, .team-grid article',
+            "[class*='team-member']", "[class*='member-card']",
             # Heuristic by class name fragments
             "[class*='team-info']",
             "[class*='team']", "[class*='people']", "[class*='person']",
@@ -83,7 +90,7 @@ class ContactExtractor:
         
         # Email patterns
         self.email_pattern = re.compile(
-            r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            r'\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b', re.IGNORECASE
         )
         
         # Phone patterns (international formats)
@@ -134,6 +141,22 @@ class ContactExtractor:
                 m2 = self.email_pattern.search(cand)
                 if m2:
                     return m2.group(0)
+        return None
+
+    def _sanitize_mailto(self, href: str, fallback_text: Optional[str] = None) -> Optional[str]:
+        """Sanitize a mailto href and fallback to link text if needed."""
+        if not href:
+            return None
+        s = href.strip()
+        raw = s[7:] if s.lower().startswith('mailto:') else s
+        email = raw.split('?', 1)[0].split('#', 1)[0].strip().lower()
+        if self.email_pattern.match(email):
+            return email
+        if fallback_text:
+            ft = html.unescape(str(fallback_text)).strip()
+            m = self.email_pattern.search(ft.lower())
+            if m:
+                return m.group(0)
         return None
 
     def _emails_from_text(self, node: Node) -> List[str]:
@@ -191,6 +214,12 @@ class ContactExtractor:
         parser = HTMLParser(html)
         contacts: List[Contact] = []
         
+        # Top-level call budget reset for D=1 profile follow-ups
+        local_reset = False
+        if self._d1_budget is None:
+            self._d1_budget = 5
+            local_reset = True
+        
         # Extract company name from page
         company_name = self._extract_company_name_static(parser, source_url)
         
@@ -232,6 +261,10 @@ class ContactExtractor:
                 contacts.extend(fallback_contacts)
         # Post-filtering and deduplication
         contacts = self._postprocess_and_dedup(contacts)
+        
+        # Reset D=1 budget after top-level extraction completes
+        if local_reset:
+            self._d1_budget = None
         return contacts
     
     def extract_from_playwright(self, page: Page, source_url: str) -> List[Contact]:
@@ -338,52 +371,77 @@ class ContactExtractor:
         person_title = self._extract_role_near_name_static(person_node, name_node) or self._extract_person_title_static(person_node)
         person_title = self._normalize_role_title(person_title) if person_title else person_title
 
-        # Name is mandatory; role is mandatory unless aggressive_static with other evidence
+        # Name is mandatory
         if not person_name:
             return contacts
 
-        # In non-aggressive mode, title is also required.
-        if not self.aggressive_static and not person_title:
-            return contacts
+        # Listing URL detection (for role Unknown fallback)
+        try:
+            path_low = urlparse(source_url).path.lower()
+        except Exception:
+            path_low = ""
+        is_listing_url = any(x in path_low for x in ("/team", "/our-team", "/people", "/leadership", "/management"))
 
         # Email/Phone/VCF collection containers
         found_any_contact = False
+        found_email = False
+        found_phone = False
 
         # Email domain filter inputs
         site_domain = urlparse(source_url).netloc.lower().replace('www.', '')
         allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
 
-        # 1) Emails: nearest mailto, fall back to text scan when aggressive
-        email_link = self._nearest_link(person_node, name_node, "a[href*='mailto:']") if name_node else None
+        # 1) Emails: prefer mailto; if absent, use aria/title/icon or text-only within card root
         candidate_emails: List[tuple[str, Optional[Node], str]] = []  # (email, node, selector)
+        email_link = self._nearest_link(person_node, name_node, "a[href*='mailto:']") if name_node else None
         if email_link:
             href = (email_link.attrs.get('href','') or '').strip()
-            href_lower = href.lower()
-            email_val = None
-            if href_lower.startswith('mailto:'):
-                email_val = href[7:]
-            elif '@' in href:
-                email_val = href
-            else:
-                txt = (email_link.text() or '').strip()
-                if '@' in txt:
-                    email_val = txt
-            if not email_val and self.aggressive_static:
-                # try deobfuscation on href/text
-                email_val = self._deobfuscate_email(href) or self._deobfuscate_email(email_link.text() or '')
+            txt = (email_link.text() or '').strip()
+            email_val = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+            if email_val:
+                email_val = email_val.lower()
             if email_val and self.email_pattern.match(email_val):
                 candidate_emails.append((email_val, email_link, f"{base_selector} a[href*='mailto:']"))
-
-        if self.aggressive_static and not candidate_emails:
-            # Extract from text within the person card
-            for em in self._emails_from_text(person_node):
-                candidate_emails.append((em, person_node, f"{base_selector} :contains('@')"))
+        else:
+            # a[aria-label*='email' i], a[title*='email' i]
+            for a in person_node.css('a'):
+                if not a or not a.attrs:
+                    continue
+                lab = (a.attrs.get('aria-label') or a.attrs.get('title') or '').lower()
+                if 'email' in lab:
+                    # Try to extract email from card text
+                    for em in self._emails_from_text(person_node):
+                        candidate_emails.append((em.lower(), a, f"{base_selector} a[aria|title*=email]"))
+                        break
+            # i[class*='envelope'] → nearest parent-anchor
+            for i_node in person_node.css('i'):
+                cls = (i_node.attrs.get('class','') or '').lower()
+                if 'envelope' in cls:
+                    parent = i_node.parent
+                    anchor = None
+                    while parent is not None:
+                        if parent.tag == 'a':
+                            anchor = parent
+                            break
+                        parent = parent.parent
+                    if anchor is not None:
+                        for em in self._emails_from_text(person_node):
+                            candidate_emails.append((em, anchor, f"{base_selector} i[class*='envelope']~a"))
+                            break
+            # Pure text email within card
+            if not candidate_emails:
+                for em in self._emails_from_text(person_node):
+                    candidate_emails.append((em.lower(), person_node, f"{base_selector} :text-email"))
+                    break
 
         # Filter and add emails by domain policy
+        used_emails: set[str] = set()
         for email_val, node_for_ev, sel in candidate_emails:
+            if not email_val or email_val in used_emails:
+                continue
             email_domain = email_val.split('@')[-1].lower() if '@' in email_val else ''
             same_domain = email_domain.endswith(site_domain)
-            domain_ok = same_domain or (self.aggressive_static and self._email_domain_matches_site(email_domain, site_domain)) or (allow_free_env and (email_domain in self.free_email_domains))
+            domain_ok = same_domain or self._email_domain_matches_site(email_domain, site_domain) or (allow_free_env and (email_domain in self.free_email_domains))
             if domain_ok:
                 evidence = self.evidence_builder.create_evidence_static(
                     source_url=source_url,
@@ -394,114 +452,170 @@ class ContactExtractor:
                 contacts.append(Contact(
                     company=company_name,
                     person_name=person_name,
-                    role_title=person_title or ("Unknown" if self.aggressive_static else None),
+                    role_title=person_title or "Unknown",
                     contact_type=ContactType.EMAIL,
                     contact_value=email_val,
                     evidence=evidence,
                     captured_at=evidence.timestamp
                 ))
+                used_emails.add(email_val)
                 found_any_contact = True
+                found_email = True
 
-        # 2) Phones: tel links; if none and aggressive, scan text
-        phone_link = self._nearest_link(person_node, name_node, "a[href*='tel:']") if name_node else None
+        # 2) Phones: tel links; if none, aria/title/icon or text within card
         phones_added = False
+        phone_link = self._nearest_link(person_node, name_node, "a[href*='tel:']") if name_node else None
+        candidate_phones: List[tuple[str, Optional[Node], str, str]] = []  # (normalized_digits, node, selector, raw_display)
         if phone_link:
             href = phone_link.attrs.get('href','') or ''
             phone_raw = href[4:] if href.startswith('tel:') else href
             normalized_phone = re.sub(r"\D", "", phone_raw)
+            candidate_phones.append((normalized_phone, phone_link, f"{base_selector} a[href*='tel:']", phone_raw))
+        else:
+            # a[aria-label*='phone' i], a[title*='phone' i]
+            for a in person_node.css('a'):
+                if not a or not a.attrs:
+                    continue
+                lab = (a.attrs.get('aria-label') or a.attrs.get('title') or '').lower()
+                if 'phone' in lab or 'tel' in lab:
+                    # extract first phone from card text
+                    text_block = person_node.text() or ''
+                    for m in self.phone_pattern.findall(text_block):
+                        raw = m if isinstance(m, str) else ''.join(m)
+                        num = re.sub(r"\D", "", raw)
+                        if not num or len(num) < 10 or len(num) > 15:
+                            continue
+                        if re.match(r'^(19|20)\d{6,8}$', num):
+                            continue
+                        candidate_phones.append((num, a, f"{base_selector} a[aria|title*=phone]", raw))
+                        break
+            # icons i[class*='phone'|'tel'] → nearest anchor
+            for i_node in person_node.css('i'):
+                cls = (i_node.attrs.get('class','') or '').lower()
+                if ('phone' in cls) or (re.search(r'\btel\b', cls) is not None):
+                    parent = i_node.parent
+                    anchor = None
+                    while parent is not None:
+                        if parent.tag == 'a':
+                            anchor = parent
+                            break
+                        parent = parent.parent
+                    if anchor is not None:
+                        text_block = person_node.text() or ''
+                        for m in self.phone_pattern.findall(text_block):
+                            raw = m if isinstance(m, str) else ''.join(m)
+                            num = re.sub(r"\D", "", raw)
+                            if not num or len(num) < 10 or len(num) > 15:
+                                continue
+                            if re.match(r'^(19|20)\d{6,8}$', num):
+                                continue
+                            candidate_phones.append((num, anchor, f"{base_selector} i[class*='phone|tel']~a", raw))
+                            break
+            # Pure text phone within card
+            if not candidate_phones:
+                text_block = person_node.text() or ''
+                for m in self.phone_pattern.findall(text_block):
+                    raw = m if isinstance(m, str) else ''.join(m)
+                    num = re.sub(r"\D", "", raw)
+                    if not num or len(num) < 10 or len(num) > 15:
+                        continue
+                    if re.match(r'^(19|20)\d{6,8}$', num):
+                        continue
+                    candidate_phones.append((num, person_node, f"{base_selector} :text-phone", raw))
+                    break
+        
+        for num, node_for_ev, sel, raw_disp in candidate_phones:
             evidence = self.evidence_builder.create_evidence_static(
                 source_url=source_url,
-                selector=f"{base_selector} a[href*='tel:']",
-                node=phone_link,
-                verbatim_text=phone_link.text() or phone_raw
+                selector=sel,
+                node=node_for_ev or person_node,
+                verbatim_text=(node_for_ev.text() if (node_for_ev and hasattr(node_for_ev, 'text')) else None) or raw_disp
             )
             try:
                 contacts.append(Contact(
                     company=company_name,
                     person_name=person_name,
-                    role_title=person_title or ("Unknown" if self.aggressive_static else None),
+                    role_title=person_title or "Unknown",
                     contact_type=ContactType.PHONE,
-                    contact_value=normalized_phone,
+                    contact_value=num,
                     evidence=evidence,
                     captured_at=evidence.timestamp
                 ))
                 found_any_contact = True
+                found_phone = True
                 phones_added = True
             except Exception:
-                pass
-        if self.aggressive_static and not phones_added:
-            text_block = person_node.text() or ''
-            text_lower = text_block.lower()
-            markers = ('phone', 'tel', 'тел', 'telefon')
-            has_marker = any(k in text_lower for k in markers)
-            for m in self.phone_pattern.findall(text_block):
-                raw = m if isinstance(m, str) else ''.join(m)
-                num = re.sub(r"\D", "", raw)
-                # Strict validation for text-detected phones
-                if not num or len(num) < 10 or len(num) > 15:
-                    continue
-                # filter date-like patterns (YYYYMMDD or similar)
-                if re.match(r'^(19|20)\d{6,8}$', num):
-                    continue
-                if not has_marker:
-                    continue
-                evidence = self.evidence_builder.create_evidence_static(
-                    source_url=source_url,
-                    selector=f"{base_selector} :text-phone",
-                    node=person_node,
-                    verbatim_text=raw
-                )
-                try:
-                    contacts.append(Contact(
-                        company=company_name,
-                        person_name=person_name,
-                        role_title=person_title or ("Unknown" if self.aggressive_static else None),
-                        contact_type=ContactType.PHONE,
-                        contact_value=num,
-                        evidence=evidence,
-                        captured_at=evidence.timestamp
-                    ))
-                    found_any_contact = True
-                    break  # keep at most one phone per person
-                except Exception:
-                    continue
+                continue
 
-        # 3) vCard links (.vcf) if present in card
+        # 3) vCard links (.vcf) if present in card — strict attribution
         for a in person_node.css('a'):
             href = (a.attrs.get('href','') or '').strip()
-            text_lower = (a.text() or '').strip().lower()
-            if href.lower().endswith('.vcf') or 'vcard' in text_lower:
-                vcf_url = urljoin(source_url, href)
-                evidence = self.evidence_builder.create_evidence_static(
-                    source_url=source_url,
-                    selector=f"{base_selector} a[href$='.vcf']",
-                    node=a,
-                    verbatim_text=a.text() or href
-                )
-                try:
-                    contacts.append(Contact(
-                        company=company_name,
-                        person_name=person_name,
-                        role_title=person_title or ("Unknown" if self.aggressive_static else None),
-                        contact_type=ContactType.LINK,
-                        contact_value=vcf_url,
-                        evidence=evidence,
-                        captured_at=evidence.timestamp
-                    ))
-                    found_any_contact = True
-                except Exception:
-                    pass
+            if not href:
+                continue
+            href_low = href.lower()
+            if not href_low.endswith('.vcf'):
+                # Skip non-VCF; do not attribute by generic 'vcard' text
+                continue
+            # Require filename contains at least one token from the person's name
+            try:
+                from urllib.parse import urlsplit
+                joined = urljoin(source_url, href)
+                path = urlsplit(joined).path or ''
+            except Exception:
+                joined = urljoin(source_url, href)
+                path = href_low
+            # Normalize tokens from person name (ASCII letters best-effort)
+            name_tokens = [t for t in re.split(r"[^a-zA-Z]+", person_name.lower()) if t]
+            # Fallback: split on non-alphanumerics if above yields nothing
+            if not name_tokens:
+                name_tokens = [t for t in re.split(r"[^a-z0-9]+", person_name.lower()) if t]
+            path_low = path.lower()
+            if not any(tok and tok in path_low for tok in name_tokens):
+                # Do not attribute vCard to this person if filename doesn't include their name tokens
+                continue
+            vcf_url = urljoin(source_url, href)
+            evidence = self.evidence_builder.create_evidence_static(
+                source_url=source_url,
+                selector=f"{base_selector} a[href$='.vcf']",
+                node=a,
+                verbatim_text=a.text() or href
+            )
+            try:
+                contacts.append(Contact(
+                    company=company_name,
+                    person_name=person_name,
+                    role_title=person_title or "Unknown",
+                    contact_type=ContactType.LINK,
+                    contact_value=vcf_url,
+                    evidence=evidence,
+                    captured_at=evidence.timestamp
+                ))
+                found_any_contact = True
+            except Exception:
+                pass
 
-        # If still no contacts in card root, try bio page if there is a name link
-        if not found_any_contact and name_node is not None:
+        # D=1: If no email or phone in card, follow profile link (limit by budget)
+        if (not found_email and not found_phone) and name_node is not None and (self._d1_budget is not None and self._d1_budget > 0):
+            # Find profile link: anchor around name or any anchor within card that is not mailto/tel
             a = name_node.parent if name_node and name_node.parent and name_node.parent.tag == 'a' else name_node.css_first('a')
-            href = a.attrs.get('href') if a and a.attrs else None
-            if href and href.startswith('http'):
+            profile_href = a.attrs.get('href') if a and a.attrs else None
+            if not profile_href:
+                # fallback: first anchor in card not mailto/tel
+                for cand in person_node.css('a'):
+                    if not cand or not cand.attrs:
+                        continue
+                    href = cand.attrs.get('href') or ''
+                    if href and (not href.startswith('mailto:')) and (not href.startswith('tel:')):
+                        profile_href = href
+                        break
+            if profile_href:
                 try:
-                    with httpx.Client(timeout=10.0, follow_redirects=True) as c:
-                        r = c.get(href)
+                    abs_url = urljoin(source_url, profile_href)
+                    self._d1_budget -= 1
+                    with httpx.Client(timeout=8.0, follow_redirects=True) as c:
+                        r = c.get(abs_url)
                         if r.status_code < 400 and 'text/html' in (r.headers.get('Content-Type','').lower()):
-                            bio_contacts = self.extract_from_static_html(r.text, href)
+                            bio_contacts = self.extract_from_static_html(r.text, abs_url)
                             # choose the first matching by name
                             for bc in bio_contacts:
                                 if bc.person_name.lower() == person_name.lower():
@@ -511,7 +625,598 @@ class ContactExtractor:
                     pass
 
         return contacts
-    
+
+    def extract_with_playwright(self, url: str, timeout_ms: int = 15000) -> List[Contact]:
+        """Extract contacts directly from a headless DOM session.
+        - Uses the same selectors as static, scoped within card roots
+        - Sanitizes mailto parameters and falls back to text
+        - Limited D=1 follow-ups to profiles (≤5 per listing)
+        """
+        out: List[Contact] = []
+        try:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as p:
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=[
+                        '--disable-dev-shm-usage',
+                        '--disable-gpu',
+                        '--disable-extensions',
+                        '--disable-plugins',
+                        '--no-first-run',
+                        '--disable-default-apps',
+                        '--disable-background-timer-throttling',
+                    ],
+                )
+                context = browser.new_context(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")
+                page = context.new_page()
+
+                # Time budget for fast DOM sweep (includes goto/wait)
+                start_t = time.monotonic()
+                budget_s = 8.0
+
+                page.goto(url, wait_until='load', timeout=timeout_ms)
+                try:
+                    page.wait_for_selector("a[href^='mailto'], a[href^='tel']", timeout=2000)
+                except Exception:
+                    try:
+                        page.wait_for_selector("section, .team, [class*=team], [class*=member], article", timeout=2000)
+                    except Exception:
+                        pass
+                page.wait_for_timeout(200)
+
+                company_name = self._extract_company_name_playwright(page, url)
+                try:
+                    path_low = urlparse(url).path.lower()
+                except Exception:
+                    path_low = ''
+                is_listing_url = any(x in path_low for x in ("/team", "/our-team", "/people", "/leadership", "/management"))
+                site_domain = urlparse(url).netloc.lower().replace('www.', '')
+                allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
+                d1_budget = 5
+
+                # -------------------------------
+                # Fast sweep: global mailto/tel first
+                # -------------------------------
+                try:
+                    email_anchors = page.query_selector_all("a[href^='mailto']")
+                except Exception:
+                    email_anchors = []
+                try:
+                    phone_anchors = page.query_selector_all("a[href^='tel']")
+                except Exception:
+                    phone_anchors = []
+
+                def _clean_name(txt: Optional[str]) -> Optional[str]:
+                    if not txt:
+                        return None
+                    name = re.sub(r'^(Dr\.|Mr\.|Ms\.|Mrs\.)\s+', '', txt.strip())
+                    return name if self._is_valid_person_name(name) else None
+
+                # Emails
+                for a in email_anchors:
+                    # Budget guard
+                    if (time.monotonic() - start_t) > budget_s:
+                        break
+                    try:
+                        href = (a.get_attribute('href') or '').strip()
+                        txt = (a.text_content() or '').strip()
+                        email = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+                        if not email:
+                            continue
+                        email = email.lower()
+
+                        # Find name near anchor first (to allow cross-domain emails when confidently attributed)
+                        name = None
+                        role = None
+                        container = None
+                        try:
+                            container = a.query_selector("xpath=ancestor::li[contains(@class, 'list-item')][1]")
+                        except Exception:
+                            container = None
+                        if container:
+                            try:
+                                name_el = container.query_selector("h2, h3, h4, .list-item-content__title")
+                                name = _clean_name(name_el.text_content() if name_el else None)
+                            except Exception:
+                                name = None
+                            # title within container
+                            if name:
+                                for sel in self.title_selectors:
+                                    try:
+                                        t_el = container.query_selector(sel)
+                                        t_val = (t_el.text_content() or '').strip() if t_el else ''
+                                        if t_val:
+                                            cand_role = self._normalize_role_title(t_val)
+                                            # Guard: ignore role if it duplicates the name (stubbed containers may return heading text)
+                                            if cand_role and cand_role.strip().lower() != (name or '').strip().lower():
+                                                role = cand_role
+                                                break
+                                    except Exception:
+                                        continue
+                        if not name:
+                            # Try nearest previous heading
+                            prev = None
+                            for xp in ("xpath=preceding::h2[1]", "xpath=preceding::h3[1]", "xpath=preceding::h4[1]"):
+                                try:
+                                    prev = a.query_selector(xp)
+                                    if prev:
+                                        nm = _clean_name(prev.text_content())
+                                        if nm:
+                                            name = nm
+                                            break
+                                except Exception:
+                                    continue
+
+                        # Domain policy: accept if domain matches OR we have a valid person name nearby
+                        edom = email.split('@')[-1]
+                        domain_ok = (
+                            edom.endswith(site_domain)
+                            or self._email_domain_matches_site(edom, site_domain)
+                            or (allow_free_env and (edom in self.free_email_domains))
+                            or bool(name)
+                        )
+                        if not domain_ok:
+                            continue
+
+                        if not name:
+                            continue
+                        if not role and is_listing_url:
+                            role = "Unknown"
+
+                        ev = self.evidence_builder.create_evidence_playwright(
+                            source_url=url,
+                            selector="a[href*='mailto:']",
+                            page=page,
+                            element=a,
+                            verbatim_text=txt or email,
+                        )
+                        out.append(Contact(company=company_name, person_name=name, role_title=role or 'Unknown', contact_type=ContactType.EMAIL, contact_value=email, evidence=ev, captured_at=ev.timestamp))
+                    except Exception:
+                        continue
+
+                # Phones
+                for a in phone_anchors:
+                    if (time.monotonic() - start_t) > budget_s:
+                        break
+                    try:
+                        href = (a.get_attribute('href') or '').strip()
+                        raw = href[4:] if href.lower().startswith('tel:') else href
+                        digits = re.sub(r"\D", "", raw)
+                        if len(digits) == 11 and digits.startswith('1'):
+                            digits = digits[1:]
+                        if not (10 <= len(digits) <= 15):
+                            continue
+                        # Find name near anchor
+                        name = None
+                        role = None
+                        container = None
+                        try:
+                            container = a.query_selector("xpath=ancestor::li[contains(@class, 'list-item')][1]")
+                        except Exception:
+                            container = None
+                        if container:
+                            try:
+                                name_el = container.query_selector("h2, h3, h4, .list-item-content__title")
+                                name = _clean_name(name_el.text_content() if name_el else None)
+                            except Exception:
+                                name = None
+                            if name:
+                                for sel in self.title_selectors:
+                                    try:
+                                        t_el = container.query_selector(sel)
+                                        t_val = (t_el.text_content() or '').strip() if t_el else ''
+                                        if t_val:
+                                            cand_role = self._normalize_role_title(t_val)
+                                            if cand_role and cand_role.strip().lower() != (name or '').strip().lower():
+                                                role = cand_role
+                                                break
+                                    except Exception:
+                                        continue
+                        if not name:
+                            prev = None
+                            for xp in ("xpath=preceding::h2[1]", "xpath=preceding::h3[1]", "xpath=preceding::h4[1]"):
+                                try:
+                                    prev = a.query_selector(xp)
+                                    if prev:
+                                        nm = _clean_name(prev.text_content())
+                                        if nm:
+                                            name = nm
+                                            break
+                                except Exception:
+                                    continue
+                        if not name:
+                            continue
+                        if not role and is_listing_url:
+                            role = "Unknown"
+
+                        ev = self.evidence_builder.create_evidence_playwright(
+                            source_url=url,
+                            selector="a[href*='tel:']",
+                            page=page,
+                            element=a,
+                            verbatim_text=(a.text_content() or raw),
+                        )
+                        out.append(Contact(company=company_name, person_name=name, role_title=role or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                    except Exception:
+                        continue
+
+                # If fast sweep produced results or budget exceeded, finish early
+                if out or (time.monotonic() - start_t) > budget_s:
+                    browser.close()
+                    return self._postprocess_and_dedup(out)
+
+                card_selectors = [
+                    '.entry-team-info',
+                    '.elementor-team-member', '.team-member', '.team-member__content', '.elementor-widget-team-member',
+                    '.our-team', '.team-grid article', "[class*='team-member']", "[class*='member-card']",
+                    '.person', '.profile', 'article.profile', 'section.team-member',
+                    '.sqs-block-content'
+                ]
+                for sel in card_selectors:
+                    for el in page.locator(sel).all():
+                        name = self._extract_person_name_playwright(el)
+                        if not name or not self._is_valid_person_name(name):
+                            continue
+                        title = self._extract_person_title_playwright(el) or ('Unknown' if is_listing_url else None)
+                        found_email = False
+                        found_phone = False
+
+                        # EMAIL via anchors
+                        for a in el.locator("a[href*='mailto:']").all():
+                            href = (a.get_attribute('href') or '').strip()
+                            txt = (a.text_content() or '').strip()
+                            email = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+                            if not email:
+                                continue
+                            email = email.lower()
+                            edom = email.split('@')[-1]
+                            if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
+                                ev = self.evidence_builder.create_evidence_playwright(
+                                    source_url=url,
+                                    selector="a[href*='mailto:']",
+                                    page=page,
+                                    element=a,
+                                    verbatim_text=txt or email,
+                                )
+                                out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=email, evidence=ev, captured_at=ev.timestamp))
+                                found_email = True
+                                break
+
+                        # EMAIL via aria/title
+                        if not found_email:
+                            for a in el.locator('a').all():
+                                lab = ((a.get_attribute('aria-label') or a.get_attribute('title') or '') or '').lower()
+                                if 'email' not in lab:
+                                    continue
+                                txt = (a.text_content() or '').strip()
+                                cand = None
+                                if '@' in txt:
+                                    m = self.email_pattern.search(txt.lower())
+                                    cand = m.group(0) if m else None
+                                if not cand:
+                                    m2 = self.email_pattern.search((el.text_content() or '').lower())
+                                    cand = m2.group(0) if m2 else None
+                                if cand:
+                                    edom = cand.split('@')[-1]
+                                    if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
+                                        ev = self.evidence_builder.create_evidence_playwright(
+                                            source_url=url,
+                                            selector="a[aria|title*=email]",
+                                            page=page,
+                                            element=a,
+                                            verbatim_text=txt or cand,
+                                        )
+                                        out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
+                                        found_email = True
+                                        break
+
+                        # EMAIL via icon envelope
+                        if not found_email:
+                            for a in el.locator("a:has(i[class*='envelope'])").all():
+                                txt = (a.text_content() or '').strip()
+                                m = self.email_pattern.search(txt.lower())
+                                if not m:
+                                    continue
+                                cand = m.group(0)
+                                edom = cand.split('@')[-1]
+                                if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
+                                    ev = self.evidence_builder.create_evidence_playwright(
+                                        source_url=url,
+                                        selector="i[class*='envelope']~a",
+                                        page=page,
+                                        element=a,
+                                        verbatim_text=txt or cand,
+                                    )
+                                    out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
+                                    found_email = True
+                                    break
+
+                        # EMAIL via text
+                        if not found_email:
+                            card_text = (el.text_content() or '')
+                            m = self.email_pattern.search(card_text.lower())
+                            if m:
+                                cand = m.group(0)
+                                edom = cand.split('@')[-1]
+                                if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
+                                    ev = self.evidence_builder.create_evidence_playwright(
+                                        source_url=url,
+                                        selector=":text-email(card)",
+                                        page=page,
+                                        element=el,
+                                        verbatim_text=(card_text[:200] if card_text else cand),
+                                    )
+                                    out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
+                                    found_email = True
+
+                        # PHONE via anchors
+                        for a in el.locator("a[href*='tel:']").all():
+                            href = a.get_attribute('href') or ''
+                            raw = href[4:] if href.startswith('tel:') else href
+                            digits = re.sub(r"\D", "", raw)
+                            if 10 <= len(digits) <= 15:
+                                ev = self.evidence_builder.create_evidence_playwright(
+                                    source_url=url,
+                                    selector="a[href*='tel:']",
+                                    page=page,
+                                    element=a,
+                                    verbatim_text=(a.text_content() or raw),
+                                )
+                                out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                                found_phone = True
+                                break
+
+                        # PHONE via aria/title or icons
+                        if not found_phone:
+                            for a in el.locator('a').all():
+                                lab = ((a.get_attribute('aria-label') or a.get_attribute('title') or '') or '').lower()
+                                if 'phone' in lab or 'tel' in lab:
+                                    text_block = (el.text_content() or '')
+                                    for m in self.phone_pattern.findall(text_block):
+                                        raw = m if isinstance(m, str) else ''.join(m)
+                                        digits = re.sub(r"\D", "", raw)
+                                        if 10 <= len(digits) <= 15 and not re.match(r'^(19|20)\d{6,8}$', digits):
+                                            ev = self.evidence_builder.create_evidence_playwright(
+                                                source_url=url,
+                                                selector="a[aria|title*=phone]",
+                                                page=page,
+                                                element=a,
+                                                verbatim_text=raw,
+                                            )
+                                            out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                                            found_phone = True
+                                            break
+                                if found_phone:
+                                    break
+                        if not found_phone:
+                            for a in el.locator("a:has(i[class*='phone']), a:has(i[class*='tel'])").all():
+                                text_block = (el.text_content() or '')
+                                for m in self.phone_pattern.findall(text_block):
+                                    raw = m if isinstance(m, str) else ''.join(m)
+                                    digits = re.sub(r"\D", "", raw)
+                                    if 10 <= len(digits) <= 15 and not re.match(r'^(19|20)\d{6,8}$', digits):
+                                        ev = self.evidence_builder.create_evidence_playwright(
+                                            source_url=url,
+                                            selector="i[class*='phone|tel']~a",
+                                            page=page,
+                                            element=a,
+                                            verbatim_text=raw,
+                                        )
+                                        out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                                        found_phone = True
+                                        break
+                                if found_phone:
+                                    break
+
+                        # PHONE via text
+                        if not found_phone:
+                            text_block = (el.text_content() or '')
+                            for m in self.phone_pattern.findall(text_block):
+                                raw = m if isinstance(m, str) else ''.join(m)
+                                digits = re.sub(r"\D", "", raw)
+                                if 10 <= len(digits) <= 15 and not re.match(r'^(19|20)\d{6,8}$', digits):
+                                    ev = self.evidence_builder.create_evidence_playwright(
+                                        source_url=url,
+                                        selector=":text-phone(card)",
+                                        page=page,
+                                        element=el,
+                                        verbatim_text=raw,
+                                    )
+                                    out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                                    found_phone = True
+                                    break
+
+                        # D=1 follow-up when no email/phone
+                        if (not found_email and not found_phone) and d1_budget > 0:
+                            prof_href = None
+                            for a in el.locator('a').all():
+                                href = a.get_attribute('href') or ''
+                                if not href or href.startswith('mailto:') or href.startswith('tel:'):
+                                    continue
+                                prof_href = href
+                                break
+                            if prof_href:
+                                try:
+                                    abs_url = urljoin(url, prof_href)
+                                    d1_budget -= 1
+                                    with httpx.Client(timeout=8.0, follow_redirects=True) as c:
+                                        r = c.get(abs_url)
+                                        if r.status_code < 400 and 'text/html' in (r.headers.get('Content-Type','').lower()):
+                                            bio_contacts = self.extract_from_static_html(r.text, abs_url)
+                                            for bc in bio_contacts:
+                                                if bc.person_name.lower() == name.lower():
+                                                    out.append(bc)
+                                                    break
+                                except Exception:
+                                    pass
+
+                browser.close()
+        except Exception:
+            pass
+        return self._postprocess_and_dedup(out)
+
+    # Testing hook: run fast sweep against a provided Page-like object (already loaded)
+    def _fast_sweep_test_hook(self, page: Page, url: str) -> List[Contact]:  # pragma: no cover - exercised via unit tests
+        out: List[Contact] = []
+        try:
+            company_name = self._extract_company_name_playwright(page, url)
+            try:
+                path_low = urlparse(url).path.lower()
+            except Exception:
+                path_low = ''
+            is_listing_url = any(x in path_low for x in ("/team", "/our-team", "/people", "/leadership", "/management"))
+            site_domain = urlparse(url).netloc.lower().replace('www.', '')
+            allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
+
+            try:
+                email_anchors = page.query_selector_all("a[href^='mailto']")
+            except Exception:
+                email_anchors = []
+            try:
+                phone_anchors = page.query_selector_all("a[href^='tel']")
+            except Exception:
+                phone_anchors = []
+
+            def _clean_name(txt: Optional[str]) -> Optional[str]:
+                if not txt:
+                    return None
+                name = re.sub(r'^(Dr\.|Mr\.|Ms\.|Mrs\.)\s+', '', txt.strip())
+                return name if self._is_valid_person_name(name) else None
+
+            for a in email_anchors:
+                try:
+                    href = (a.get_attribute('href') or '').strip()
+                    txt = (a.text_content() or '').strip()
+                    email = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+                    if not email:
+                        continue
+                    email = email.lower()
+                    name = None
+                    role = None
+                    container = None
+                    try:
+                        container = a.query_selector("xpath=ancestor::li[contains(@class, 'list-item')][1]")
+                    except Exception:
+                        container = None
+                    if container:
+                        try:
+                            name_el = container.query_selector("h2, h3, h4, .list-item-content__title")
+                            name = _clean_name(name_el.text_content() if name_el else None)
+                        except Exception:
+                            name = None
+                        if name:
+                            for sel in self.title_selectors:
+                                try:
+                                    t_el = container.query_selector(sel)
+                                    t_val = (t_el.text_content() or '').strip() if t_el else ''
+                                    if t_val:
+                                        cand_role = self._normalize_role_title(t_val)
+                                        if cand_role and cand_role.strip().lower() != (name or '').strip().lower():
+                                            role = cand_role
+                                            break
+                                except Exception:
+                                    continue
+                    if not name:
+                        for xp in ("xpath=preceding::h2[1]", "xpath=preceding::h3[1]", "xpath=preceding::h4[1]"):
+                            try:
+                                prev = a.query_selector(xp)
+                                if prev:
+                                    nm = _clean_name(prev.text_content())
+                                    if nm:
+                                        name = nm
+                                        break
+                            except Exception:
+                                continue
+                    # Domain policy: accept if domain matches OR we have a valid person name nearby
+                    edom = email.split('@')[-1]
+                    domain_ok = (
+                        edom.endswith(site_domain)
+                        or self._email_domain_matches_site(edom, site_domain)
+                        or (allow_free_env and (edom in self.free_email_domains))
+                        or bool(name)
+                    )
+                    if not domain_ok:
+                        continue
+                    if not name:
+                        continue
+                    if not role and is_listing_url:
+                        role = "Unknown"
+                    ev = self.evidence_builder.create_evidence_playwright(
+                        source_url=url,
+                        selector="a[href*='mailto:']",
+                        page=page,
+                        element=a,
+                        verbatim_text=txt or email,
+                    )
+                    out.append(Contact(company=company_name, person_name=name, role_title=role or 'Unknown', contact_type=ContactType.EMAIL, contact_value=email, evidence=ev, captured_at=ev.timestamp))
+                except Exception:
+                    continue
+
+            for a in phone_anchors:
+                try:
+                    href = (a.get_attribute('href') or '').strip()
+                    raw = href[4:] if href.lower().startswith('tel:') else href
+                    digits = re.sub(r"\D", "", raw)
+                    if len(digits) == 11 and digits.startswith('1'):
+                        digits = digits[1:]
+                    if not (10 <= len(digits) <= 15):
+                        continue
+                    name = None
+                    role = None
+                    container = None
+                    try:
+                        container = a.query_selector("xpath=ancestor::li[contains(@class, 'list-item')][1]")
+                    except Exception:
+                        container = None
+                    if container:
+                        try:
+                            name_el = container.query_selector("h2, h3, h4, .list-item-content__title")
+                            name = _clean_name(name_el.text_content() if name_el else None)
+                        except Exception:
+                            name = None
+                        if name:
+                            for sel in self.title_selectors:
+                                try:
+                                    t_el = container.query_selector(sel)
+                                    t_val = (t_el.text_content() or '').strip() if t_el else ''
+                                    if t_val:
+                                        cand_role = self._normalize_role_title(t_val)
+                                        if cand_role and cand_role.strip().lower() != (name or '').strip().lower():
+                                            role = cand_role
+                                            break
+                                except Exception:
+                                    continue
+                    if not name:
+                        for xp in ("xpath=preceding::h2[1]", "xpath=preceding::h3[1]", "xpath=preceding::h4[1]"):
+                            try:
+                                prev = a.query_selector(xp)
+                                if prev:
+                                    nm = _clean_name(prev.text_content())
+                                    if nm:
+                                        name = nm
+                                        break
+                            except Exception:
+                                continue
+                    if not name:
+                        continue
+                    if not role and is_listing_url:
+                        role = "Unknown"
+                    ev = self.evidence_builder.create_evidence_playwright(
+                        source_url=url,
+                        selector="a[href*='tel:']",
+                        page=page,
+                        element=a,
+                        verbatim_text=(a.text_content() or raw),
+                    )
+                    out.append(Contact(company=company_name, person_name=name, role_title=role or 'Unknown', contact_type=ContactType.PHONE, contact_value=digits, evidence=ev, captured_at=ev.timestamp))
+                except Exception:
+                    continue
+
+            return self._postprocess_and_dedup(out)
+        except Exception:
+            return []
+
     def _extract_person_contacts_playwright(
         self,
         person_element: Locator,
@@ -849,6 +1554,13 @@ class ContactExtractor:
             return False
         # Exclude generic section headers
         if re.search(r"^(Our Team|Team|People|Staff|Contact|Contacts|News|Press)$", name, re.IGNORECASE):
+            return False
+        # Non-person stop-list
+        stoplist = {
+            'mailing address','branch hours','business services team','executive team',
+            'support','department','services','contact us','resources'
+        }
+        if name.strip().lower() in stoplist:
             return False
         # Require at least two tokens; each must contain at least one letter (Unicode-aware)
         parts = [p for p in re.split(r"\s+", name.strip()) if p]

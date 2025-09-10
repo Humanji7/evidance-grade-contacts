@@ -126,6 +126,15 @@ def expand_candidate_urls(base: str, include_paths: List[str]) -> List[str]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Python 3.11+ gate (must run before any heavy imports/arg parsing)
+    if sys.version_info < (3, 11):
+        cur = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        print(
+            f"Python 3.11+ required. Current: {cur}. Activate .venv311 or run: python3.11 -m egc.run …",
+            file=sys.stderr,
+        )
+        return 1
+
     parser = argparse.ArgumentParser(prog="egc.run", description="EGC PoC pipeline runner")
     parser.add_argument("--input", "-i", required=True, help="Path to URLs file (one per line)")
     parser.add_argument("--config", "-c", required=True, help="Path to YAML config file")
@@ -183,6 +192,8 @@ def main(argv: list[str] | None = None) -> int:
 
     # Smart mode profile log
     print("Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10")
+    # Print Python version for diagnostics
+    print(f"Python: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
 
     # Resolve DB path if enabled
     db_path = None
