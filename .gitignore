@@ -59,13 +59,20 @@ ehthumbs.db
 Thumbs.db
 
 # Evidence Grade Contacts PoC specific
-data/                    # Raw/processed data (per WARP.md)
-output/                  # Generated reports & exports
-out/                     # CLI output directory
-results/                 # Test results
-evidence/                # Evidence artifacts
-screenshots/             # DOM node screenshots
-cache/                   # Cache files
+# Raw/processed data (per WARP.md)
+data/
+# Generated reports & exports
+output/
+# CLI output directory
+out/
+# Test results
+results/
+# Evidence artifacts
+evidence/
+# DOM node screenshots
+screenshots/
+# Cache files
+cache/
 
 # Virtual environments (Python 3.11)
 .venv311/

@@ -1,1 +1,0 @@
-[{"email": "user@example.com", "domain": "example.com", "mx_used": null, "accepts_rcpt": false, "smtp_code": null, "smtp_message": "no MX provided (lookup not implemented)", "error_category": "policy", "rtt_ms": null, "mx_found": false}]
