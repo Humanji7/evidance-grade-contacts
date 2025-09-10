@@ -174,7 +174,7 @@ SMTP validation of emails without sending messages (with MX/RCPT cache).
 
 
 Requirements
-[Insert OS and Python/Node/Docker version details if applicable…]
+Python 3.11+ required. macOS 13+ or newer recommended.
 
 
 Network access for page fetching and DNS lookups (SMTP probe).
@@ -203,12 +203,12 @@ The project includes a high-quality gold dataset for testing and validation:
 
 ### Validate Gold Dataset
 ```bash
-python3 scripts/validate_gold_dataset.py
+python scripts/validate_gold_dataset.py
 ```
 
 ### Extract New Gold Records
 ```bash
-python3 scripts/gold_extractor.py "https://example.com/people/john-doe"
+python scripts/gold_extractor.py "https://example.com/people/john-doe"
 ```
 
 Installation
@@ -216,13 +216,17 @@ Installation
 git clone [Insert_repository_URL]
 cd evidence-grade-contacts
 
-# Virtual env (Python example)
-python -m venv .venv
+# Virtual env (Python 3.11)
+python3.11 -m venv .venv
 source .venv/bin/activate
 
 # PoC dependencies (✅ Tested)
 pip install httpx trafilatura selectolax playwright pydantic extruct
-python3 -m playwright install  # Installs Chromium, Firefox, Webkit
+
+# Install Playwright browsers in the active venv (install per browser)
+python -m playwright install chromium
+python -m playwright install firefox
+# (optional) python -m playwright install webkit
 
 # Verify installation
 which playwright
@@ -235,28 +239,28 @@ pip install rq redis
 ### Run All Unit Tests
 ```bash
 # All 49 unit tests
-python3 -m pytest tests/unit/ -v
+python -m pytest tests/unit/ -v
 
 # Evidence package tests
-python3 -m pytest tests/unit/test_evidence_builder.py -v
+python -m pytest tests/unit/test_evidence_builder.py -v
 
 # Contact extraction tests  
-python3 -m pytest tests/unit/test_extractors.py -v
+python -m pytest tests/unit/test_extractors.py -v
 
 # Pipeline integration tests
-python3 -m pytest tests/unit/test_ingest_pipeline.py -v
+python -m pytest tests/unit/test_ingest_pipeline.py -v
 
 # Export pipeline tests
-python3 -m pytest tests/unit/test_export.py -v
+python -m pytest tests/unit/test_export.py -v
 ```
 
 ### Validate Gold Dataset
 ```bash
 # Verify gold dataset integrity
-python3 scripts/validate_gold_dataset.py
+python scripts/validate_gold_dataset.py
 
 # Extract new gold records
-python3 scripts/gold_extractor.py "https://example.com/people/john-doe"
+python scripts/gold_extractor.py "https://example.com/people/john-doe"
 ```
 
 [Insert details for supported package managers/alternative installers…]
@@ -370,7 +374,7 @@ Schemas/validation: Pydantic.
 JSON Schemas:
 - Location: schemas/*.schema.json (draft 2020-12)
 - Source of truth: src/schemas.py (Pydantic models)
-- Regenerate: python3 scripts/export_json_schema.py
+- Regenerate: python scripts/export_json_schema.py
 
 Export: CSV/JSON (local), SQLite (optional for demo queries).
 

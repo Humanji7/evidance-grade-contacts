@@ -422,6 +422,14 @@ python -c "import yaml; yaml.safe_load(open('config/example.yaml'))"
 python -m egc.run --dry-run --config config/example.yaml --input test.txt --out /tmp
 ```
 
+**Playwright "browser not found":**
+```bash
+# Install the required browser in your active virtualenv
+python -m playwright install firefox
+# (Chromium example)
+# python -m playwright install chromium
+```
+
 ### Log Analysis
 
 Logs follow structured format with correlation IDs:

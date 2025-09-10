@@ -159,7 +159,12 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # PoC dependencies (✅ Tested)
 pip install httpx trafilatura selectolax playwright pydantic extruct
-python3 -m playwright install  # Installs Chromium, Firefox, Webkit
+
+# Install Playwright browsers in the active venv (install per browser)
+python -m playwright install chromium
+python -m playwright install firefox
+# (optional)
+# python -m playwright install webkit
 
 # (Optional) queue
 pip install rq redis
@@ -333,6 +338,8 @@ python -m pytest tests/unit/test_export.py -v
 
 # Integration tests (with Playwright)
 python -m pytest tests/integration/ --browser chromium
+# Firefox example
+python -m pytest tests/integration/ --browser firefox
 
 # Regression tests (against gold datasets)
 python -m pytest tests/regression/ --compare-gold

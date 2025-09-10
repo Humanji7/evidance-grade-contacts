@@ -69,11 +69,13 @@ python -m pytest tests/integration/ -v
 
 # With browser (Playwright)
 python -m pytest tests/integration/ --browser chromium -v
+python -m pytest tests/integration/ --browser firefox -v
 ```
 
 Notes
 - Keep pages and selectors in fixtures/ to allow offline replay when possible
 - Mark tests that require network or headless appropriately (xfail/skip if missing)
+- If you see "browser not found" errors, install the required browser in your active venv, e.g.: `python -m playwright install firefox`
 
 ### 3) Regression tests (gold datasets)
 Scope
@@ -145,6 +147,7 @@ Integration
 ```bash
 python -m pytest tests/integration/ -v
 python -m pytest tests/integration/ --browser chromium -v
+python -m pytest tests/integration/ --browser firefox -v
 ```
 
 Regression
