@@ -126,6 +126,13 @@ Guidelines
 - Use deterministic content_hash values (fixed inputs) in unit tests
 - Keep fixture size small
 
+## New unit tests (added)
+
+- URL normalization (CLI): ensures removal of query/fragment, host lowercasing, trailing slash rules
+- Phone validation (text fallback): rejects date-like numbers and enforces markers + 10–15 digits
+- Role stop-list: maps junk roles ("email", "areas of focus:", "coming soon", "open seat") to "Unknown"
+- Export-layer dedupe & paths: collapses duplicates by (company, person, type, value); CSV/JSON contain normalized `source_url`
+
 ## Commands (cheat sheet)
 
 Unit
@@ -166,6 +173,12 @@ python -m pytest tests/e2e/ --slow -v
 - Only public pages; respect robots.txt and ToS
 - No real personal emails/phones in fixtures; use synthetic examples
 - Do not commit sensitive data; keep evidence images minimal
+
+## Acceptance checks (quick)
+
+- No duplicates in exported CSV/JSON by key (company_norm, person_norm, contact_type, contact_value_norm)
+- All exported `source_url` values are normalized (no query/fragment, host without `www.`, no trailing slash unless root)
+- All rows remain VERIFIED; Evidence remains unchanged and complete
 
 ## References
 

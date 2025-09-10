@@ -195,6 +195,10 @@ python3 -m pytest tests/unit/test_extractors.py -v        # Contact extraction s
 
 ## Export Security
 
+### Normalization & Dedupe (Report-only)
+- Normalizing `source_url` in CSV/JSON is a reporting convenience (lowercased host without `www.`, no query/fragment, trimmed trailing slash). It does NOT modify Evidence stored in models, preserving auditability.
+- Global export-layer dedupe selects a single best instance per (company, person, type, value) using deterministic tie-breaks (anchor>text, semantic URL, role!=Unknown, shorter canonical URL, fresher captured_at). This reduces duplicate rows without altering source evidence.
+
 ### Data Export Controls
 - **VERIFIED-only exports**: Only contacts with complete evidence packages exported
 - **UNVERIFIED filtering**: Incomplete records automatically excluded from all exports

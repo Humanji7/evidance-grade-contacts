@@ -41,7 +41,14 @@ python -m egc.run --input <urls_file> --config <config_file> --out <output_dir> 
 **Optional Arguments:**
 - `--verbose` / `-v`: Enable verbose logging
 - `--dry-run`: Validate configuration without processing
-- `--max-workers`: Override worker count (default: from config)
+- `--no-discovery`: Disable adaptive link discovery; use only include_paths expansion
+- `--no-prefilter`: Disable pre-filter HTTP checks
+- `--no-headless`: Disable Playwright escalation (static-only)
+- `--static-timeout` SECONDS: Static fetch timeout (default 12.0)
+- `--prefilter-timeout` SECONDS: Prefilter HEAD timeout (default 5.0)
+- `--aggressive-static`: Enable aggressive static heuristics (name, email de-obfuscation, text phones with markers, VCF, table extractor first, role stop-list→Unknown)
+- `--max-pages-per-domain` N: Limit number of candidate pages per domain after normalization (default 10)
+- `--include-all`: Export UNVERIFIED as well (default: VERIFIED only)
 
 **Example:**
 ```bash
@@ -55,8 +62,8 @@ python -m egc.run \
 **Output Structure:**
 ```
 output/
-├── contacts.csv          # Flattened export with evidence fields
-├── contacts.json         # Full Contact records with nested evidence
+├── contacts.csv          # Flattened export with evidence fields (source_url normalized for report)
+├── contacts.json         # Full Contact records with nested evidence (evidence.source_url normalized for report)
 └── evidence/             # DOM node screenshots
     ├── screenshot_001.png
     └── screenshot_002.png
@@ -265,6 +272,13 @@ export EGC_HEADLESS_BUDGET=10000              # Override headless timeout (ms)
 | 4    | Network/connectivity error |
 
 ## Examples
+
+### Behavior Notes
+
+- Candidate URL normalization: host lowercased, drop query/fragment, trim trailing slash; discovery skips facet links (?/#)
+- Per-domain limit: `--max-pages-per-domain` caps candidates after normalization
+- Export-layer dedupe: removes duplicates by (company_norm, person_norm, contact_type, contact_value_norm); logs "🧹 Dedupe: kept X of Y"
+- Reporting-only normalization: `source_url` is normalized in exported files; Evidence models remain unchanged
 
 ### Complete Workflow
 

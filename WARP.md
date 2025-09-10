@@ -107,6 +107,22 @@ Static → headless per the conditions above. Enforce:
 
 ## Development Workflow
 
+### Recent Enhancements (Updated)
+- Aggressive Static Mode (CLI: `--aggressive-static`):
+  - Relaxed name validation (≥2 tokens with at least one letter each, Unicode-aware)
+  - Email de-obfuscation (at/dot patterns, HTML entities, simple JS concatenations)
+  - Phone extraction from text (only with markers like "phone|tel|тел|telefon" and normalized 10–15 digits)
+  - vCard links detection (.vcf or text contains "vcard")
+  - Table extractor prioritized before generic fallback; repeating cards used only if tables absent
+  - Role stop-list normalized to "Unknown" (e.g., "email", "areas of focus:", "coming soon", "open seat")
+- URL Normalization and Candidate Limiting:
+  - CLI normalizes and deduplicates candidate URLs (host lowercased, drop query/fragment, trim trailing slash) and limits per-domain pages (`--max-pages-per-domain`, default 10)
+  - Discovery filters facet links (skips `?` and `#`) and normalizes in-domain links
+- Export-layer Dedupe and Normalized Source URLs:
+  - Global dedupe by (company_norm, person_norm, contact_type, contact_value_norm) with quality tie-breaks: anchor>text, semantic URL (/leadership|/our-team|/team), role!=Unknown, shorter canonical URL, fresher captured_at
+  - Normalized source_url in CSV/JSON outputs (report-only; Evidence models remain unchanged)
+  - Log line: "🧹 Dedupe: kept X of Y"
+
 ### Initial Setup
 ```bash
 # Clone
@@ -300,6 +316,9 @@ python -m pytest tests/e2e/ --slow
 ## Implementation Status (✅ Updated)
 
 ### Core Components Completed
+- ✅ Aggressive Static Mode (guarded by `--aggressive-static`)
+- ✅ URL Normalization & Candidate Limiting (CLI `--max-pages-per-domain`, discovery facet filter)
+- ✅ Export-layer Dedupe & Normalized `source_url` (report-only)
 - ✅ **Static-First Pipeline**: StaticFetcher with robots.txt compliance
 - ✅ **Escalation Logic**: EscalationDecider with anti-bot detection
 - ✅ **Playwright Integration**: Secure headless browser with sandboxing
@@ -318,6 +337,7 @@ python -m pytest tests/e2e/ --slow
 - ✅ **Escalation Tests**: 4 tests for anti-bot detection logic
 
 ### Data Quality Metrics
+- Duplicate Export Key Rate: < 1% (based on key: company_norm, person_norm, contact_type, contact_value_norm)
 - ✅ **Evidence Completeness Rate**: 100% (all 7 fields validated)
 - ✅ **Schema Validation**: Automatic Pydantic model enforcement
 - ✅ **Content Integrity**: SHA-256 hashing for all extracted content
