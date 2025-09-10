@@ -123,6 +123,30 @@ Static → headless per the conditions above. Enforce:
   - Normalized source_url in CSV/JSON outputs (report-only; Evidence models remain unchanged)
   - Log line: "🧹 Dedupe: kept X of Y"
 
+### Smart mode (default)
+
+Smart mode is the default run profile. It executes:
+- Static++ first → escalate to Playwright only when needed (guarded) → always produce people-level exports in addition to base CSV/JSON.
+- On-demand discovery: if the input URL is already a target page (path contains team|our-team|people|leadership|management|contacts|imprint|impressum), skip discovery; otherwise, discover in-domain target-like links (limit 4 per domain) with a fast HEAD prefilter (~2s).
+- Headless budgets on top of the existing 20% per-domain quota:
+  - Per-domain headless cap: ≤ 2 pages per run
+  - Global headless cap: ≤ 10 pages per run
+  - When caps are exceeded, escalation is skipped and the log prints: "headless budget exhausted".
+- Exports: perform global dedupe and always write contacts_people_*.{csv,json} alongside the base contacts files.
+
+Escalation triggers considered in Smart mode (superset):
+- MIME ≠ text/html (redirect into SPA/JS app)
+- selector_hits == 0 and tiny page (< 5 KiB)
+- Anti-bot/challenge markers (e.g., Cloudflare "Just a moment…")
+- JS markers (escalate regardless of size): data-cfemail, cf_email, javascript:.*mailto, data-email=, data-phone=, data-reactroot, ng-app
+- "Cards present, no contacts": ≥3 repeating blocks with class containing team|member|profile|person or many h3/h4 headings AND no mailto/tel anchors
+- Target URL with 0 contacts after static extraction
+
+Operational logs:
+- At start of run: "Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10"
+- On escalation: "via playwright: reasons=[…]"
+- On exhausted budgets: "headless budget exhausted"
+
 ### Initial Setup
 ```bash
 # Clone
@@ -152,9 +176,13 @@ cp config/example.yaml config.yaml
 # Prepare input
 echo "https://example.com" > input_urls.txt
 
-# Run the pipeline (CLI example)
+# Run the pipeline (default Smart mode, no flags required)
 python -m egc.run --input input_urls.txt --config config.yaml --out ./out
 ```
+
+Expected outputs:
+- Base exports: contacts_*.csv and contacts_*.json (VERIFIED-only by default)
+- People consolidation: contacts_people_*.csv and contacts_people_*.json
 
 #### Testing & Quality Assurance
 ```bash
@@ -375,6 +403,11 @@ python3 scripts/gold_extractor.py "https://example.com/people/john-doe"
 ```
 
 ## Common Troubleshooting
+
+Operational logs to look for:
+- Startup profile: Smart mode profile line appears once at run start.
+- Escalation: via playwright lines with reasons — present on 1–2 URLs typically.
+- Budgets: headless budget exhausted — printed when domain/global caps prevent escalation.
 
 ```bash
 # Validate gold dataset quality
