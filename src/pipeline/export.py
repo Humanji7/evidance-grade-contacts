@@ -43,9 +43,26 @@ def normalize_url_for_report(u: str) -> str:
         return u or ''
 
 
+def normalize_person_name(s: str) -> str:
+    """Normalize person name for grouping keys (unicode-safe).
+    - lowercased, trimmed
+    - collapse whitespace
+    - strip commas and periods (dots) so that variants like "J. W. Alberstadt, Jr." and
+      "J. W.Alberstadt, Jr." normalize the same.
+    - keep other unicode letters intact
+    """
+    if not s:
+        return ""
+    # Lowercase and replace commas/dots with space, then collapse whitespace
+    s2 = s.lower()
+    s2 = s2.replace(',', ' ').replace('.', ' ')
+    s2 = re.sub(r"\s+", " ", s2).strip()
+    return s2
+
+
 def _norm_key(company: str, person_name: str, contact_type: str, contact_value: str) -> tuple:
     company_norm = (company or '').strip().lower()
-    person_norm = (person_name or '').strip().lower()
+    person_norm = normalize_person_name(person_name or '')
     if contact_type == 'email':
         value_norm = (contact_value or '').strip().lower()
     elif contact_type == 'phone':
@@ -99,6 +116,233 @@ def dedupe_contacts_for_export(contacts: List[Contact]) -> List[Contact]:
     if removed > 0:
         print(f"🧹 Dedupe: kept {len(kept)} of {len(contacts)}")
     return kept
+
+
+def _registrable_domain(host: str) -> str:
+    parts = (host or '').lower().split('.')
+    if len(parts) >= 3 and parts[-2] in {'co','com','org','net','gov','ac','edu'} and len(parts[-1]) <= 3:
+        return '.'.join(parts[-3:])
+    return '.'.join(parts[-2:]) if len(parts) >= 2 else host.lower()
+
+
+def _email_domain_score(email: str, source_url: str) -> int:
+    """Return 1 if email domain matches page domain (registrable), else 0."""
+    try:
+        from urllib.parse import urlsplit
+        host = (urlsplit(source_url).netloc or '').lower()
+    except Exception:
+        host = ''
+    edom = (email.split('@')[-1] or '').lower()
+    return 1 if (_registrable_domain(edom) == _registrable_domain(host)) else 0
+
+
+def _is_generic_localpart(email: str) -> int:
+    local = (email.split('@')[0] or '').lower()
+    generics = {'info', 'hr', 'contact', 'office'}
+    return 1 if (local not in generics) else 0
+
+
+def _is_semantic_url(u: str) -> int:
+    low = (u or '').lower()
+    return 1 if any(k in low for k in ('/leadership', '/our-team', '/team')) else 0
+
+
+def _is_anchor_selector(sel: str, want: str) -> int:
+    low = (sel or '').lower()
+    return 1 if (want in low) else 0
+
+
+def _is_toll_free(num: str) -> int:
+    d = re.sub(r"\D", "", num or '')
+    return 0 if d.startswith(('800', '888', '877', '866')) else 1
+
+
+def _best_role_for_person(contacts: List[Contact]) -> str:
+    # Prefer non-Unknown and longer titles as "more informative"
+    best = 'Unknown'
+    best_score = (-1, 0)
+    for c in contacts:
+        rt = (c.role_title or '').strip()
+        is_known = 1 if rt and rt.lower() != 'unknown' else 0
+        score = (is_known, len(rt))
+        if score > best_score:
+            best_score = score
+            best = rt or 'Unknown'
+    return best or 'Unknown'
+
+
+def consolidate_per_person(contacts: List[Contact]) -> List[dict]:
+    """Aggregate contacts per person into a single row per person.
+
+    - Key: (company_norm, person_name_norm)
+    - For each person choose best email/phone/vcard based on ranking rules.
+    Returns list of dict rows with fields:
+      company, person_name, role_title, email, phone, vcard,
+      source_url_email, source_url_phone, source_url_vcard
+    """
+    if not contacts:
+        return []
+
+    # 1) Filter out obvious non-persons BEFORE grouping
+    NON_PERSON_PHRASES = {
+        'mailing address', 'click here', 'branch hours', 'business services team',
+        'executive team', 'support', 'department', 'services', 'contact us', 'resources'
+    }
+
+    filtered: list[Contact] = []
+    for c in contacts:
+        pname = (c.person_name or '').strip().lower()
+        if any(phrase in pname for phrase in NON_PERSON_PHRASES):
+            continue  # exclude from consolidation
+        filtered.append(c)
+
+    if not filtered:
+        print(f"👤 Consolidation: persons=0, from_contacts={len(contacts)}")
+        return []
+
+    # 2) Group by (company, person)
+    by_person: dict[tuple, list[Contact]] = {}
+    for c in filtered:
+        key = ((c.company or '').strip().lower(), normalize_person_name(c.person_name or ''))
+        by_person.setdefault(key, []).append(c)
+
+    def _name_tokens_latin(name: str) -> list[str]:
+        low = (name or '').lower()
+        return re.findall(r"[a-z]{3,}", low)
+
+    def _local_matches_name(local: str, tokens: list[str]) -> int:
+        loc = (local or '').lower()
+        return 1 if any(tok in loc for tok in tokens) else 0
+
+    def _digits_only(s: str) -> str:
+        return re.sub(r"\D", "", s or '')
+
+    def _looks_like_date_number(digits: str) -> bool:
+        # r'^(19|20)\d{6,8}$' on the normalized digits
+        return bool(re.match(r"^(19|20)\d{6,8}$", digits or ''))
+
+    rows: list[dict] = []
+    for (company_norm, person_norm), clist in by_person.items():
+        # Stable display values from any contact in group
+        company_disp = clist[0].company
+        person_disp = clist[0].person_name
+
+        # Prepare name tokens for email local-part matching
+        tokens = _name_tokens_latin(person_disp)
+
+        # Rank email candidates per spec
+        email_best: Optional[Contact] = None
+        email_score_best: Optional[tuple] = None
+        for c in clist:
+            if c.contact_type.value != 'email':
+                continue
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            local = (c.contact_value or '').split('@')[0].lower()
+            name_match = _local_matches_name(local, tokens)
+            score = (
+                _is_anchor_selector(sel.lower(), "a[href*='mailto:']"),  # 1) anchor
+                _is_semantic_url(surl),                                   # 2) semantic URL
+                name_match,                                               # 3) local-part matches name
+                c.captured_at or datetime.min,                            # 4) recency
+            )
+            if (email_best is None) or (score > email_score_best):
+                email_best = c
+                email_score_best = score
+
+        # Rank phone candidates per spec
+        phone_best: Optional[Contact] = None
+        phone_score_best: Optional[tuple] = None
+        phone_candidates_anchor: list[Contact] = []
+        phone_candidates_text: list[Contact] = []
+        for c in clist:
+            if c.contact_type.value != 'phone':
+                continue
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            if _is_anchor_selector(sel.lower(), "a[href*='tel:']"):
+                phone_candidates_anchor.append(c)
+            else:
+                phone_candidates_text.append(c)
+
+        def _score_phone(c: Contact) -> tuple:
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            return (
+                _is_anchor_selector(sel.lower(), "a[href*='tel:']"),  # anchor first
+                _is_semantic_url(surl),                                # semantic URL
+                _is_toll_free(c.contact_value),                        # prefer non toll-free
+                c.captured_at or datetime.min,                         # fresher
+            )
+
+        if phone_candidates_anchor:
+            for c in phone_candidates_anchor:
+                score = _score_phone(c)
+                if (phone_best is None) or (score > phone_score_best):
+                    phone_best = c
+                    phone_score_best = score
+        else:
+            # No anchor phones; consider text-only phones with validation
+            valid_texts: list[Contact] = []
+            for c in phone_candidates_text:
+                digits = _digits_only(c.contact_value)
+                if 10 <= len(digits) <= 15 and not _looks_like_date_number(digits):
+                    valid_texts.append(c)
+            for c in valid_texts:
+                score = _score_phone(c)
+                if (phone_best is None) or (score > phone_score_best):
+                    phone_best = c
+                    phone_score_best = score
+
+        # vCard: trust extractor attribution; pick best by semantic URL then recency
+        vcard_best = None
+        vcard_score_best = None
+        for c in clist:
+            if c.contact_type.value != 'link':
+                continue
+            if not (c.contact_value or '').lower().endswith('.vcf'):
+                continue
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            score = (
+                _is_semantic_url(surl),
+                c.captured_at or datetime.min,
+            )
+            if (vcard_best is None) or (score > vcard_score_best):
+                vcard_best = c
+                vcard_score_best = score
+
+        role_final = _best_role_for_person(clist)
+
+        # Output: one best email and one best phone (phone normalized to digits if present)
+        out_phone = ''
+        if phone_best is not None:
+            # Prefer digits from href/tel when anchor is present; fallback to contact_value
+            sel_best = (phone_best.evidence.selector_or_xpath or '') if phone_best.evidence else ''
+            if _is_anchor_selector(sel_best.lower(), "a[href*='tel:']"):
+                # Try to parse digits from verbatim (often mirrors the href or the displayed number)
+                verb = (phone_best.evidence.verbatim_quote or '') if phone_best.evidence else ''
+                digits_from_verb = _digits_only(verb)
+                if 10 <= len(digits_from_verb) <= 15 and not _looks_like_date_number(digits_from_verb):
+                    out_phone = digits_from_verb
+                else:
+                    out_phone = _digits_only(phone_best.contact_value)
+            else:
+                out_phone = _digits_only(phone_best.contact_value)
+
+        row = {
+            'company': company_disp,
+            'person_name': person_disp,
+            'role_title': role_final or 'Unknown',
+            'email': email_best.contact_value if email_best else '',
+            'phone': out_phone,
+            'vcard': vcard_best.contact_value if vcard_best else '',
+            'source_url_email': normalize_url_for_report(email_best.evidence.source_url) if email_best and email_best.evidence else '',
+            'source_url_phone': normalize_url_for_report(phone_best.evidence.source_url) if phone_best and phone_best.evidence else '',
+            'source_url_vcard': normalize_url_for_report(vcard_best.evidence.source_url) if vcard_best and vcard_best.evidence else '',
+        }
+        rows.append(row)
+
+    print(f"👤 Consolidation: persons={len(rows)}, from_contacts={len(contacts)}")
+    return rows
 
 
 class ContactExporter:
@@ -370,3 +614,48 @@ class ContactExporter:
             "evidence_completeness_rate": evidence_rate,
             "ready_for_export": len(verified) > 0
         }
+
+    # -------------------------
+    # People-level export
+    # -------------------------
+    def to_people_csv(self, consolidated: List[dict], filename: Optional[str] = None) -> Path:
+        """Write consolidated per-person rows to CSV.
+        Filename pattern: contacts_people_{timestamp}.csv if not provided.
+        """
+        if filename is None:
+            timestamp = dt.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"contacts_people_{timestamp}.csv"
+        path = self.output_dir / filename
+        if not consolidated:
+            # Still create the file with header for consistency
+            consolidated = []
+        # Determine columns
+        columns = [
+            'company', 'person_name', 'role_title', 'email', 'phone', 'vcard',
+            'source_url_email', 'source_url_phone', 'source_url_vcard'
+        ]
+        with open(path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=columns)
+            w.writeheader()
+            for row in consolidated:
+                # Ensure only known columns
+                out_row = {k: row.get(k, '') for k in columns}
+                w.writerow(out_row)
+        print(f"💾 People CSV exported: {path} ({len(consolidated)} persons)")
+        return path
+
+    def to_people_json(self, consolidated: List[dict], filename: Optional[str] = None, pretty: bool = True) -> Path:
+        """Write consolidated per-person rows to JSON.
+        Filename pattern: contacts_people_{timestamp}.json if not provided.
+        """
+        if filename is None:
+            timestamp = dt.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"contacts_people_{timestamp}.json"
+        path = self.output_dir / filename
+        with open(path, 'w', encoding='utf-8') as f:
+            if pretty:
+                json.dump(consolidated or [], f, indent=2, ensure_ascii=False)
+            else:
+                json.dump(consolidated or [], f, ensure_ascii=False)
+        print(f"💾 People JSON exported: {path} ({len(consolidated or [])} persons)")
+        return path
