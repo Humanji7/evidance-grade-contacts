@@ -22,7 +22,7 @@ import argparse
 import sys
 from pathlib import Path
 from typing import List
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse, urlunparse
 
 try:
     import yaml  # type: ignore
@@ -31,6 +31,7 @@ except Exception:  # pragma: no cover
 
 # Pipeline imports
 from src.pipeline.ingest import IngestPipeline
+from src.pipeline.discovery import discover_from_root, discover_links
 from src.pipeline.export import ContactExporter
 
 
@@ -88,6 +89,23 @@ def read_input_urls(input_path: Path) -> List[str]:
     return urls
 
 
+def normalize_url(u: str) -> str:
+    """Canonicalize a URL: lowercase host, drop query/fragment, trim trailing slash (except root)."""
+    try:
+        p = urlparse(u)
+        if not p.scheme:
+            return u  # not a URL; leave untouched
+        netloc = (p.netloc or '').lower()
+        path = p.path or ''
+        # trim trailing slash except root
+        if path.endswith('/') and path != '/':
+            path = path.rstrip('/')
+        newp = p._replace(netloc=netloc, path=path, query='', fragment='')
+        return urlunparse(newp)
+    except Exception:
+        return u
+
+
 def expand_candidate_urls(base: str, include_paths: List[str]) -> List[str]:
     # If base is not a URL yet, skip expansion
     if not (base.startswith("http://") or base.startswith("https://")):
@@ -116,6 +134,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--include-all", action="store_true", help="Export UNVERIFIED contacts as well (default: VERIFIED only)")
     parser.add_argument("--db", choices=["sqlite", "none"], default="sqlite", help="DB integration: sqlite or none (default: sqlite)")
     parser.add_argument("--db-path", default=None, help="Path to SQLite DB file (default: <out>/egc.sqlite)")
+    # Performance/behavior knobs
+    parser.add_argument("--no-discovery", action="store_true", help="Disable adaptive link discovery; use only include_paths expansion")
+    parser.add_argument("--no-prefilter", action="store_true", help="Disable pre-filter HTTP checks for candidate pages")
+    parser.add_argument("--no-headless", action="store_true", help="Disable Playwright escalation (static-only)")
+    parser.add_argument("--static-timeout", type=float, default=12.0, help="Static fetch timeout seconds (default 12.0)")
+    parser.add_argument("--prefilter-timeout", type=float, default=5.0, help="Prefilter check timeout seconds (default 5.0)")
+    parser.add_argument("--aggressive-static", action="store_true", help="Enable static++ heuristics")
+    parser.add_argument("--max-pages-per-domain", type=int, default=10, help="Limit number of candidate pages per domain (default 10)")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -143,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
     ])
 
     # Initialize pipeline and exporter
-    pipeline = IngestPipeline()
+    pipeline = IngestPipeline(enable_headless=(not args.no_headless), static_timeout_s=float(args.static_timeout), aggressive_static=bool(args.aggressive_static))
     exporter = ContactExporter(output_dir=out_dir)
 
     # Resolve DB path if enabled
@@ -155,8 +181,8 @@ def main(argv: list[str] | None = None) -> int:
     def _quick_url_ok(u: str) -> bool:
         try:
             import httpx
-            with httpx.Client(timeout=5.0, follow_redirects=True, headers={"User-Agent": "EGC-CLI/0.1"}) as c:
-                r = c.get(u)
+            with httpx.Client(timeout=float(args.prefilter_timeout), follow_redirects=True, headers={"User-Agent": "EGC-CLI/0.1"}) as c:
+                r = c.head(u)
                 if r.status_code >= 400:
                     return False
                 ct = r.headers.get('Content-Type', '').lower()
@@ -168,10 +194,28 @@ def main(argv: list[str] | None = None) -> int:
     total_pages = 0
     try:
         for base in urls:
-            candidates = expand_candidate_urls(base, include_paths)
+            # If base is a domain root, try adaptive discovery first, then include_paths fallback
+            discovered: list[str] = []
+            if (not args.no_discovery) and (base.startswith("http://") or base.startswith("https://")):
+                try:
+                    discovered = discover_from_root(base)
+                except Exception:
+                    discovered = []
+            candidates = (discovered or []) + expand_candidate_urls(base, include_paths)
+            # Normalize and dedupe candidates
+            norm_seen = set()
+            norm_candidates: list[str] = []
+            for u in candidates:
+                nu = normalize_url(u)
+                if nu and nu.startswith(('http://','https://')) and nu not in norm_seen:
+                    norm_seen.add(nu)
+                    norm_candidates.append(nu)
             # Pre-filter candidates quickly
-            filtered = [u for u in candidates if _quick_url_ok(u)]
-            for url in filtered:
+            prefiltered = norm_candidates if args.no_prefilter else [u for u in norm_candidates if _quick_url_ok(u)]
+            # Enforce per-domain limit
+            max_per_domain = int(getattr(args, 'max_pages_per_domain', 10) or 10)
+            limited = prefiltered[:max_per_domain]
+            for url in limited:
                 total_pages += 1
                 print(f"➡️  Processing: {url}")
                 result = pipeline.ingest(url)
@@ -231,4 +275,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     sys.exit(main())
-

@@ -1,0 +1,3908 @@
+[
+  {
+    "company": "Leadership",
+    "person_name": "Shelley Stelzner",
+    "role_title": "Shelley StelznerVice President",
+    "contact_type": "email",
+    "contact_value": "sstelzner@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.709169+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Shelley ",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.709169+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "713b2e34860f69652e1a14f11bb81ab9db9dc01448873d8746efa9f89e438b61"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Shawn McKenzie",
+    "role_title": "SHAWN MCKENZIE Chief Executive Officer",
+    "contact_type": "email",
+    "contact_value": "smckenzie@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.714133+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Shawn",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.714133+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a8e011432a626836461bc6e27b517ceebf6d9087fbffeb3da873f2fc6146a68b"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Steve Boline",
+    "role_title": "Steve BolineChief Financial Officer",
+    "contact_type": "email",
+    "contact_value": "Sboline@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.714902+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Steve",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.714902+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "b5caec89a2568d0aa82ef2e2767d664a1deb27c1dc3af92933a4ea5d8408d386"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Judy Cline",
+    "role_title": "Judith Cline Chief Nursing Officer",
+    "contact_type": "email",
+    "contact_value": "jcline@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.715881+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center :contains('@')",
+      "verbatim_quote": "Judith Cline Chief Nursing OfficerEmail Judy×Judy ClineJudy Cline is the Chief Nursing Officer at Seneca Healthcare District.  As a registered nurse (RN), she previously worked at Enloe Medical Center in Chico for over 35 years. She has vast experience in critical care, trauma, emergency, and flight nursing.Judy stated, “I wanted to complete my nursing career doing something meaningful for the community where we plan to retire, and to be a part of the new Seneca Hospital planning and build has been nothing short of amazing! It is going to be a beautiful, state-of-the-art, and modern hospital that will serve our community very well for many years to come.” Close",
+      "dom_node_screenshot": "evidence/static_b81a98c0_85a62bac_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.715881+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "e238d5c96aad8b9b527b174e58bac2d89f6bf961bdaefaf2e83b9656c6370182"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Brady Haynes",
+    "role_title": "BRADY HAYNES Chief Operating Officer",
+    "contact_type": "email",
+    "contact_value": "bhaynes@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.716646+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Brady",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.716646+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "8eb26ecf626be637077c2bd92b394ec2f208bd6e4cf0c3e67b9165e5e6d3f43f"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Charlene Almocera",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "calmocera@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.717410+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.717410+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Ethan Bevan",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "bchurchill@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.718110+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.718110+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Linda McCurdy",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "lmccurdy@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.718766+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.718766+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kailie Sonneville",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "ksonneville@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.719663+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.719663+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Shanna Roelofson",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "hr@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.720271+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.720271+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Tessa Parsons",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "TPARSONS@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.720883+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.720883+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Chelssa Outland",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "coutland@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.721523+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.721523+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jay BADEKER",
+    "role_title": "Maintenance Supervisor",
+    "contact_type": "email",
+    "contact_value": "jbadeker@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.722356+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center :contains('@')",
+      "verbatim_quote": "Jay BADEKERMaintenance SupervisorEmail",
+      "dom_node_screenshot": "evidence/static_b81a98c0_85a62bac_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.722356+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "625d4070238a539a125020973dd7b7435828f194bdb6d7578caa5bb8fa427d04"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kacie Broussard,",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "khowell@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.723013+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.723013+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "NEAL CLINE, BSN, RN, CFRN, JD",
+    "role_title": "House Supervisor",
+    "contact_type": "email",
+    "contact_value": "ncline@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.723712+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.723712+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Diane Dowden",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "ddowden@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.724434+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.724434+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jennifer Hall",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "jhall@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.725141+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.725141+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "ANDREA KELLY",
+    "role_title": "Dietary",
+    "contact_type": "email",
+    "contact_value": "akelly@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.725842+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.725842+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Todd Lane",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "tlane@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.726609+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.726609+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "JoAnn Mahloch",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "jmahloch@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.727277+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "E",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.727277+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Catie NeEly",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "cneely@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.727950+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.727950+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Ashli Pleau",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "ahughes@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.728655+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.728655+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Royce Raker",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "rraker@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.729398+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.729398+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kristin RUtkowski",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "kcourtright@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.730857+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.730857+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Steven Stoops",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "spstoops@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.731530+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.731530+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Stefanie White",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "swhite@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:44:30.732349+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center :contains('@')",
+      "verbatim_quote": "Stefanie WhiteNurse EducatorEmail ",
+      "dom_node_screenshot": "evidence/static_b81a98c0_85a62bac_20250910_114430.png",
+      "timestamp": "2025-09-10T08:44:30.732349+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1ffe66f215edfffabc85e5a1f01e2b646ab314f80ac11ba737f3bdc79e7831f5"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Executive Team",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mvandemaele@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:31.627407+00:00",
+    "evidence": {
+      "source_url": "https://www.prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "mvandemaele@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_7167db89_4f5acfe1_20250910_114531.png",
+      "timestamp": "2025-09-10T08:45:31.627407+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fae31a78cdb147f80d1918da8e211d36c650b78a6046b1fe3f2f62813735956e"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Mike Vandemaele",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mvandemaele@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:31.636423+00:00",
+    "evidence": {
+      "source_url": "https://www.prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "mvandemaele@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_7167db89_4f5acfe1_20250910_114531.png",
+      "timestamp": "2025-09-10T08:45:31.636423+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fae31a78cdb147f80d1918da8e211d36c650b78a6046b1fe3f2f62813735956e"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Executive Team",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mvandemaele@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:35.080238+00:00",
+    "evidence": {
+      "source_url": "https://prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "mvandemaele@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_10534630_4f5acfe1_20250910_114535.png",
+      "timestamp": "2025-09-10T08:45:35.080238+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fae31a78cdb147f80d1918da8e211d36c650b78a6046b1fe3f2f62813735956e"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Mike Vandemaele",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mvandemaele@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:35.089432+00:00",
+    "evidence": {
+      "source_url": "https://prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "mvandemaele@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_10534630_4f5acfe1_20250910_114535.png",
+      "timestamp": "2025-09-10T08:45:35.089432+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fae31a78cdb147f80d1918da8e211d36c650b78a6046b1fe3f2f62813735956e"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Josh Jelenek",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "jjelenek@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:35.093378+00:00",
+    "evidence": {
+      "source_url": "https://prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "jjelenek@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_10534630_4f5acfe1_20250910_114535.png",
+      "timestamp": "2025-09-10T08:45:35.093378+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "0a55e5ec43790178b13319a00981f744ef1a964ba3d3a8b2a93d9f7fd20d2a6a"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Dan Schulte",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "dschulte@prosatwork.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:35.097551+00:00",
+    "evidence": {
+      "source_url": "https://prosatwork.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": "dschulte@prosatwork.com",
+      "dom_node_screenshot": "evidence/static_10534630_4f5acfe1_20250910_114535.png",
+      "timestamp": "2025-09-10T08:45:35.097551+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "6f3c2aeb865bc25f92db619d7206e2c7884c8bad3b7c00d9f280613b4a19578f"
+    }
+  },
+  {
+    "company": "Firefightersfirstcu.Org",
+    "person_name": "Firefighters First Credit Union",
+    "role_title": "Mailing Address\nFirefighters First Credit Union\nP.O. Box 60890\nLos Angeles, CA 90060-0890",
+    "contact_type": "phone",
+    "contact_value": "8002311626",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:46.577724+00:00",
+    "evidence": {
+      "source_url": "https://www.firefightersfirstcu.org/Resources/Support/Contact-Us",
+      "selector_or_xpath": "fallback[div] a[href*='tel:']",
+      "verbatim_quote": "800.231.1626",
+      "dom_node_screenshot": "evidence/static_b715d172_0ad4b2f4_20250910_114546.png",
+      "timestamp": "2025-09-10T08:45:46.577724+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "cc0175370f8cbe719d7c3705153e5fd0c43798a3f9daa89e7e418966da460376"
+    }
+  },
+  {
+    "company": "Firefightersfirstcu.Org",
+    "person_name": "Branch Hours",
+    "role_title": "If your Firefighters First Debit or Credit card becomes lost or stolen, call us at:",
+    "contact_type": "phone",
+    "contact_value": "8002311626",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:46.579789+00:00",
+    "evidence": {
+      "source_url": "https://www.firefightersfirstcu.org/Resources/Support/Contact-Us",
+      "selector_or_xpath": "fallback[div] a[href*='tel:']",
+      "verbatim_quote": "800.231.1626",
+      "dom_node_screenshot": "evidence/static_b715d172_0ad4b2f4_20250910_114546.png",
+      "timestamp": "2025-09-10T08:45:46.579789+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "cc0175370f8cbe719d7c3705153e5fd0c43798a3f9daa89e7e418966da460376"
+    }
+  },
+  {
+    "company": "Business Services Team",
+    "person_name": "Rebecca Valderrama",
+    "role_title": "Business Banking Specialist\nDirect: (800)231-1626 ext. 7675\nEmail: rvalderrama@firefirstcu.org",
+    "contact_type": "phone",
+    "contact_value": "8002311626",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:47.621704+00:00",
+    "evidence": {
+      "source_url": "https://www.firefightersfirstcu.org/Business/Business-Services/Business-Team",
+      "selector_or_xpath": "fallback[div] a[href*='tel:']",
+      "verbatim_quote": "(800)231-1626",
+      "dom_node_screenshot": "evidence/static_f175b756_0ad4b2f4_20250910_114547.png",
+      "timestamp": "2025-09-10T08:45:47.621704+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1f757fdd3d326ecc4d77aa54d7da6b36a04dcbd3e9bcb54efcb075ccada6e467"
+    }
+  },
+  {
+    "company": "Business Services Team",
+    "person_name": "Karen Pak",
+    "role_title": "Investment Property Specialist\nDirect: (800)231-1626 ext. 7682\nMobile: (626)319-8085\nEmail: kpak@firefirstcu.org",
+    "contact_type": "phone",
+    "contact_value": "3235504994",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:45:47.623136+00:00",
+    "evidence": {
+      "source_url": "https://www.firefightersfirstcu.org/Business/Business-Services/Business-Team",
+      "selector_or_xpath": "fallback[div] a[href*='tel:']",
+      "verbatim_quote": "(800)231-1626",
+      "dom_node_screenshot": "evidence/static_f175b756_0ad4b2f4_20250910_114547.png",
+      "timestamp": "2025-09-10T08:45:47.623136+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1f757fdd3d326ecc4d77aa54d7da6b36a04dcbd3e9bcb54efcb075ccada6e467"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Ashley  Betcher",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707738",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.405791+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7738",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.405791+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "5e19c773b5f9657ee51620f19f40839c767bee61ea374c7b6b1bbd7eb8be1c2d"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Janice  Boncella",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707788",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.413007+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7788",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.413007+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "d497f39a5b8abd8adcecad2a1a7f6ca07c3abb51de2f13d116b991a0bd6444c7"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Stephanie  Burick",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707726",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.413952+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7726",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.413952+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "ea0e93bb3b1873efc26c49bf2893a95f90c9b7968de8044c43557499561e35b2"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Kristine Connelly",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707781",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.414565+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7781",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.414565+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "32e4163a5a2d841eca4ce8c619b853f5894fc72bc6466896c2499a247a707e74"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Susan  Gausman",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707614",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.415261+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7614",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.415261+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1c7c66527805c60a4881194a12eb86496731148db73d3b0abcea1a8b33bd4615"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Heather  Giglio",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707678",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.415905+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7678",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.415905+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "85b70d2c43cffdbadec4cee3f9114d73563592bc12c0f8ede995674d8835557b"
+    }
+  },
+  {
+    "company": "Business",
+    "person_name": "Chrystal  Herman",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "8148707778",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:00.416503+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7778",
+      "dom_node_screenshot": "evidence/static_d45bdb9a_2d4f2578_20250910_114900.png",
+      "timestamp": "2025-09-10T08:49:00.416503+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "528bfb61fdf60438f11247a48312be30f8d122725740a25bdacd1ffee5e54edc"
+    }
+  },
+  {
+    "company": "Shaun B. Adrian",
+    "person_name": "Shaun B. Adrian",
+    "role_title": "Partner",
+    "contact_type": "phone",
+    "contact_value": "8148707758",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:04.688352+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/shaun-b-adrian",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7758",
+      "dom_node_screenshot": "evidence/static_88346d68_2d4f2578_20250910_114904.png",
+      "timestamp": "2025-09-10T08:49:04.688352+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "b8d890ce3cc365bc3c011bd30db1192dc0568734b790ec926db5691b1fba424e"
+    }
+  },
+  {
+    "company": "J. W. Alberstadt, Jr.",
+    "person_name": "J. W.Alberstadt, Jr.",
+    "role_title": "Partner",
+    "contact_type": "phone",
+    "contact_value": "8148707750",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:06.960651+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/j-w-alberstadt-jr-",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7750",
+      "dom_node_screenshot": "evidence/static_e3963caa_2d4f2578_20250910_114906.png",
+      "timestamp": "2025-09-10T08:49:06.960651+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "f2fb7508a885a6af1de821c4642e78d9d02e80e878d21e859b225f64a69aa603"
+    }
+  },
+  {
+    "company": "William R. Brown",
+    "person_name": "William  R. Brown",
+    "role_title": "Of Counsel",
+    "contact_type": "phone",
+    "contact_value": "8148707600",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:08.437930+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/william-r-brown",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7600",
+      "dom_node_screenshot": "evidence/static_001c180c_2d4f2578_20250910_114908.png",
+      "timestamp": "2025-09-10T08:49:08.437930+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "04bff4c7da8f9b19d96b4a3b76c7b22471ba5872e611b7dd1a0cc43b89c374fb"
+    }
+  },
+  {
+    "company": "Thomas J. Buseck",
+    "person_name": "Thomas J. Buseck",
+    "role_title": "Partner",
+    "contact_type": "phone",
+    "contact_value": "8148707707",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:10.707552+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/thomas-j-buseck",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7707",
+      "dom_node_screenshot": "evidence/static_bdbd1f82_2d4f2578_20250910_114910.png",
+      "timestamp": "2025-09-10T08:49:10.707552+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "8f54eed4450658713ce296c5db47efab9e5087f21007c96d2e6ad9e06ad1e73c"
+    }
+  },
+  {
+    "company": "Lydia H. Caparosa",
+    "person_name": "Lydia  H. Caparosa",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "8148707665",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:12.349634+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/lydia-h-caparosa",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7665",
+      "dom_node_screenshot": "evidence/static_826a5f1a_2d4f2578_20250910_114912.png",
+      "timestamp": "2025-09-10T08:49:12.349634+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "784690625d9fbbc734aeacba638fbcbab4591ed76cdefaca808fe06d3725667f"
+    }
+  },
+  {
+    "company": "Brian Cressman",
+    "person_name": "Brian K. Cressman",
+    "role_title": "Partner",
+    "contact_type": "phone",
+    "contact_value": "8148707702",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:14.855078+00:00",
+    "evidence": {
+      "source_url": "https://www.macdonaldillig.com/our-team/bio/brian-k-cressman",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": "(814) 870-7702",
+      "dom_node_screenshot": "evidence/static_589e8e00_2d4f2578_20250910_114914.png",
+      "timestamp": "2025-09-10T08:49:14.855078+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "0ed4c1949b062f150a8a8af5755942e14e40c114f3d981a35dc5985619712ac0"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/01/Diana-Alsabe.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.158598+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.158598+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "James M. Behnke",
+    "role_title": "Of Counsel",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/James-Behnke.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.160150+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.160150+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Ashley M. Berger",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/03/Ashley-Berger.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.162779+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.162779+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Erica P. Bigelow",
+    "role_title": "Of Counsel",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Erica-Bigelow.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.165471+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.165471+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Thomas H. Bilodeau, III",
+    "role_title": "Managing Director; Shareholder; Investment Management and Private Funds Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Thomas-BilodeauIII.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.166152+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.166152+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Leah Cohen",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/08/Leah-Cohen.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.169450+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.169450+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Dorfler",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2021/06/Joseph-Dorfler.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.170388+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.170388+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Frank N. Gaeta",
+    "role_title": "Shareholder; Employment Law Group Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Gaeta-Frank.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.172663+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.172663+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "David Glod",
+    "role_title": "Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/David-Glod.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173202+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173202+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Claire Grace",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/02/Claire-Grace.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173636+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173636+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "James B. Heffernan",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/James-Heffernan.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174304+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174304+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "J. Allen Holland",
+    "role_title": "Shareholder; Employment Law Group Co-Chair; Litigation Group Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Allen-Holland.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174863+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174863+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Christopher M. Hynes",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/04/Christopher-Hynes.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.175455+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.175455+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Stephen M. Kane",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Stephen-Kane.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.176615+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.176615+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Eric J. Krathwohl",
+    "role_title": "Shareholder; Energy, Renewables & Regulated Industries, Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Eric-Krathwohl.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.177184+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.177184+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Howard L. Levin",
+    "role_title": "Of Counsel",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Howard-Levin.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.178360+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.178360+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jonathan Loeb",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/01/Jonathan-Loeb.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.180142+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.180142+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Theodore A. Lund",
+    "role_title": "Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Theodore-Lund.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.183795+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.183795+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Emmett E. Lyne",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Emmett-Lyne.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.184178+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.184178+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Gerald V. May, Jr",
+    "role_title": "Shareholder; Estate Planning Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Gerald-May.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185166+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185166+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Anthony McGuinness",
+    "role_title": "Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2020/02/Anthony-McGuinness.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185477+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_89cd4d82_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185477+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/James-Behnke.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198106+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198106+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/03/Ashley-Berger.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198138+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198138+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Erica-Bigelow.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198162+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198162+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Thomas-BilodeauIII.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198187+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198187+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/08/Leah-Cohen.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198214+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198214+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2021/06/Joseph-Dorfler.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198238+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198238+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Gaeta-Frank.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198267+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198267+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/David-Glod.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198290+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198290+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/02/Claire-Grace.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198312+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198312+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/James-Heffernan.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198337+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198337+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Allen-Holland.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198361+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198361+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/04/Christopher-Hynes.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198445+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198445+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Danielle-Justo.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198478+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198478+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Stephen-Kane.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198505+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198505+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Eric-Krathwohl.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198530+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198530+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Howard-Levin.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198553+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198553+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Jeffrey-Loeb.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198579+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198579+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/01/Jonathan-Loeb.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198603+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198603+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Theodore-Lund.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198629+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198629+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Emmett-Lyne.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198660+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198660+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Gerald-May.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198689+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198689+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2020/02/Anthony-McGuinness.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198713+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198713+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/11/Mark-OConnor.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198744+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198744+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/06/Kayla-Perry.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198774+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198774+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/02/Rachel-Shipp.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198813+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198813+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Scott-Stokes.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198840+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198840+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Robert-Tedesco.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198868+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198868+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/11/Arvid-von-Taube.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198897+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198897+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/04/Joseph-Y.-Wang.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198923+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198923+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2021/12/Yana-Zheng.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.198948+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.198948+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Danielle Justo",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Danielle-Justo.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.221193+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.221193+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jeffrey B. Loeb",
+    "role_title": "President; Managing Director; Shareholder; Litigation Co-Chair; Real Estate and Title Litigation Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Jeffrey-Loeb.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.050278+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.050278+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Mark C. O’Connor",
+    "role_title": "Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/11/Mark-OConnor.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.087801+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.087801+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kayla Perry",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2022/06/Kayla-Perry.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.090361+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.090361+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Rachel Shipp",
+    "role_title": "Unknown",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/02/Rachel-Shipp.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.100249+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.100249+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Scott A. Stokes",
+    "role_title": "Managing Director; Shareholder; Business, Corporate and Securities Group Chair; Investment Management and Private Funds Group Co-Chair",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Scott-Stokes.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.102266+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.102266+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Robert P. Tedesco",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/10/Robert-Tedesco.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.104958+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.104958+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Arvid von Taube",
+    "role_title": "Shareholder",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2019/11/Arvid-von-Taube.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.108085+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.108085+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Y. Wang",
+    "role_title": "Counsel",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2023/04/Joseph-Y.-Wang.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.109628+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.109628+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Yana Zheng",
+    "role_title": "Associate",
+    "contact_type": "link",
+    "contact_value": "https://www.richmaylaw.com/wp-content/uploads/2021/12/Yana-Zheng.vcf",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.111070+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href$='.vcf']",
+      "verbatim_quote": " vCard",
+      "dom_node_screenshot": "evidence/static_0084a3ca_ef648dc6_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.111070+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a49ccd4ff9cf6076f8c9daa935f5c679e95c7643c689a40ce469b6a62e443b09"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "dalsabe@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.152452+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.152452+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diana Alsabe",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563889",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.158222+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3889",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.158222+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "c1cf3b88c4d29e458e1fdcf13839f2c908d35a36ea14823ab787447fcdf8ed66"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "James M. Behnke",
+    "role_title": "Of Counsel",
+    "contact_type": "email",
+    "contact_value": "jbehnke@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.159364+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.159364+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Ashley M. Berger",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "aberger@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.161917+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.161917+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Ashley M. Berger",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563869",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.162288+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3869",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.162288+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "c3c0b5b1ec72cebdc0eb117749bba8853bc6ff55b4cef570fcce0ce64adb1708"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Erica P. Bigelow",
+    "role_title": "Of Counsel",
+    "contact_type": "email",
+    "contact_value": "ebigelow@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.165141+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.165141+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Erica P. Bigelow",
+    "role_title": "Of Counsel",
+    "contact_type": "phone",
+    "contact_value": "6175563877",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.165307+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3877",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.165307+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1c2822f9e0d13b3824774c598d91fdcd03d3f7b8ba1a38049f889c53e6e96410"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Thomas H. Bilodeau, III",
+    "role_title": "Managing Director; Shareholder; Investment Management and Private Funds Co-Chair",
+    "contact_type": "email",
+    "contact_value": "tbilodeau@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.165985+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.165985+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Thomas H. Bilodeau, III",
+    "role_title": "Managing Director; Shareholder; Investment Management and Private Funds Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563813",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.166070+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3813",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.166070+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "6715108df6d38414a7309a22eb994e26b001b05545aa3e67300f73a39b9237fa"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kennedy Cameron",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "kcameron@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.167584+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.167584+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kennedy Cameron",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563825",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.168020+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3825",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.168020+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "40a817f94e4f0c47deb4b46ba718b075716de6d3a0be4dd0c35f781613559c68"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Leah Cohen",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "lcohen@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.169169+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.169169+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Leah Cohen",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563842",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.169356+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3842",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.169356+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "5bffd97e3e90121729a3ffa0c6c6d9861e58dafa0e1979f00c304f9cf5de9cdf"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Dorfler",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "jdorfler@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.169873+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.169873+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Dorfler",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "617205563867",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.170069+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " (617) 556-3867",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.170069+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "249340f136c333bf25a1ab76070f3478acd28130da53011b5db914ffa30266e9"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Thomas E. Doyle",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "tdoyle@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.171324+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.171324+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Thomas E. Doyle",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563808",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.171535+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3808",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.171535+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "c87e53585c326372b932024e29a2fed8db47fef4aa23064c77527c8558f02c55"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Frank N. Gaeta",
+    "role_title": "Shareholder; Employment Law Group Co-Chair",
+    "contact_type": "email",
+    "contact_value": "fgaeta@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.172483+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.172483+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Frank N. Gaeta",
+    "role_title": "Shareholder; Employment Law Group Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563838",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.172580+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3838",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.172580+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "849d1f6769a1de4a1cc7b9bd8ff869258f33d7c1f34fd8e6ecb4265dd311eb85"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "David Glod",
+    "role_title": "Shareholder",
+    "contact_type": "email",
+    "contact_value": "dglod@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173069+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173069+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "David Glod",
+    "role_title": "Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563852",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173133+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3852",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173133+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "2a07612daae9cf1b73532d5c32d01d9db90a74045ecee1e226d94d2d984ff171"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Claire Grace",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "cgrace@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173526+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173526+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Claire Grace",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563803",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.173574+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3803",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.173574+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "85c59ae2a50d5651bc44b78569a514146d74aeefa0ab26464348f39ccf5fbdae"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "James B. Heffernan",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "email",
+    "contact_value": "jheffernan@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174118+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174118+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "James B. Heffernan",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563881",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174178+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3881",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174178+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "28209f9c2198102dd3095567ad449dcd20eb311d123bebb30795620c34f77ead"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "J. Allen Holland",
+    "role_title": "Shareholder; Employment Law Group Co-Chair; Litigation Group Co-Chair",
+    "contact_type": "email",
+    "contact_value": "jaholland@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174743+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174743+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "J. Allen Holland",
+    "role_title": "Shareholder; Employment Law Group Co-Chair; Litigation Group Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563879",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.174807+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3879",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.174807+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "63cee66c240efccfbdde461eb667bb0857352e98276d187917d5eb0e99d58d23"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Christopher M. Hynes",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "chynes@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.175313+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.175313+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Christopher M. Hynes",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563858",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.175389+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3858",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.175389+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "53e40d7d9b23c8a56a3dcbc1667e025c349410036942ebe1bb5f840ef680f049"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Hayley Kallfelz",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "hkallfelz@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.176029+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.176029+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Hayley Kallfelz",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563897",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.176090+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3897",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.176090+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "22a2acec403331f236fb30ce3bb8e90ca2ad3d382fbb62370454329072948043"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Stephen M. Kane",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "email",
+    "contact_value": "skane@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.176494+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.176494+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Stephen M. Kane",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563827",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.176554+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3827",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.176554+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "5910121fcbdb8e94144b1b7a755c7408fe65c374d8cff1a0098c10d39a580ad3"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Eric J. Krathwohl",
+    "role_title": "Shareholder; Energy, Renewables & Regulated Industries, Chair",
+    "contact_type": "email",
+    "contact_value": "ekrathwohl@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.177030+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.177030+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Eric J. Krathwohl",
+    "role_title": "Shareholder; Energy, Renewables & Regulated Industries, Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563857",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.177080+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3857",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.177080+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a7e71a82af4031ff2073349880504dd2bcb05cc83cee67bfdfde48b85fa3a1f1"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Howard L. Levin",
+    "role_title": "Of Counsel",
+    "contact_type": "email",
+    "contact_value": "hlevin@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.178128+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.178128+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Howard L. Levin",
+    "role_title": "Of Counsel",
+    "contact_type": "phone",
+    "contact_value": "6175563855",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.178260+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3855",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.178260+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "91f8acf59b424c1c26b215ba7dcaa065fd5b1577ca1ab4dac3b8eca713f15df0"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jonathan Loeb",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "jonloeb@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.179926+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.179926+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jonathan Loeb",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563836",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.179997+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3836",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.179997+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a29c174fff5f512ddb99087cff1921beab752dd90769ea8537b377f5c4cbfba2"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Chabely Lopez",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "clopez@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.183233+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.183233+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Chabely Lopez",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563887",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.183331+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3887",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.183331+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "9f7c0b40eef0ea1301a2165727abe1b6576829215e0739988ca49dec163f6df4"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Theodore A. Lund",
+    "role_title": "Shareholder",
+    "contact_type": "email",
+    "contact_value": "tlund@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.183686+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.183686+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Theodore A. Lund",
+    "role_title": "Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563826",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.183732+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3826",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.183732+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "ac89b65fef3ceab3b3a32753352f82e098a0ede7b4c89fc87c0db575349a7911"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Emmett E. Lyne",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "email",
+    "contact_value": "elyne@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.184070+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.184070+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Emmett E. Lyne",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563885",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.184114+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3885",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.184114+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "e516092b8ee1a573bcc3d882d288b4958c32603693daa0c0a65dbd7d1ae72f40"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jessica Mann",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563849",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.184708+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3849",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.184708+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "2342a25efda914d6230a95c988a238482afd0492f5bdd2bac1541b22e90b344f"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Gerald V. May, Jr",
+    "role_title": "Shareholder; Estate Planning Chair",
+    "contact_type": "email",
+    "contact_value": "gmay@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185073+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185073+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Gerald V. May, Jr",
+    "role_title": "Shareholder; Estate Planning Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563835",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185123+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3835",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185123+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "ae14a75b94f411a9c53e0f7908f61bf974a7aae03b155022ef1102c9b8c33411"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Anthony McGuinness",
+    "role_title": "Shareholder",
+    "contact_type": "email",
+    "contact_value": "amcguinness@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185401+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185401+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Anthony McGuinness",
+    "role_title": "Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563806",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185437+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3806",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185437+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "3dc74a0b4b223b486e81972379b178e7a8733e986dc81a2d32974d1e4208a463"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Michele McMorrow",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mmcmorrow@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185731+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_c453cf8f_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185731+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Michele McMorrow",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563824",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.185768+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": ".entry-team-info a[href*='tel:']",
+      "verbatim_quote": " 617-556-3824",
+      "dom_node_screenshot": "evidence/static_0084a3ca_8e9ee3f9_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.185768+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "57f4970c8e6cd1cf22bdf346eb9f9505e0a98c6d05c0a005ed9b716a3f5e5228"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Shayla Foley",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "sfoley@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.190917+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team-info'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_7c488896_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.190917+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Shayla Foley",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563884",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.190992+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team-info'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3884",
+      "dom_node_screenshot": "evidence/static_0084a3ca_d6c327aa_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.190992+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "84417383d61186ae423731069576c9185b138364a6bac7a6301a60fe21442071"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Danielle Justo",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "email",
+    "contact_value": "djusto@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.221060+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.221060+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Danielle Justo",
+    "role_title": "Shareholder; Commercial Real Estate Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563841",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:31.221126+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3841",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114931.png",
+      "timestamp": "2025-09-10T08:49:31.221126+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "5da0f59a959811fa7a2ab956419ec18cb8f47434672765f38f40d06f89743fba"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jeffrey B. Loeb",
+    "role_title": "President; Managing Director; Shareholder; Litigation Co-Chair; Real Estate and Title Litigation Chair",
+    "contact_type": "email",
+    "contact_value": "jloeb@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.049211+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.049211+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Jeffrey B. Loeb",
+    "role_title": "President; Managing Director; Shareholder; Litigation Co-Chair; Real Estate and Title Litigation Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563871",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.050023+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3871",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.050023+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "670374d53167274d05b1b220aa3aee64c1755fee18b8768f04f134af69f86bf3"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Mark C. O’Connor",
+    "role_title": "Shareholder",
+    "contact_type": "email",
+    "contact_value": "moconnor@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.087468+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.087468+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Mark C. O’Connor",
+    "role_title": "Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563862",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.087567+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3862",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.087567+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "d433d9c6120ade93572220164f2199c690084f25179b70e8ff628c1039554570"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kayla Perry",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "kperry@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.090155+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.090155+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kayla Perry",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563853",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.090256+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3853",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.090256+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1f6731d3fe92f93d4fa2405f20c685aa3cd43c969b3e41e201d6abcbf0f01762"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Harley Racer",
+    "role_title": "Counsel",
+    "contact_type": "email",
+    "contact_value": "hracer@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.092827+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.092827+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Harley Racer",
+    "role_title": "Counsel",
+    "contact_type": "phone",
+    "contact_value": "6175563845",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.093168+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3845",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.093168+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a88ec8dd11a1cad317abfd6c8f7b46f244d7db05efdaf2c3f424f90ae3859c51"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diddia Serrao Sousa",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "dsousa@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.096521+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.096521+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Diddia Serrao Sousa",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563850",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.096719+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3850",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.096719+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a4818683e4ef7e9733dd794a6345809d2513685e97868331dafc0d1d23523aeb"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kathleen A. Shipp",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "kshipp@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.099209+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.099209+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Kathleen A. Shipp",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563811",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.099310+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3811",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.099310+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "34ff3339443dcf5bfdff04f26e2e21b6d9de1347a760b80ff544edbfed968b56"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Rachel Shipp",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "rshipp@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.100080+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.100080+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Rachel Shipp",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563886",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.100158+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3886",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.100158+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "c2c8f0db82b3ae40bb929386daf4354ad466f76bbb93e3db8f65003fb26b9c84"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Scott A. Stokes",
+    "role_title": "Managing Director; Shareholder; Business, Corporate and Securities Group Chair; Investment Management and Private Funds Group Co-Chair",
+    "contact_type": "email",
+    "contact_value": "sstokes@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.102122+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.102122+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Scott A. Stokes",
+    "role_title": "Managing Director; Shareholder; Business, Corporate and Securities Group Chair; Investment Management and Private Funds Group Co-Chair",
+    "contact_type": "phone",
+    "contact_value": "6175563810",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.102195+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3810",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.102195+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "342fd38597476319eedad187c4b1d04bcdec97e66114bf18f21996fdb8bd4630"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Aurora Sullivan",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "asullivan@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.103305+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.103305+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Aurora Sullivan",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563833",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.103371+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3833",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.103371+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "520f2a94295b215aeeb15941abd023285d74d6e9d767ff7531b77de197ad21f8"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Robert P. Tedesco",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "email",
+    "contact_value": "rtedesco@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.104827+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.104827+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Robert P. Tedesco",
+    "role_title": "Managing Director; Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563802",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.104890+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3802",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.104890+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "81364b59bfdec8277fc1a32bfa1b31d5db13e82a558da70a29c4aae722751078"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Marissa Thomas",
+    "role_title": "Unknown",
+    "contact_type": "email",
+    "contact_value": "mthomas@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.106414+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.106414+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Marissa Thomas",
+    "role_title": "Unknown",
+    "contact_type": "phone",
+    "contact_value": "6175563805",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.106479+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3805",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.106479+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "dce4da925f9da3c1f6c4253ffaf097d3510fd3b0d42c918695d1141bde5fc1bc"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Arvid von Taube",
+    "role_title": "Shareholder",
+    "contact_type": "email",
+    "contact_value": "avontaube@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.107944+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.107944+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Arvid von Taube",
+    "role_title": "Shareholder",
+    "contact_type": "phone",
+    "contact_value": "6175563823",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.108022+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3823",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.108022+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "400f11eddee2b4660362b526fb89a1675802b3e053152e1e4c60702e8f87013b"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Y. Wang",
+    "role_title": "Counsel",
+    "contact_type": "email",
+    "contact_value": "jwang@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.109506+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.109506+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Joseph Y. Wang",
+    "role_title": "Counsel",
+    "contact_type": "phone",
+    "contact_value": "6175563843",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.109568+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3843",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.109568+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "872529a6b5b2fd4318c82b7397e2a879e272d8b0f6d58fa6fd346a95580af9ea"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Yana Zheng",
+    "role_title": "Associate",
+    "contact_type": "email",
+    "contact_value": "yzheng@richmaylaw.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.110952+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='mailto:']",
+      "verbatim_quote": " Email",
+      "dom_node_screenshot": "evidence/static_0084a3ca_4f5acfe1_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.110952+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Our Team",
+    "person_name": "Yana Zheng",
+    "role_title": "Associate",
+    "contact_type": "phone",
+    "contact_value": "6175563896",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:35.111010+00:00",
+    "evidence": {
+      "source_url": "https://www.richmaylaw.com/our-team",
+      "selector_or_xpath": "[class*='team'] a[href*='tel:']",
+      "verbatim_quote": " 617-556-3896",
+      "dom_node_screenshot": "evidence/static_0084a3ca_2d4f2578_20250910_114935.png",
+      "timestamp": "2025-09-10T08:49:35.111010+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "d339b52e4c3f75fe5baf8e8799660408adcd69f644d3e48fc7820ecfeb450f9c"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Frederick Reinhardt",
+    "role_title": "President and CEO",
+    "contact_type": "phone",
+    "contact_value": "4015622706",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.563772+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2706",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.563772+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "5cb8b85bb2ac7f3b05f499cf15f9806c2e04ad82110cd54ac7947937f7382548"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Andrew Brown",
+    "role_title": "Senior Vice President, CFO",
+    "contact_type": "phone",
+    "contact_value": "4015622709",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.564556+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2709",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.564556+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fca2f4a2e6ee61922c2d82a4ba23b6d52b0d7e25e91f534a8f1f9dd85ae46bee"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Holly Ferrara",
+    "role_title": "Senior Vice President, Chief Lending Officer",
+    "contact_type": "phone",
+    "contact_value": "4015622784",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.564667+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2784",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.564667+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "0feb92ab7ce8a644c98ad45b661d0307e1bf119ac51e747e32ee67f171edcbb3"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jennifer LaFrance",
+    "role_title": "Senior Vice President, COO",
+    "contact_type": "phone",
+    "contact_value": "4015622794",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.564778+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2794",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.564778+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "1953b137aa0f748ca6f34074bb0bf2c292a6e8aefbaf9be5f540ae3780a268e1"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Terri Brophy",
+    "role_title": "Senior Vice President, Human Resources",
+    "contact_type": "phone",
+    "contact_value": "4015622746",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.564890+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2746",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.564890+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "b84039c6a81350c4c2ca2fd200a204c6f0a66961e8c599264b1cfb4f5d82a384"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Paul Silva",
+    "role_title": "Senior Vice President, Chief Risk Officer",
+    "contact_type": "phone",
+    "contact_value": "4015622776",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.565014+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2776",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.565014+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "b6fad52676467c87de353d848cc9168ff60c591b7c01e69234b10ad6cc376456"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Michael Aurecchia",
+    "role_title": "Vice President, Retail Lending",
+    "contact_type": "phone",
+    "contact_value": "4015622774",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.565129+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2774",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.565129+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "d663b110cb222ea21700b534f7846da1956e123228a70c1cc6936b5e7ce53d68"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jason Bouchard",
+    "role_title": "Vice President, Collections",
+    "contact_type": "phone",
+    "contact_value": "4015622753",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.565315+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2753",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.565315+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "907f71f7250000133eec2cf33d0da05def3c5ac6d2a181229926e045b226e15f"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Brian McMahon",
+    "role_title": "Vice President, Commercial Lending",
+    "contact_type": "phone",
+    "contact_value": "4015622731",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567228+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2731",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567228+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "741deff0cc2ceca7f58959ca7417f40d890992cb3aac79a3bc6056f6a26ef285"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Scott Corvese",
+    "role_title": "Vice President, Indirect Lending",
+    "contact_type": "phone",
+    "contact_value": "4015622736",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567366+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2736",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567366+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "aad249d91c7a2ed7bc80523c1400b73821718d4b6d7a4add4483cc61b77667ec"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Janet McAuslin",
+    "role_title": "Vice President, Operations",
+    "contact_type": "phone",
+    "contact_value": "4015622714",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567481+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2714",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567481+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "6873ebfdfb900eeb634d6215f11b408c7724ca9e80474c598574f3e2493c6ee6"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Chris Guenette",
+    "role_title": "Vice President, Marketing and Data Analytics",
+    "contact_type": "phone",
+    "contact_value": "4013049751",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567583+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401 304 9751",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567583+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "146966a15d9da8799ed82f7fc32392c00ecb052cfcdbf302b0e7094fb3f7e5e6"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Siran Krikorian",
+    "role_title": "Vice President, Digital Strategy and Customer Experience",
+    "contact_type": "phone",
+    "contact_value": "4015622757",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567679+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2757",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567679+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "f32bdae9fff7f15e4e989e398b820602b50e45df75f85833f63975afe83cd0b6"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Joslyn Clemm",
+    "role_title": "Assistant Vice President, Retail Banking",
+    "contact_type": "phone",
+    "contact_value": "4015622799",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567776+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2799",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567776+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "683597b2048d3fbf253423d1697c01280e6c67f458eea0eb2fdc305402cd0f32"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Melissa Danielian",
+    "role_title": "Assistant Vice President, Deposit Operations",
+    "contact_type": "phone",
+    "contact_value": "4015622738",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567874+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2738",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567874+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "6efcf3c93f92f10989a870fef683014bc33789776985fa55e78567dd6e38c059"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jessica DaSilva",
+    "role_title": "Assistant Vice President, Loan Operations",
+    "contact_type": "phone",
+    "contact_value": "4015622745",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.567969+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2745",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.567969+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "36fa90d95706637558e9af568067a8a6a4269694433871c1916bd37b8fb6205c"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Erica Mathie",
+    "role_title": "Assistant Vice President, Indirect Lending",
+    "contact_type": "phone",
+    "contact_value": "4015622710",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568059+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2710",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568059+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "e243cd9d817f29e911a0cbaee9d2bf0bf1d6d53df8b8d71bfc314742f2ace8ba"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Maria Rinaudo",
+    "role_title": "Assistant Vice President, Senior Portfolio Manager",
+    "contact_type": "phone",
+    "contact_value": "4015622749",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568177+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2749",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568177+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "080aa9346c4e2393a95607b074348b81d5b40b80490dad86482f16e2358efcec"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Stephen Ritarossi",
+    "role_title": "Assistant Vice President, Collections",
+    "contact_type": "phone",
+    "contact_value": "4015622779",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568310+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2779",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568310+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a8c08504b9dfb5253adc45820cfae024c94b88cf20f598df7ab01ca75f2c6151"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Elaine Medina",
+    "role_title": "Assistant Vice President, Human Resources",
+    "contact_type": "phone",
+    "contact_value": "4015622788",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568416+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2788",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568416+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "dd878e0234817dd9ae399c5255043a50ccf71550483456778e63a58e04dd703d"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Nicole Fortier",
+    "role_title": "Assistant Vice President, Core Administrator",
+    "contact_type": "phone",
+    "contact_value": "4015622715",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568599+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2715",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568599+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "32e10f38d1aa25ea01bfc48ed1e00c366268bfbceced6c1852b029b7efa20675"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Patrick Quirk",
+    "role_title": "Assistant Vice President, System Administrator",
+    "contact_type": "phone",
+    "contact_value": "4015622780",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.568866+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2780",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.568866+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "8a00ce9c6251733d434171b38e2bea6b31b7e833f4e144cfa8d2a5157e330e9f"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Elizabeth Zachow",
+    "role_title": "Assistant Vice President, Retail Lending",
+    "contact_type": "phone",
+    "contact_value": "4015622715",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-10T08:49:43.569076+00:00",
+    "evidence": {
+      "source_url": "https://greenwoodcu.org/about-us/leadership",
+      "selector_or_xpath": "table th:contains('phone')",
+      "verbatim_quote": "401-562-2715",
+      "dom_node_screenshot": "evidence/static_0da7fb72_49c5c070_20250910_114943.png",
+      "timestamp": "2025-09-10T08:49:43.569076+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "32e10f38d1aa25ea01bfc48ed1e00c366268bfbceced6c1852b029b7efa20675"
+    }
+  }
+]

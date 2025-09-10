@@ -14,11 +14,91 @@ Key Features:
 
 import csv
 import json
+import re
 from pathlib import Path
 from typing import List, Optional, Union
 from datetime import datetime as dt, datetime
+from urllib.parse import urlsplit, urlunsplit
 
 from ..schemas import Contact, ContactExport, VerificationStatus
+
+
+def normalize_url_for_report(u: str) -> str:
+    """Normalize URLs for reporting purposes only (does not change Evidence):
+    - host -> lower and strip leading 'www.'
+    - drop query and fragment
+    - trim trailing '/' except for root
+    """
+    try:
+        sp = urlsplit(u)
+        netloc = (sp.netloc or '').lower()
+        if netloc.startswith('www.'):
+            netloc = netloc[4:]
+        path = sp.path or ''
+        if path.endswith('/') and path != '/':
+            path = path.rstrip('/')
+        sp2 = sp._replace(netloc=netloc, path=path, query='', fragment='')
+        return urlunsplit(sp2)
+    except Exception:
+        return u or ''
+
+
+def _norm_key(company: str, person_name: str, contact_type: str, contact_value: str) -> tuple:
+    company_norm = (company or '').strip().lower()
+    person_norm = (person_name or '').strip().lower()
+    if contact_type == 'email':
+        value_norm = (contact_value or '').strip().lower()
+    elif contact_type == 'phone':
+        value_norm = re.sub(r"\D", "", (contact_value or ''))
+    else:
+        value_norm = (contact_value or '').strip().lower()
+    return (company_norm, person_norm, contact_type, value_norm)
+
+
+def _quality_tuple(c: Contact) -> tuple:
+    """Return a tuple for comparing two contacts with the same dedup key.
+    Higher tuple compares greater.
+    Priority:
+      1) Anchor > text (selector contains a[href*='mailto:'] or a[href*='tel:'])
+      2) Semantic URL (contains /leadership|/our-team|/team)
+      3) Role != Unknown
+      4) Canon URL length (shorter is better)
+      5) Fresher captured_at
+    """
+    sel = (c.evidence.selector_or_xpath or '').lower() if c.evidence else ''
+    anchor = 1 if ("a[href*='mailto:']" in sel or "a[href*='tel:']" in sel) else 0
+
+    surl = (c.evidence.source_url or '').lower() if c.evidence else ''
+    semantic = 1 if any(k in surl for k in ('/leadership', '/our-team', '/team')) else 0
+
+    role_good = 1 if (c.role_title and c.role_title.strip().lower() != 'unknown') else 0
+
+    canon = normalize_url_for_report(c.evidence.source_url if c.evidence else '')
+    canon_len = len(canon)
+
+    freshness = c.captured_at or datetime.min
+
+    # We want: anchor desc, semantic desc, role_good desc, canon_len asc, captured_at desc
+    return (anchor, semantic, role_good, -canon_len, freshness)
+
+
+def dedupe_contacts_for_export(contacts: List[Contact]) -> List[Contact]:
+    """Global dedupe for export layer by (company, person, type, value) with quality tie-breaks.
+    Does not mutate models; only filters which instances to emit.
+    """
+    if not contacts:
+        return []
+    best: dict[tuple, Contact] = {}
+    for c in contacts:
+        key = _norm_key(c.company, c.person_name, c.contact_type.value, c.contact_value)
+        prev = best.get(key)
+        if prev is None or _quality_tuple(c) > _quality_tuple(prev):
+            best[key] = c
+    kept = list(best.values())
+    removed = len(contacts) - len(kept)
+    if removed > 0:
+        print(f"🧹 Dedupe: kept {len(kept)} of {len(contacts)}")
+    return kept
 
 
 class ContactExporter:
@@ -91,6 +171,9 @@ class ContactExporter:
         
         csv_path = self.output_dir / filename
         
+        # Dedupe before export (export-layer only)
+        contacts = dedupe_contacts_for_export(contacts)
+
         # Convert to export format (flattened)
         export_contacts = [ContactExport.from_contact(contact) for contact in contacts]
         
@@ -106,9 +189,13 @@ class ContactExporter:
                 for contact in export_contacts:
                     # Convert to dict and handle datetime serialization
                     row_data = contact.model_dump()
+
+                    # Normalize source_url for report (do not mutate model)
+                    if 'source_url' in row_data:
+                        row_data['source_url'] = normalize_url_for_report(row_data['source_url'])
                     
                     # Convert datetime objects to ISO format strings
-                    for key, value in row_data.items():
+                    for key, value in list(row_data.items()):
                         if isinstance(value, datetime):
                             row_data[key] = value.isoformat()
                     
@@ -150,6 +237,9 @@ class ContactExporter:
         
         json_path = self.output_dir / filename
         
+        # Dedupe before export (export-layer only)
+        contacts = dedupe_contacts_for_export(contacts)
+
         # Convert to serializable format
         export_data = []
         for contact in contacts:
@@ -162,7 +252,8 @@ class ContactExporter:
                 "verification_status": contact.verification_status.value,
                 "captured_at": contact.captured_at.isoformat(),
                 "evidence": {
-                    "source_url": contact.evidence.source_url,
+                    # Normalize only for report output
+                    "source_url": normalize_url_for_report(contact.evidence.source_url),
                     "selector_or_xpath": contact.evidence.selector_or_xpath,
                     "verbatim_quote": contact.evidence.verbatim_quote,
                     "dom_node_screenshot": contact.evidence.dom_node_screenshot,

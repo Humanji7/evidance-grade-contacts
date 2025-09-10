@@ -74,14 +74,23 @@ class IngestPipeline:
         domain_tracker: Optional[DomainTracker] = None,
         contact_extractor: Optional[ContactExtractor] = None,
         evidence_builder: Optional[EvidenceBuilder] = None,
+        enable_headless: bool = True,
+        static_timeout_s: float | None = None,
+        aggressive_static: bool = False,
     ):
-        self.static_fetcher = static_fetcher or StaticFetcher()
+        # Allow overriding static timeout for faster demos/runs
+        if static_fetcher is None:
+            self.static_fetcher = StaticFetcher(timeout_s=float(static_timeout_s or 12.0))
+        else:
+            self.static_fetcher = static_fetcher
         self.playwright_fetcher = playwright_fetcher or PlaywrightFetcher()
         self.domain_tracker = domain_tracker or DomainTracker()
         
         # Initialize evidence and extraction components
         self.evidence_builder = evidence_builder or EvidenceBuilder()
-        self.contact_extractor = contact_extractor or ContactExtractor(self.evidence_builder)
+        self.aggressive_static = bool(aggressive_static)
+        self.contact_extractor = contact_extractor or ContactExtractor(self.evidence_builder, aggressive_static=self.aggressive_static)
+        self.enable_headless = bool(enable_headless)
     
     def _extract_domain(self, url: str) -> str:
         """Extract domain from URL for tracking."""
@@ -139,7 +148,7 @@ class IngestPipeline:
             selector_hits = self._count_selector_hits(static_result.html)
             escalation = decide_escalation(static_result, selector_hits)
             
-            if not escalation.escalate:
+            if (not escalation.escalate) or (not self.enable_headless):
                 # Static success - extract contacts from HTML
                 contacts = self.contact_extractor.extract_from_static_html(
                     static_result.html, url

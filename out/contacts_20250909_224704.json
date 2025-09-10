@@ -1,0 +1,470 @@
+[
+  {
+    "company": "Leadership",
+    "person_name": "Jerri Nielson",
+    "role_title": "Jerri Nielsen President",
+    "contact_type": "email",
+    "contact_value": "jlvnielsen1@gmail.com",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.897218+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Jerri",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.897218+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "fadd17cf64805230d38ad72039bdafe50b9123e235c65f9980f2d7e15bc24189"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Richard Rydell",
+    "role_title": "Richard RydellTreasurer",
+    "contact_type": "email",
+    "contact_value": "richrydell@amdis.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.901907+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Rich",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.901907+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "710e6905b1c87e9d15ad31b528420f3f292190447abc8d44f4812b9a2e1056f9"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Shelley Stelzner",
+    "role_title": "Shelley StelznerVice President",
+    "contact_type": "email",
+    "contact_value": "sstelzner@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.903829+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Shelley ",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.903829+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "713b2e34860f69652e1a14f11bb81ab9db9dc01448873d8746efa9f89e438b61"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Shawn McKenzie",
+    "role_title": "SHAWN MCKENZIE Chief Executive Officer",
+    "contact_type": "email",
+    "contact_value": "smckenzie@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.905390+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Shawn",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.905390+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "a8e011432a626836461bc6e27b517ceebf6d9087fbffeb3da873f2fc6146a68b"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Steve Boline",
+    "role_title": "Steve BolineChief Financial Officer",
+    "contact_type": "email",
+    "contact_value": "Sboline@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.906265+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Steve",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.906265+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "b5caec89a2568d0aa82ef2e2767d664a1deb27c1dc3af92933a4ea5d8408d386"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Brady Haynes",
+    "role_title": "BRADY HAYNES Chief Operating Officer",
+    "contact_type": "email",
+    "contact_value": "bhaynes@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.907924+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email Brady",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.907924+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "8eb26ecf626be637077c2bd92b394ec2f208bd6e4cf0c3e67b9165e5e6d3f43f"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Charlene Almocera",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "calmocera@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.908696+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.908696+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Ethan Bevan",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "bchurchill@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.909470+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.909470+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Linda McCurdy",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "lmccurdy@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.910242+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.910242+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kailie Sonneville",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "ksonneville@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.911500+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.911500+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Shanna Roelofson",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "hr@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.912307+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.912307+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Tessa Parsons",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "TPARSONS@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.912994+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.912994+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Chelssa Outland",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "coutland@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.913657+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.913657+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jay BADEKER",
+    "role_title": "Maintenance Supervisor",
+    "contact_type": "email",
+    "contact_value": "jbadeker@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.914467+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.914467+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kacie Broussard,",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "khowell@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.915223+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.915223+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "NEAL CLINE, BSN, RN, CFRN, JD",
+    "role_title": "House Supervisor",
+    "contact_type": "email",
+    "contact_value": "ncline@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.915968+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.915968+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Diane Dowden",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "ddowden@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.916746+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.916746+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Jennifer Hall",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "jhall@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.917502+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.917502+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "ANDREA KELLY",
+    "role_title": "Dietary",
+    "contact_type": "email",
+    "contact_value": "akelly@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.918267+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.918267+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Todd Lane",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "tlane@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.919037+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.919037+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Catie NeEly",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "cneely@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.920492+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.920492+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Ashli Pleau",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "ahughes@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.921175+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.921175+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Royce Raker",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "rraker@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.921851+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.921851+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Kristin RUtkowski",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "kcourtright@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.923309+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.923309+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Steven Stoops",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "spstoops@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.923974+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.923974+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  },
+  {
+    "company": "Leadership",
+    "person_name": "Stefanie White",
+    "role_title": "Email",
+    "contact_type": "email",
+    "contact_value": "swhite@senecahospital.org",
+    "verification_status": "VERIFIED",
+    "captured_at": "2025-09-09T19:46:58.924742+00:00",
+    "evidence": {
+      "source_url": "https://senecahospital.org/leadership",
+      "selector_or_xpath": ".fusion-layout-column.bg-green.text-white.text-center a[href*='mailto:']",
+      "verbatim_quote": "Email ",
+      "dom_node_screenshot": "evidence/static_b81a98c0_99bf6d04_20250909_224658.png",
+      "timestamp": "2025-09-09T19:46:58.924742+00:00",
+      "parser_version": "0.1.0-poc",
+      "content_hash": "82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92"
+    }
+  }
+]

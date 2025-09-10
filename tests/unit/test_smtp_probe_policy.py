@@ -18,26 +18,28 @@ def run_cli(args, env=None):
 def test_domain_quota_enforced(tmp_path, monkeypatch):
     out = tmp_path / "out.json"
 
-    # Preload cache with MX for example.com
+    # Prepare an emails file with 3 addresses on same domain
+    emails_file = tmp_path / "emails.csv"
+    emails_file.write_text("user1@example.com\nuser2@example.com\nuser3@example.com\n")
+
+    # Load module in-process to allow patching
     import importlib.util, sys
     spec = importlib.util.spec_from_file_location("smtp_probe", SCRIPT)
     mod = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
+
+    # Point cache to tmp and preload MX to avoid DNS
     cache_file = tmp_path / ".egc_cache.db"
     monkeypatch.setattr(mod, "_cache_path", lambda: str(cache_file))
     mod._init_cache(str(cache_file))
-    mod._save_mx(str(cache_file), "example.com", ["mx.example.com"])  # so main won't try resolve
+    mod._save_mx(str(cache_file), "example.com", ["mx.example.com"])  # so resolve_mx is not needed
 
-    # Prepare an emails file with 3 addresses on same domain
-    emails_file = tmp_path / "emails.csv"
-    emails_file.write_text("user1@example.com\nuser2@example.com\nuser3@example.com\n")
-
-    # Mock probe_rcpt to always succeed fast
+    # Mock probe_rcpt and call main() directly (no subprocess)
     with patch("smtp_probe.probe_rcpt") as mock_probe:
         mock_probe.return_value = {"accepts_rcpt": True, "smtp_code": 250, "error_category": "ok", "mx_used": "mx.example.com"}
-        r = run_cli(["--emails-file", str(emails_file), "--out", str(out), "--max-per-domain", "2"])  # limit = 2
-        assert r.returncode == 0
+        rc = mod.main(["--emails-file", str(emails_file), "--out", str(out), "--max-per-domain", "2"])  # limit = 2
+        assert rc == 0
         data = json.loads(out.read_text())
         assert len(data) == 3
         # First two probed, third blocked by policy

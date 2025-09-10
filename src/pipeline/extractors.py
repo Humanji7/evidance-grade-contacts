@@ -13,6 +13,9 @@ Key Features:
 """
 
 import re
+import os
+import html
+import difflib
 from typing import List, Dict, Optional, Union, Tuple
 from urllib.parse import urljoin, urlparse
 
@@ -32,7 +35,7 @@ class ContactExtractor:
     with complete Mini Evidence Package generation for each contact.
     """
     
-    def __init__(self, evidence_builder: Optional[EvidenceBuilder] = None):
+    def __init__(self, evidence_builder: Optional[EvidenceBuilder] = None, aggressive_static: bool = False):
         """
         Initialize Contact Extractor.
         
@@ -40,6 +43,7 @@ class ContactExtractor:
             evidence_builder: EvidenceBuilder instance for creating evidence packages
         """
         self.evidence_builder = evidence_builder or EvidenceBuilder()
+        self.aggressive_static = bool(aggressive_static)
         
         # Common selectors for person information
         self.person_selectors = [
@@ -87,6 +91,91 @@ class ContactExtractor:
             r'(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}|'
             r'\+?\d{1,3}[-\s]?\(?\d{1,4}\)?[-\s]?\d{1,4}[-\s]?\d{1,9}'
         )
+
+        # Free email domains (used for allow_free env)
+        self.free_email_domains = {
+            'gmail.com','yahoo.com','outlook.com','hotmail.com','aol.com','icloud.com','proton.me','protonmail.com'
+        }
+
+    # -------------------------
+    # Aggressive-static utilities
+    # -------------------------
+    def _deobfuscate_email(self, text_or_href: str) -> Optional[str]:
+        """Best-effort deobfuscation for emails in text or URLs.
+        - Replaces (at)/[at]/ at -> @ and (dot)/[dot]/ dot -> .
+        - Unescapes HTML entities
+        - If "mailto:" appears with JS concatenation, tries to stitch quoted parts
+        Returns a single plausible email if found and valid, else None.
+        """
+        if not text_or_href:
+            return None
+        s = str(text_or_href)
+        s = html.unescape(s)
+        # Remove common wrappers
+        s_norm = s.replace('\u200b', '')  # zero-width
+        # Normalize spaced tokens around at/dot
+        s_norm = re.sub(r"(?i)\s*(?:\(|\[)?at(?:\)|\])\s*", "@", s_norm)
+        s_norm = re.sub(r"(?i)\s*(?:\(|\[)?dot(?:\)|\])\s*", ".", s_norm)
+        s_norm = s_norm.replace("(at)", "@").replace("[at]", "@").replace(" at ", "@").replace("(dot)", ".").replace("[dot]", ".").replace(" dot ", ".")
+        # Strip spaces around @ and .
+        s_norm = re.sub(r"\s*@\s*", "@", s_norm)
+        s_norm = re.sub(r"\s*\.\s*", ".", s_norm)
+        # Remove mailto: prefix if present
+        s_norm = re.sub(r"(?i)mailto:\s*", "", s_norm)
+        # Direct email match
+        m = self.email_pattern.search(s_norm)
+        if m:
+            return m.group(0)
+        # Try to reconstruct from quoted parts after a 'mailto:' style concat
+        if 'mailto' in s.lower():
+            parts = re.findall(r"[\"']([A-Za-z0-9._%+@-]+)[\"']", s)
+            if parts:
+                cand = ''.join(parts)
+                m2 = self.email_pattern.search(cand)
+                if m2:
+                    return m2.group(0)
+        return None
+
+    def _emails_from_text(self, node: Node) -> List[str]:
+        """Find emails in raw text within a node, including deobfuscated ones."""
+        found: set[str] = set()
+        text = (node.text() or '')
+        for em in self.email_pattern.findall(text):
+            found.add(em)
+        # Try deobfuscation on block text
+        deob = self._deobfuscate_email(text)
+        if deob:
+            found.add(deob)
+        # Try anchors inside node
+        for a in node.css('a'):
+            href = a.attrs.get('href', '') if a and a.attrs else ''
+            cand = self._deobfuscate_email(href) or self._deobfuscate_email(a.text() or '')
+            if cand:
+                found.add(cand)
+        return list(found)
+
+    def _email_domain_matches_site(self, email_domain: str, site_domain: str) -> bool:
+        """Heuristic domain match: registrable part match or high similarity.
+        Allows minor differences and subdomain variations.
+        """
+        if not email_domain or not site_domain:
+            return False
+        def norm(d: str) -> str:
+            d = d.lower().strip()
+            if d.startswith('www.'):
+                d = d[4:]
+            return d
+        def registrable(d: str) -> str:
+            parts = d.split('.')
+            if len(parts) >= 3 and parts[-2] in {'co','com','org','net','gov','ac','edu'} and len(parts[-1]) <= 3:
+                return '.'.join(parts[-3:])
+            return '.'.join(parts[-2:]) if len(parts) >= 2 else d
+        d1 = registrable(norm(email_domain))
+        d2 = registrable(norm(site_domain))
+        if d1 == d2:
+            return True
+        ratio = difflib.SequenceMatcher(None, d1, d2).ratio()
+        return ratio >= 0.9
     
     def extract_from_static_html(self, html: str, source_url: str) -> List[Contact]:
         """
@@ -124,8 +213,23 @@ class ContactExtractor:
                 )
                 contacts.extend(person_contacts)
         
-        # If no structured person containers were found at all, try fallback extraction
-        # Disable global fallback to avoid cross-card noise in PoC
+        # If no structured person containers were found, try table extractor first (aggressive), then generic fallback.
+        # scan for repeating sibling blocks that look like cards and extract from them.
+        if not found_person_containers:
+            used_table = False
+            if self.aggressive_static:
+                try:
+                    table_contacts = self._extract_table_contacts_static(parser, source_url, company_name)
+                    if table_contacts:
+                        print(f"[AGG] table-extractor: +{len(table_contacts)} contacts from tables @ {source_url}")
+                        contacts.extend(table_contacts)
+                        used_table = True
+                except Exception:
+                    # Fail-quietly for PoC
+                    pass
+            if not used_table:
+                fallback_contacts = self._fallback_repeating_cards(parser, source_url, company_name)
+                contacts.extend(fallback_contacts)
         # Post-filtering and deduplication
         contacts = self._postprocess_and_dedup(contacts)
         return contacts
@@ -225,95 +329,171 @@ class ContactExtractor:
         base_selector: str
     ) -> List[Contact]:
         """Extract all contacts for a single person from static HTML."""
-        contacts = []
-        
+        contacts: List[Contact] = []
+
         # Extract person name and title (within this root only)
         name_node = self._find_name_node_static(person_node)
         person_name = self._text_from_name_node(name_node) if name_node else None
         # Try to get role near name inside same paragraph with <br>
         person_title = self._extract_role_near_name_static(person_node, name_node) or self._extract_person_title_static(person_node)
-        
-        # Require both name and title for PoC to avoid generic site contacts
-        if not person_name or not person_title:
+        person_title = self._normalize_role_title(person_title) if person_title else person_title
+
+        # Name is mandatory; role is mandatory unless aggressive_static with other evidence
+        if not person_name:
             return contacts
-        
-        # Email domain filter
+
+        # In non-aggressive mode, title is also required.
+        if not self.aggressive_static and not person_title:
+            return contacts
+
+        # Email/Phone/VCF collection containers
+        found_any_contact = False
+
+        # Email domain filter inputs
         site_domain = urlparse(source_url).netloc.lower().replace('www.', '')
-        free_domains = {'gmail.com','yahoo.com','outlook.com','hotmail.com','aol.com','icloud.com'}
-        
-        # Select nearest email within root
+        allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
+
+        # 1) Emails: nearest mailto, fall back to text scan when aggressive
         email_link = self._nearest_link(person_node, name_node, "a[href*='mailto:']") if name_node else None
-        # If not found, search anchors with visible text 'email'
-        if not email_link:
-            for a in person_node.css('a'):
-                t = (a.text() or '').strip().lower()
-                if 'email' in t:
-                    email_link = a
-                    break
-        email = None
+        candidate_emails: List[tuple[str, Optional[Node], str]] = []  # (email, node, selector)
         if email_link:
             href = (email_link.attrs.get('href','') or '').strip()
             href_lower = href.lower()
+            email_val = None
             if href_lower.startswith('mailto:'):
-                email = href[7:]
-            elif href_lower.startswith('mailt:') or href_lower.startswith('mailton:') or href_lower.startswith('maiito:'):
-                # fix common typos
-                email = href.split(':',1)[-1]
+                email_val = href[7:]
             elif '@' in href:
-                email = href
+                email_val = href
             else:
-                # sometimes email is in the link text
                 txt = (email_link.text() or '').strip()
                 if '@' in txt:
-                    email = txt
-        allow_free = '/leadership' in urlparse(source_url).path.lower()
-        if email:
-            email_domain = email.split('@')[-1].lower() if '@' in email else ''
-            domain_ok = (email_domain.endswith(site_domain)) or (allow_free and email_domain not in {'example.com'})
-            if domain_ok and self.email_pattern.match(email):
+                    email_val = txt
+            if not email_val and self.aggressive_static:
+                # try deobfuscation on href/text
+                email_val = self._deobfuscate_email(href) or self._deobfuscate_email(email_link.text() or '')
+            if email_val and self.email_pattern.match(email_val):
+                candidate_emails.append((email_val, email_link, f"{base_selector} a[href*='mailto:']"))
+
+        if self.aggressive_static and not candidate_emails:
+            # Extract from text within the person card
+            for em in self._emails_from_text(person_node):
+                candidate_emails.append((em, person_node, f"{base_selector} :contains('@')"))
+
+        # Filter and add emails by domain policy
+        for email_val, node_for_ev, sel in candidate_emails:
+            email_domain = email_val.split('@')[-1].lower() if '@' in email_val else ''
+            same_domain = email_domain.endswith(site_domain)
+            domain_ok = same_domain or (self.aggressive_static and self._email_domain_matches_site(email_domain, site_domain)) or (allow_free_env and (email_domain in self.free_email_domains))
+            if domain_ok:
                 evidence = self.evidence_builder.create_evidence_static(
                     source_url=source_url,
-                    selector=f"{base_selector} a[href*='mailto:']",
-                    node=email_link,
-                    verbatim_text=email_link.text() or email
+                    selector=sel,
+                    node=node_for_ev or person_node,
+                    verbatim_text=(node_for_ev.text() if (node_for_ev and hasattr(node_for_ev, 'text')) else None) or email_val
                 )
                 contacts.append(Contact(
                     company=company_name,
                     person_name=person_name,
-                    role_title=person_title,
+                    role_title=person_title or ("Unknown" if self.aggressive_static else None),
                     contact_type=ContactType.EMAIL,
-                    contact_value=email,
+                    contact_value=email_val,
                     evidence=evidence,
                     captured_at=evidence.timestamp
                 ))
-        
-        # Select nearest phone within root
+                found_any_contact = True
+
+        # 2) Phones: tel links; if none and aggressive, scan text
         phone_link = self._nearest_link(person_node, name_node, "a[href*='tel:']") if name_node else None
+        phones_added = False
         if phone_link:
-            href = phone_link.attrs.get('href','')
-            phone = href[4:] if href.startswith('tel:') else href
-            normalized_phone = re.sub(r"\D", "", phone)
+            href = phone_link.attrs.get('href','') or ''
+            phone_raw = href[4:] if href.startswith('tel:') else href
+            normalized_phone = re.sub(r"\D", "", phone_raw)
             evidence = self.evidence_builder.create_evidence_static(
                 source_url=source_url,
                 selector=f"{base_selector} a[href*='tel:']",
                 node=phone_link,
-                verbatim_text=phone_link.text() or phone
+                verbatim_text=phone_link.text() or phone_raw
             )
             try:
                 contacts.append(Contact(
                     company=company_name,
                     person_name=person_name,
-                    role_title=person_title,
+                    role_title=person_title or ("Unknown" if self.aggressive_static else None),
                     contact_type=ContactType.PHONE,
                     contact_value=normalized_phone,
                     evidence=evidence,
                     captured_at=evidence.timestamp
                 ))
+                found_any_contact = True
+                phones_added = True
             except Exception:
                 pass
-        
-        # If no contacts in card root, try bio page if there is a name link
-        if not contacts and name_node is not None:
+        if self.aggressive_static and not phones_added:
+            text_block = person_node.text() or ''
+            text_lower = text_block.lower()
+            markers = ('phone', 'tel', 'тел', 'telefon')
+            has_marker = any(k in text_lower for k in markers)
+            for m in self.phone_pattern.findall(text_block):
+                raw = m if isinstance(m, str) else ''.join(m)
+                num = re.sub(r"\D", "", raw)
+                # Strict validation for text-detected phones
+                if not num or len(num) < 10 or len(num) > 15:
+                    continue
+                # filter date-like patterns (YYYYMMDD or similar)
+                if re.match(r'^(19|20)\d{6,8}$', num):
+                    continue
+                if not has_marker:
+                    continue
+                evidence = self.evidence_builder.create_evidence_static(
+                    source_url=source_url,
+                    selector=f"{base_selector} :text-phone",
+                    node=person_node,
+                    verbatim_text=raw
+                )
+                try:
+                    contacts.append(Contact(
+                        company=company_name,
+                        person_name=person_name,
+                        role_title=person_title or ("Unknown" if self.aggressive_static else None),
+                        contact_type=ContactType.PHONE,
+                        contact_value=num,
+                        evidence=evidence,
+                        captured_at=evidence.timestamp
+                    ))
+                    found_any_contact = True
+                    break  # keep at most one phone per person
+                except Exception:
+                    continue
+
+        # 3) vCard links (.vcf) if present in card
+        for a in person_node.css('a'):
+            href = (a.attrs.get('href','') or '').strip()
+            text_lower = (a.text() or '').strip().lower()
+            if href.lower().endswith('.vcf') or 'vcard' in text_lower:
+                vcf_url = urljoin(source_url, href)
+                evidence = self.evidence_builder.create_evidence_static(
+                    source_url=source_url,
+                    selector=f"{base_selector} a[href$='.vcf']",
+                    node=a,
+                    verbatim_text=a.text() or href
+                )
+                try:
+                    contacts.append(Contact(
+                        company=company_name,
+                        person_name=person_name,
+                        role_title=person_title or ("Unknown" if self.aggressive_static else None),
+                        contact_type=ContactType.LINK,
+                        contact_value=vcf_url,
+                        evidence=evidence,
+                        captured_at=evidence.timestamp
+                    ))
+                    found_any_contact = True
+                except Exception:
+                    pass
+
+        # If still no contacts in card root, try bio page if there is a name link
+        if not found_any_contact and name_node is not None:
             a = name_node.parent if name_node and name_node.parent and name_node.parent.tag == 'a' else name_node.css_first('a')
             href = a.attrs.get('href') if a and a.attrs else None
             if href and href.startswith('http'):
@@ -329,6 +509,7 @@ class ContactExtractor:
                                     break
                 except Exception:
                     pass
+
         return contacts
     
     def _extract_person_contacts_playwright(
@@ -570,6 +751,9 @@ class ContactExtractor:
             if d < best_d:
                 best_d = d
                 best = ln
+        # Fallback: if distance metric failed to find a better one, pick the first link in scope
+        if best is None and links:
+            return links[0]
         return best
 
     def _extract_role_near_name_static(self, root: Node, name_node: Optional[Node]) -> Optional[str]:
@@ -616,21 +800,65 @@ class ContactExtractor:
                 sib = sib.next
         return None
 
+    def _fallback_repeating_cards(self, parser: HTMLParser, source_url: str, company_name: str) -> List[Contact]:
+        contacts: List[Contact] = []
+        # Candidate containers to scan
+        containers = [
+            parser.css_first('main') or parser.body,
+            parser.css_first('section'),
+            parser.css_first(".content, .container, .row, .grid, .team, .people, .staff"),
+        ]
+        containers = [c for c in containers if c is not None]
+        seen_nodes = set()
+        for cont in containers:
+            # Collect direct children signatures and group by structure/class
+            children = []
+            ch = cont.child
+            while ch is not None:
+                if ch.tag not in (None, 'script', 'style', 'noscript'):
+                    children.append(ch)
+                ch = ch.next
+            if len(children) < 3:
+                continue
+            def sig(n: Node) -> str:
+                cls = (n.attrs.get('class','') or '').lower()
+                tokens = re.split(r"[\s_-]+", cls) if cls else []
+                return f"{n.tag}:{'|'.join(tokens[:2])}"
+            groups: Dict[str, List[Node]] = {}
+            for n in children:
+                groups.setdefault(sig(n), []).append(n)
+            # For any group with >=3 siblings, treat each as a potential card
+            for nodes in groups.values():
+                if len(nodes) < 3:
+                    continue
+                for node in nodes:
+                    if id(node) in seen_nodes:
+                        continue
+                    seen_nodes.add(id(node))
+                    person_contacts = self._extract_person_contacts_static(
+                        node, source_url, company_name, f"fallback[{node.tag}]"
+                    )
+                    contacts.extend(person_contacts)
+        return contacts
+
     # -------------------------
     # Validation & Dedup helpers
     # -------------------------
     def _is_valid_person_name(self, name: str) -> bool:
-        if not name or len(name) < 4:
+        if not name:
             return False
         # Exclude generic section headers
         if re.search(r"^(Our Team|Team|People|Staff|Contact|Contacts|News|Press)$", name, re.IGNORECASE):
             return False
-        # Require at least two words with letters
-        parts = [p for p in re.split(r"\s+", name) if p]
+        # Require at least two tokens; each must contain at least one letter (Unicode-aware)
+        parts = [p for p in re.split(r"\s+", name.strip()) if p]
         if len(parts) < 2:
             return False
-        # Basic: starts with letter and has vowels/consonants
-        return bool(re.match(r"^[A-Za-z]", parts[0]))
+        def has_letter(tok: str) -> bool:
+            return any(ch.isalpha() for ch in tok)
+        if not all(has_letter(tok) for tok in parts[:3]):
+            return False
+        return True
 
     def _is_valid_role_title(self, title: str) -> bool:
         if not title or len(title) < 3:
@@ -640,41 +868,80 @@ class ContactExtractor:
             'paralegal', 'legal administrator', 'legal administrative', 'assistant', 'accountant',
             'marketing', 'retired', 'intern', 'receptionist'
         ]
-        if any(b in title.lower() for b in blacklist):
+        low = title.lower().strip()
+        # Stop-list of junk roles that should not be treated as meaningful titles
+        stoplist = {'email', 'areas of focus:', 'coming soon', 'open seat'}
+        if low in stoplist:
+            return True  # allow creation but will be normalized to 'Unknown'
+        if any(b in low for b in blacklist):
             return False
         return True
+
+    def _normalize_role_title(self, title: Optional[str]) -> Optional[str]:
+        if not title:
+            return title
+        low = title.strip().lower()
+        stoplist = {'email', 'areas of focus:', 'coming soon', 'open seat'}
+        if low in stoplist:
+            return 'Unknown'
+        return title
 
     def _postprocess_and_dedup(self, contacts: List[Contact]) -> List[Contact]:
         if not contacts:
             return []
-        # Collapse duplicates and limit per person
-        by_person: Dict[tuple, Dict[str, set]] = {}
-        unique_contacts: List[Contact] = []
-        seen_keys = set()
+
+        def norm_company(s: str) -> str:
+            return (s or '').strip().lower()
+        def norm_person(s: str) -> str:
+            return (s or '').strip().lower()
+        def norm_value(c: Contact) -> str:
+            if c.contact_type.value == 'email':
+                return (c.contact_value or '').strip().lower()
+            if c.contact_type.value == 'phone':
+                return re.sub(r"\D", "", c.contact_value or '')
+            return (c.contact_value or '').strip().lower()
+        def quality(c: Contact) -> tuple:
+            sel = (c.evidence.selector_or_xpath or '').lower() if c.evidence else ''
+            anchor_pref = 1 if ('mailto:' in sel or "a[href*='mailto:']" in sel or 'tel:' in sel or "a[href*='tel:']" in sel) else 0
+            role_good = 1 if (c.role_title and c.role_title.strip().lower() != 'unknown') else 0
+            return (anchor_pref, role_good)
+
+        # First collapse exact duplicates based on (company, person, type, value)
+        best_by_key: Dict[tuple, Contact] = {}
         for c in contacts:
-            key_person = (c.company.strip().lower(), c.person_name.strip().lower(), c.role_title.strip().lower())
-            if key_person not in by_person:
-                by_person[key_person] = {'email': set(), 'phone': set(), 'link': set()}
-            # Limit: keep at most 1 email and 1 phone per person for PoC
-            type_key = c.contact_type.value
-            if type_key in ('email', 'phone'):
-                if by_person[key_person][type_key] and c.contact_value in by_person[key_person][type_key]:
-                    continue
-                if len(by_person[key_person][type_key]) >= 1:
-                    continue
-                by_person[key_person][type_key].add(c.contact_value)
+            key = (norm_company(c.company), norm_person(c.person_name), c.contact_type.value, norm_value(c))
+            prev = best_by_key.get(key)
+            if prev is None or quality(c) > quality(prev):
+                best_by_key[key] = c
+
+        # Then enforce at most 1 email and 1 phone per person
+        chosen: Dict[tuple, Dict[str, Contact]] = {}
+        links_seen: Set[tuple] = set()
+        out: List[Contact] = []
+        for key, c in best_by_key.items():
+            comp, person, ctype, val = key
+            if ctype in ('email', 'phone'):
+                kp = (comp, person)
+                if kp not in chosen:
+                    chosen[kp] = {}
+                existing = chosen[kp].get(ctype)
+                if existing is None or quality(c) > quality(existing):
+                    chosen[kp][ctype] = c
             else:
-                # Links: dedupe exact value
-                if c.contact_value in by_person[key_person]['link']:
+                # links: dedupe exact value
+                lkey = (comp, person, val)
+                if lkey in links_seen:
                     continue
-                by_person[key_person]['link'].add(c.contact_value)
-            # Global dedupe key
-            dk = (key_person, type_key, c.contact_value)
-            if dk in seen_keys:
-                continue
-            seen_keys.add(dk)
-            unique_contacts.append(c)
-        return unique_contacts
+                links_seen.add(lkey)
+                out.append(c)
+
+        # Append the selected email/phone per person
+        for kp, d in chosen.items():
+            for ctype in ('email', 'phone'):
+                if ctype in d:
+                    out.append(d[ctype])
+
+        return out
     
     def _extract_phones_static(self, person_node: Node) -> List[Tuple[str, str]]:
         """Extract phone numbers from static HTML with their selectors (anchors only)."""
@@ -832,6 +1099,173 @@ class ContactExtractor:
             ))
         
         return contacts
+
+    def _extract_table_contacts_static(self, parser: HTMLParser, source_url: str, company_name: str) -> List[Contact]:
+        """Extract contacts from well-structured HTML tables with header columns.
+        Active only in aggressive-static mode.
+        """
+        results: List[Contact] = []
+        tables = parser.css('table') or []
+        if not tables:
+            return results
+        site_domain = urlparse(source_url).netloc.lower().replace('www.', '')
+        allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
+
+        def norm_txt(s: Optional[str]) -> str:
+            return re.sub(r"\s+", " ", (s or '').strip()).lower()
+        # Header classification
+        def classify(h: str) -> str | None:
+            h = norm_txt(h)
+            if re.search(r"\b(full\s*name|name|person|employee|имя|фамилия|surname)\b", h):
+                return 'name'
+            if re.search(r"\b(first\s*name)\b", h):
+                return 'first'
+            if re.search(r"\b(last\s*name|surname|фамилия)\b", h):
+                return 'last'
+            if re.search(r"\b(title|role|position|должность)\b", h):
+                return 'title'
+            if re.search(r"\b(email|e-mail|mail|почта)\b", h):
+                return 'email'
+            if re.search(r"\b(phone|telephone|tel|телефон)\b", h):
+                return 'phone'
+            return None
+
+        for tbl in tables:
+            headers = tbl.css('th')
+            if not headers:
+                continue
+            header_texts = [norm_txt(h.text()) for h in headers]
+            col_map: Dict[str, int] = {}
+            for idx, h in enumerate(header_texts):
+                kind = classify(h)
+                if kind and kind not in col_map:
+                    col_map[kind] = idx
+            if not any(k in col_map for k in ('name','first')):
+                continue
+            # Collect rows
+            rows = tbl.css('tr')
+            for tr in rows[1:]:  # skip header row
+                tds = tr.css('td')
+                if not tds:
+                    continue
+                def get_cell(i: int) -> tuple[str, Optional[Node]]:
+                    if i is None or i >= len(tds):
+                        return '', None
+                    cell = tds[i]
+                    return (cell.text() or '').strip(), cell
+
+                # Compose name
+                name_val = ''
+                if 'name' in col_map:
+                    name_val, name_node = get_cell(col_map['name'])
+                else:
+                    first_val, _ = get_cell(col_map.get('first'))
+                    last_val, _ = get_cell(col_map.get('last'))
+                    name_val = f"{first_val} {last_val}".strip()
+                    name_node = None
+                if not name_val or not self._is_valid_person_name(name_val):
+                    continue
+
+                # Title
+                title_val, title_node = get_cell(col_map.get('title'))
+
+                # Email
+                email_val = ''
+                email_node = None
+                if 'email' in col_map:
+                    email_text, email_node = get_cell(col_map['email'])
+                    # Prefer mailto in the cell
+                    a_mail = email_node.css_first("a[href*='mailto:']") if email_node else None
+                    if a_mail:
+                        href = a_mail.attrs.get('href','')
+                        if href.lower().startswith('mailto:'):
+                            email_val = href[7:]
+                        elif '@' in href:
+                            email_val = href
+                    if not email_val:
+                        email_val = self._deobfuscate_email(email_text) or ''
+                # Phone
+                phone_val = ''
+                phone_node = None
+                if 'phone' in col_map:
+                    phone_text, phone_node = get_cell(col_map['phone'])
+                    m = self.phone_pattern.search(phone_text or '')
+                    if m:
+                        phone_val = re.sub(r"\D", "", m.group(0))
+
+                # Domain policy for email
+                email_ok = False
+                if email_val:
+                    email_domain = email_val.split('@')[-1].lower()
+                    same_domain = email_domain.endswith(site_domain)
+                    email_ok = same_domain or (self.aggressive_static and self._email_domain_matches_site(email_domain, site_domain)) or (allow_free_env and (email_domain in self.free_email_domains))
+
+                # Build contacts
+                # Role fallback if aggressive
+                role_final = title_val or ("Unknown" if (self.aggressive_static and (email_val or phone_val)) else None)
+                if not role_final:
+                    continue
+
+                if email_val and email_ok:
+                    ev = self.evidence_builder.create_evidence_static(
+                        source_url=source_url,
+                        selector="table th:contains('email')",
+                        node=email_node or tr,
+                        verbatim_text=email_val
+                    )
+                    results.append(Contact(
+                        company=company_name,
+                        person_name=name_val,
+                        role_title=role_final,
+                        contact_type=ContactType.EMAIL,
+                        contact_value=email_val,
+                        evidence=ev,
+                        captured_at=ev.timestamp
+                    ))
+                if phone_val:
+                    evp = self.evidence_builder.create_evidence_static(
+                        source_url=source_url,
+                        selector="table th:contains('phone')",
+                        node=phone_node or tr,
+                        verbatim_text=phone_node.text() if (phone_node and phone_node.text()) else phone_val
+                    )
+                    try:
+                        results.append(Contact(
+                            company=company_name,
+                            person_name=name_val,
+                            role_title=role_final,
+                            contact_type=ContactType.PHONE,
+                            contact_value=phone_val,
+                            evidence=evp,
+                            captured_at=evp.timestamp
+                        ))
+                    except Exception:
+                        pass
+
+                # VCF in row
+                a_vcf = tr.css_first("a[href$='.vcf']")
+                if a_vcf:
+                    vcf_url = urljoin(source_url, a_vcf.attrs.get('href',''))
+                    evv = self.evidence_builder.create_evidence_static(
+                        source_url=source_url,
+                        selector="tr a[href$='.vcf']",
+                        node=a_vcf,
+                        verbatim_text=a_vcf.text() or vcf_url
+                    )
+                    try:
+                        results.append(Contact(
+                            company=company_name,
+                            person_name=name_val,
+                            role_title=role_final,
+                            contact_type=ContactType.LINK,
+                            contact_value=vcf_url,
+                            evidence=evv,
+                            captured_at=evv.timestamp
+                        ))
+                    except Exception:
+                        pass
+
+        return results
     
     def _find_associated_name_static(self, contact_node: Node, parser: HTMLParser) -> Optional[str]:
         """
