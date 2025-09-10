@@ -87,3 +87,17 @@ htmlcov/
 # Secrets
 config/production.yaml
 config/secrets.yaml
+
+# EGC local configs and artifacts
+config.yaml
+config/*.local.yaml
+
+# Test and tool outputs
+test_out/
+playwright-report/
+test-results/
+trace.zip
+
+# Local env and caches
+.venv/
+.egc_cache.db
