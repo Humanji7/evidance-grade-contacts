@@ -124,10 +124,11 @@ Static → headless per the conditions above. Enforce:
   - Log line: "🧹 Dedupe: kept X of Y"
 - Decision Filter (post-processing CLI):
   - DecisionLevel classification with thresholding: C_SUITE > VP_PLUS > MGMT > NON_DM > UNKNOWN (default min-level: VP_PLUS)
-  - Signals: positive title patterns (President, Managing Director, General Counsel, VP, Head of ...), negative guards (Associate, Counsel, Paralegal, Intern), structural uplift (leadership/management paths), generic inbox flag (info@, support@)
+  - Signals: positive title patterns (President, Managing Director, Director, General Counsel, VP, Head of ...), negative guards (Associate, Counsel, Paralegal, Intern), structural uplift (leadership/management paths), generic inbox flag (info@, support@)
   - Normalization: email de-obfuscation and phone normalization to E.164-like format (+1 default when no country code)
   - Optional vCard enrichment: guarded by budget/timeout/max-bytes and `--site-allow` hostname allowlist; non-fatal errors recorded in decision_reasons
   - Outputs per input: decision_<basename>.json/.csv and a summary line (total/kept/dropped, level counts, top drop reasons)
+  - Structural reason is always recorded when leadership/management URL context is detected (`struct:leadership`), even if it does not change the level
 
 ### Smart mode (default)
 

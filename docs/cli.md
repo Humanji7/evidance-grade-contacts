@@ -263,9 +263,10 @@ python scripts/decision_filter.py --input <people.json [people2.json ...]> \
 **Behavior:**
 - Classification levels: `C_SUITE` > `VP_PLUS` > `MGMT` > `NON_DM` > `UNKNOWN`
 - Signals:
-  - Title patterns for positives (e.g., President, Managing Director, General Counsel, VP, Head of ...)
+  - Title patterns for positives (e.g., President, Managing Director, Director, General Counsel, VP, Head of ...)
   - Negative guard (e.g., Associate, Counsel, Paralegal, Intern)
   - Structural uplift if any source URL path contains leadership/management-like segments
+  - Reason recording: when structural hints are present, `struct:leadership` is added to decision_reasons even if no level change occurs
   - Email heuristic flags generic inboxes (e.g., info@, support@)
 - Normalization:
   - Email: basic de-obfuscation and lowercase (e.g., "[name](at)example(dot)com" → "name@example.com")
