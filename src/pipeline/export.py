@@ -20,7 +20,7 @@ from typing import List, Optional, Union
 from datetime import datetime as dt, datetime
 from urllib.parse import urlsplit, urlunsplit
 
-from ..schemas import Contact, ContactExport, VerificationStatus
+from src.schemas import Contact, ContactExport, VerificationStatus
 
 
 def normalize_url_for_report(u: str) -> str:

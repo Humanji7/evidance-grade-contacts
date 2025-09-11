@@ -22,7 +22,7 @@ from typing import Optional, Union
 from playwright.sync_api import Page, ElementHandle, Locator
 from selectolax.parser import HTMLParser, Node
 
-from ..schemas import Evidence
+from src.schemas import Evidence
 
 
 class EvidenceBuilder:

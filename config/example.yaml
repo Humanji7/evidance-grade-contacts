@@ -91,6 +91,25 @@ evidence_pack:
   screenshot_format: "png"
   content_hash_algorithm: "sha256"
 
+# Operational budgets and observability (PoC)
+ops:
+  concurrency:
+    max_workers: 4   # runner-level parallelism (suggested)
+  headless:
+    per_domain_budget: 2   # hard cap per domain (pages per run)
+    global_budget: 10       # hard cap per run
+    max_share_pct: 0.2      # soft quota (existing guardrail)
+    target_paths_only: true # only /our-team|/team|/leadership|/management|/people
+  timeouts:
+    static_fetch_s: 8       # static fetch timeout
+    prefilter_head_s: 2     # HEAD prefilter timeout
+    dom_sweep_budget_s: 8   # per-page DOM sweep budget
+    deep_pass_budget_s: 3   # optional deep pass budget
+  d1_profile:
+    max_per_listing: 5      # D=1 follow-ups per listing page
+  logging:
+    ops_json: true          # print JSON ops logs when EGC_OPS_JSON=1
+
 # SMTP probe configuration
 smtp_probe:
   enabled: true

@@ -7,8 +7,8 @@ from .fetchers.static import StaticFetcher, FetchResult
 from .fetchers.playwright import PlaywrightFetcher, PlaywrightResult
 from .escalation import decide_escalation, EscalationDecision
 from .extractors import ContactExtractor
-from ..schemas import Contact
-from ..evidence import EvidenceBuilder
+from src.schemas import Contact
+from src.evidence import EvidenceBuilder
 
 
 @dataclass
@@ -124,10 +124,12 @@ class IngestPipeline:
     
     def _is_target_url(self, url: str) -> bool:
         from urllib.parse import urlparse
+        import re
         p = urlparse(url)
         path = (p.path or '').lower()
-        targets = ("team", "our-team", "people", "leadership", "management", "contacts", "imprint", "impressum")
-        return any(t in path for t in targets)
+        # Target-only paths for headless prioritization
+        # /(our-)?team|people|leadership|management
+        return re.search(r'/(our-)?team|people|leadership|management', path, re.IGNORECASE) is not None
     
     def _count_selector_hits(self, html: str | None) -> int:
         """Count hits for target selectors (people/team pages).
@@ -174,24 +176,38 @@ class IngestPipeline:
                     contacts=[],
                     error=f"HTTP {static_result.status_code}"
                 )
-            
-            # Step 2: Check initial escalation conditions
+            # Step 2: Decide escalation first
+            is_target = self._is_target_url(url)
             selector_hits = self._count_selector_hits(static_result.html)
             escalation = decide_escalation(static_result, selector_hits)
 
             contacts_static: List[Contact] | None = None
             # Only extract contacts from static HTML when we are not already escalating
             if not escalation.escalate:
-                contacts_static = self.contact_extractor.extract_from_static_html(
-                    static_result.html, url
-                )
+                if static_result.mime == "text/html" and static_result.html:
+                    contacts_static = self.contact_extractor.extract_from_static_html(
+                        static_result.html, url
+                    )
+                else:
+                    contacts_static = []
                 # Smart escalation rule — target URL with 0 contacts
-                if self.enable_headless and self._is_target_url(url) and len(contacts_static) == 0:
+                if self.enable_headless and is_target and len(contacts_static) == 0:
                     escalation = EscalationDecision(escalate=True, reasons=(escalation.reasons + ["target_url_no_contacts"]))
+            else:
+                # Escalation planned: apply soft rule to JS-only markers if static already yields ≥1
+                js_only = all(str(r).startswith("js:") for r in escalation.reasons)
+                if js_only and static_result.mime == "text/html" and static_result.html:
+                    tmp_contacts = self.contact_extractor.extract_from_static_html(static_result.html, url)
+                    if tmp_contacts and selector_hits > 0:
+                        contacts_static = tmp_contacts
+                        escalation = EscalationDecision(escalate=False, reasons=escalation.reasons)
 
-            # If still no escalation or headless disabled, finish with static
+            # Hard guard: do not escalate non-target paths (preserve headless budget)
+            if not is_target:
+                escalation = EscalationDecision(escalate=False, reasons=escalation.reasons)
+
+            # Step 3: If no escalation or headless disabled → return static success
             if (not escalation.escalate) or (not self.enable_headless):
-                # Ensure contacts list is not None
                 final_contacts = contacts_static if contacts_static is not None else []
                 return IngestResult(
                     url=url,
@@ -203,65 +219,63 @@ class IngestPipeline:
                     escalation_decision=escalation,
                 )
             
-            # Step 5: Escalation needed - check guardrails (percentage + hard budgets)
+            # Step 4: Escalation needed - check guardrails (percentage + hard budgets)
             if not self.domain_tracker.can_use_headless(domain):
                 print("headless budget exhausted")
-                final_contacts = contacts_static if contacts_static is not None else []
                 return IngestResult(
                     url=url,
                     method="static",
                     success=False,
                     html=static_result.html,
                     status_code=static_result.status_code,
-                    contacts=final_contacts,
+                    contacts=contacts_static,
                     escalation_decision=escalation,
                     error=f"Headless quota exceeded for {domain}"
                 )
             if not self.headless_budget.can_spend(domain):
                 print("headless budget exhausted")
-                final_contacts = contacts_static if contacts_static is not None else []
                 return IngestResult(
                     url=url,
                     method="static",
                     success=False,
                     html=static_result.html,
                     status_code=static_result.status_code,
-                    contacts=final_contacts,
+                    contacts=contacts_static,
                     escalation_decision=escalation,
                     error=f"Headless budget exhausted (domain={domain})"
                 )
             
-            # Step 6: Escalate to Playwright
+            # Step 5: Escalate to Playwright
             print(f"via playwright: reasons={escalation.reasons}")
             # Record headless usage before invoking DOM extractor
             self.domain_tracker.record_fetch(domain, "playwright")
             self.headless_budget.spend(domain)
 
-            used_dom_path = False
             try:
                 dom_method = getattr(self.contact_extractor, 'extract_with_playwright', None)
                 if callable(dom_method):
                     contacts = dom_method(url)
                     if not isinstance(contacts, list):
                         raise TypeError("extract_with_playwright did not return a list")
-                    used_dom_path = True
                 else:
                     raise AttributeError("No extract_with_playwright method")
             except Exception:
                 # Fallback: use fetcher HTML and static extractor (for backward-compatible tests)
                 pw = self.playwright_fetcher.fetch(url)
                 if pw.error:
+                    # Fall back to static results (do not return empty on PW error)
+                    print("playwright returned error; falling back to static extraction")
                     return IngestResult(
                         url=url,
-                        method="playwright",
-                        success=False,
-                        html=pw.html,
-                        status_code=pw.status_code,
-                        contacts=[],
+                        method="static",
+                        success=True,
+                        html=static_result.html,
+                        status_code=static_result.status_code,
+                        contacts=contacts_static,
                         escalation_decision=escalation,
-                        error=pw.error
                     )
-                contacts = self.contact_extractor.extract_from_static_html(pw.html, url)
+                contacts = self.contact_extractor.extract_from_static_html(pw.html or "", url)
+                # Keep method=playwright for this HTML-based fallback to satisfy existing tests
                 return IngestResult(
                     url=url,
                     method="playwright",
@@ -272,16 +286,28 @@ class IngestPipeline:
                     escalation_decision=escalation
                 )
 
-            # DOM path success
-            return IngestResult(
-                url=url,
-                method="playwright",
-                success=True,
-                html=None,
-                status_code=200,
-                contacts=contacts,
-                escalation_decision=escalation
-            )
+            # If DOM extractor returned results, return them; otherwise fallback to static results
+            if len(contacts) > 0:
+                return IngestResult(
+                    url=url,
+                    method="playwright",
+                    success=True,
+                    html=None,
+                    status_code=200,
+                    contacts=contacts,
+                    escalation_decision=escalation
+                )
+            else:
+                print("playwright returned 0; falling back to static extraction")
+                return IngestResult(
+                    url=url,
+                    method="static",
+                    success=True,
+                    html=static_result.html,
+                    status_code=static_result.status_code,
+                    contacts=contacts_static,
+                    escalation_decision=escalation
+                )
         
         except Exception as e:
             return IngestResult(

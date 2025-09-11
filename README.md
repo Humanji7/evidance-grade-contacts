@@ -160,6 +160,28 @@ Example Inc.,Jane Doe,Head of Marketing,email,jane.doe@example.com,2025-09-04T10
 - **Evidence integrity**: SHA-256 content hashing for all extracted data
 - **Input validation**: Pydantic model enforcement for all data structures
 
+## Ops & Scalability (PoC)
+
+This PoC scales horizontally by running multiple worker processes that each execute the static‑first pipeline with guarded headless escalation. Guardrails keep runs predictable:
+- Concurrency: run N workers (or threads) with per‑domain headless budget (≤2 pages) and global headless cap (≤10 pages per run).
+- Time budgets: static fetch ~6–8s; fast HEAD prefilter ~2s; DOM sweep ≤6–8s per page; optional deep pass ≤2–3s.
+- Depth: D=1 profile follow‑ups limited to ≤5 per listing page.
+
+Observability: the runner prints human‑readable progress (“Processing…”, “via playwright…”) and can emit structured OPS logs (JSON lines) with phase timings (fetch/extract/render), method used (static|playwright), contact counts, and headless reasons. Enable with `EGC_OPS_JSON=1` when running.
+
+## Economy & Budgets
+
+Headless (Playwright) is significantly more expensive than static HTML fetch/parse (seconds vs. sub‑second on typical pages). To keep cost/time bounded, the pipeline:
+- Prioritizes static extraction; escalates only on target pages when static finds 0 contacts or when hard signals exist (anti‑bot/tiny/SPA mime).
+- Enforces budgets: per‑domain headless ≤ 2 pages and global ≤ 10 per run; skips non‑target paths (/about, /news) even with JS markers.
+- Logs headless share and per‑page timings (when `EGC_OPS_JSON=1`) to inform future SLOs.
+
+## Policies (High‑level)
+
+- Respect robots.txt and ToS; do not bypass CAPTCHA or anti‑bot protections.
+- Evidence is mandatory for all exported records (7 fields, including node screenshot ref).
+- Headless is used sparingly and only on target pages; no automated clicks or form submissions in the PoC.
+
 Features
 Extraction of names, roles, and business contacts from corporate pages.
 
@@ -415,4 +437,3 @@ License
 [Insert license type and text/link.]
 
 Quick navigation: TL;DR • PoC Scope • Success Criteria • Evidence Package • Compliance • Execution & Escalations • Pipeline • Data Format • Technologies • Limitations.
-
