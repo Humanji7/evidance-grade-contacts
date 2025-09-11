@@ -172,9 +172,7 @@ class IngestPipeline:
 
         def _emit_ops_log():
             try:
-                env_on = os.environ.get("EGC_OPS_JSON", "0") == "1"
-                if not (env_on or getattr(self, "ops_json_enabled", False)):
-                    return
+                # Build last ops record regardless; runner decides where to write
                 usage = self.domain_tracker.get_usage(domain)
                 total_s = max(0.0, time.perf_counter() - t0)
                 record = {
@@ -194,7 +192,12 @@ class IngestPipeline:
                     "escalate": bool(escalate_bool_for_log),
                     "reasons": list(reasons_for_log),
                 }
-                print(json.dumps(record, ensure_ascii=False))
+                # Store for runner to consume and write via OpsLogger
+                setattr(self, "_last_ops_record", record)
+                # Still optionally print JSON to stdout if env or flag is set
+                env_on = os.environ.get("EGC_OPS_JSON", "0") == "1"
+                if env_on or getattr(self, "ops_json_enabled", False):
+                    print(json.dumps(record, ensure_ascii=False))
             except Exception:
                 # Never break pipeline due to logging
                 pass

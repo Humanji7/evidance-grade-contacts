@@ -163,6 +163,8 @@ def main(argv: list[str] | None = None) -> int:
     # ECR summary flags (computed from all extracted contacts before export filtering)
     parser.add_argument("--print-ecr-summary", action="store_true", help="Print ECR summary after run (computed on all extracted contacts)")
     parser.add_argument("--ecr-threshold", type=float, default=0.95, help="ECR threshold for OK/FAIL tag in summary (default 0.95)")
+    parser.add_argument("--ops-log", default=None, help="Path to ops JSONL log file (default: <out>/ops.log)")
+    parser.add_argument("--ops-stdout", action="store_true", help="Also mirror ops JSON to stdout")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -225,6 +227,14 @@ def main(argv: list[str] | None = None) -> int:
 
     exporter = ContactExporter(output_dir=out_dir)
 
+    # Setup OpsLogger
+    ops_log_path = Path(args.ops_log) if args.ops_log else (out_dir / "ops.log")
+    try:
+        from src.ops_logger import OpsLogger
+        ops_logger = OpsLogger(ops_log_path, also_stdout=bool(getattr(args, "ops_stdout", False)))
+    except Exception:
+        ops_logger = None
+
     # Smart mode profile log
     print(f"Smart mode: discovery=auto, headless=guarded, budgets: domain={headless_domain_cap}, global={headless_global_cap}")
     # Print Python version for diagnostics
@@ -270,6 +280,8 @@ def main(argv: list[str] | None = None) -> int:
 
     all_contacts = []
     total_pages = 0
+    import time as _time
+    proc_start = _time.perf_counter()
     try:
         for base in urls:
             # Smart discovery:
@@ -316,6 +328,12 @@ def main(argv: list[str] | None = None) -> int:
                 total_pages += 1
                 print(f"➡️  Processing: {url}")
                 result = pipeline.ingest(url)
+                # Emit per-URL ops record to file if available
+                try:
+                    if ops_logger and getattr(pipeline, "_last_ops_record", None):
+                        ops_logger.emit(pipeline._last_ops_record)
+                except Exception:
+                    pass
                 # Surface escalation reasons in logs
                 if result.escalation_decision and result.escalation_decision.escalate and result.method == 'playwright':
                     print(f"  via playwright: reasons={result.escalation_decision.reasons}")
@@ -410,6 +428,40 @@ def main(argv: list[str] | None = None) -> int:
             return 3
 
     print("🏁 Done.")
+    # Emit final summary ops record
+    try:
+        import os as _os
+        import platform as _plat
+        import json as _json
+        try:
+            import psutil as _ps
+        except Exception:
+            _ps = None
+        wall_s = max(0.0, _time.perf_counter() - proc_start)
+        cpu_pct = None
+        rss_mb = None
+        if _ps:
+            try:
+                p = _ps.Process()
+                with p.oneshot():
+                    rss_mb = round(p.memory_info().rss / (1024*1024), 1)
+                    cpu_pct = round(p.cpu_percent(interval=None), 1)
+            except Exception:
+                pass
+        summary = {
+            "egc_ops": 1,
+            "summary": True,
+            "processed_pages": total_pages,
+            "total_contacts": len(all_contacts),
+            "durations": {"wall_s": round(wall_s, 2)},
+            "resources": {"cpu_pct": cpu_pct, "rss_mb": rss_mb},
+            "python": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+            "host": {"platform": _plat.system(), "release": _plat.release(), "machine": _plat.machine()},
+        }
+        if ops_logger:
+            ops_logger.emit(summary)
+    except Exception:
+        pass
     print(f"   Processed pages: {total_pages}")
     print(f"   Total contacts: {len(all_contacts)}")
 

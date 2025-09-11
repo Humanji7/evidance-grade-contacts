@@ -24,7 +24,10 @@ This document covers runtime guardrails, budgets/quotas, logging, and compliance
 
 ## Observability
 - Human‑readable logs: “Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10”, “via playwright: reasons=[…]”, “headless budget exhausted”.
-- Structured logs: set `EGC_OPS_JSON=1` to emit JSON lines with timings, method (static|playwright), contact counts, headless reasons.
+- Structured JSON logs:
+  - Enable stdout JSON: set `EGC_OPS_JSON=1` (environment) or use `--ops-stdout`.
+  - Persist to file: use `--ops-log <path>` (default: `<out>/ops.log`).
+  - Format: JSONL (one object per line).
 
 ## Compliance & Policies
 - robots.txt and ToS are enforced; red‑flag sources (LinkedIn, X/Twitter, Meta) are out of scope.
