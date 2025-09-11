@@ -346,6 +346,228 @@ def consolidate_per_person(contacts: List[Contact]) -> List[dict]:
     return rows
 
 
+def consolidate_per_person_with_evidence(contacts: List[Contact], min_level: Optional['DecisionLevel'] = None) -> List[dict]:
+    """Aggregate contacts per person with attached evidence and DecisionLevel.
+
+    - Copies grouping and best selection logic from consolidate_per_person.
+    - Adds decision_level/decision_reasons via classify_role on best role_title using any available source_url as context.
+    - Attaches evidence dicts for the selected email/phone/vcard (7 fields each).
+    - evidence_complete=True iff all present selected types have a complete mini-pack.
+    - verification_status='VERIFIED' only when evidence_complete is True.
+    - If min_level is provided, filters out rows below the threshold.
+    - Returns list of dicts with fields exactly:
+      company, person_name, role_title, decision_level, decision_reasons,
+      email, phone, vcard,
+      evidence_email, evidence_phone, evidence_vcard,
+      evidence_complete, verification_status
+    """
+    # Local import to avoid hard dependency if roles module is optional elsewhere
+    from src.pipeline.roles import DecisionLevel, classify_role
+
+    if not contacts:
+        return []
+
+    # 1) Filter out obvious non-persons BEFORE grouping (same rules as consolidate_per_person)
+    NON_PERSON_PHRASES = {
+        'mailing address', 'click here', 'branch hours', 'business services team',
+        'executive team', 'support', 'department', 'services', 'contact us', 'resources'
+    }
+
+    filtered: list[Contact] = []
+    for c in contacts:
+        pname = (c.person_name or '').strip().lower()
+        if any(phrase in pname for phrase in NON_PERSON_PHRASES):
+            continue
+        filtered.append(c)
+
+    if not filtered:
+        print(f"👤 Consolidation (with evidence): persons=0, from_contacts={len(contacts)}")
+        return []
+
+    # 2) Group by (company, person)
+    by_person: dict[tuple, list[Contact]] = {}
+    for c in filtered:
+        key = ((c.company or '').strip().lower(), normalize_person_name(c.person_name or ''))
+        by_person.setdefault(key, []).append(c)
+
+    def _name_tokens_latin(name: str) -> list[str]:
+        low = (name or '').lower()
+        return re.findall(r"[a-z]{3,}", low)
+
+    def _local_matches_name(local: str, tokens: list[str]) -> int:
+        loc = (local or '').lower()
+        return 1 if any(tok in loc for tok in tokens) else 0
+
+    def _digits_only(s: str) -> str:
+        return re.sub(r"\D", "", s or '')
+
+    def _looks_like_date_number(digits: str) -> bool:
+        return bool(re.match(r"^(19|20)\d{6,8}$", digits or ''))
+
+    rows: list[dict] = []
+    for (company_norm, person_norm), clist in by_person.items():
+        # Stable display values from any contact in group
+        company_disp = clist[0].company
+        person_disp = clist[0].person_name
+
+        # Prepare name tokens for email local-part matching
+        tokens = _name_tokens_latin(person_disp)
+
+        # Rank email candidates (same logic)
+        email_best: Optional[Contact] = None
+        email_score_best: Optional[tuple] = None
+        for c in clist:
+            if c.contact_type.value != 'email':
+                continue
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            local = (c.contact_value or '').split('@')[0].lower()
+            name_match = _local_matches_name(local, tokens)
+            score = (
+                _is_anchor_selector(sel.lower(), "a[href*='mailto:']"),
+                _is_semantic_url(surl),
+                name_match,
+                c.captured_at or datetime.min,
+            )
+            if (email_best is None) or (score > email_score_best):
+                email_best = c
+                email_score_best = score
+
+        # Rank phone candidates (same logic)
+        phone_best: Optional[Contact] = None
+        phone_score_best: Optional[tuple] = None
+        phone_candidates_anchor: list[Contact] = []
+        phone_candidates_text: list[Contact] = []
+        for c in clist:
+            if c.contact_type.value != 'phone':
+                continue
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            if _is_anchor_selector(sel.lower(), "a[href*='tel:']"):
+                phone_candidates_anchor.append(c)
+            else:
+                phone_candidates_text.append(c)
+
+        def _score_phone(c: Contact) -> tuple:
+            sel = (c.evidence.selector_or_xpath or '') if c.evidence else ''
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            return (
+                _is_anchor_selector(sel.lower(), "a[href*='tel:']"),
+                _is_semantic_url(surl),
+                _is_toll_free(c.contact_value),
+                c.captured_at or datetime.min,
+            )
+
+        if phone_candidates_anchor:
+            for c in phone_candidates_anchor:
+                score = _score_phone(c)
+                if (phone_best is None) or (score > phone_score_best):
+                    phone_best = c
+                    phone_score_best = score
+        else:
+            valid_texts: list[Contact] = []
+            for c in phone_candidates_text:
+                digits = _digits_only(c.contact_value)
+                if 10 <= len(digits) <= 15 and not _looks_like_date_number(digits):
+                    valid_texts.append(c)
+            for c in valid_texts:
+                score = _score_phone(c)
+                if (phone_best is None) or (score > phone_score_best):
+                    phone_best = c
+                    phone_score_best = score
+
+        # vCard candidates (same logic)
+        vcard_best: Optional[Contact] = None
+        vcard_score_best: Optional[tuple] = None
+        for c in clist:
+            if c.contact_type.value != 'link':
+                continue
+            if not (c.contact_value or '').lower().endswith('.vcf'):
+                continue
+            surl = (c.evidence.source_url or '') if c.evidence else ''
+            score = (
+                _is_semantic_url(surl),
+                c.captured_at or datetime.min,
+            )
+            if (vcard_best is None) or (score > vcard_score_best):
+                vcard_best = c
+                vcard_score_best = score
+
+        role_final = _best_role_for_person(clist)
+
+        # Normalize phone like consolidate_per_person
+        out_phone = ''
+        if phone_best is not None:
+            sel_best = (phone_best.evidence.selector_or_xpath or '') if phone_best.evidence else ''
+            if _is_anchor_selector(sel_best.lower(), "a[href*='tel:']"):
+                verb = (phone_best.evidence.verbatim_quote or '') if phone_best.evidence else ''
+                digits_from_verb = _digits_only(verb)
+                candidate = digits_from_verb if (10 <= len(digits_from_verb) <= 15 and not _looks_like_date_number(digits_from_verb)) else _digits_only(phone_best.contact_value)
+            else:
+                candidate = _digits_only(phone_best.contact_value)
+            if len(candidate) == 11 and candidate.startswith('1'):
+                candidate = candidate[1:]
+            out_phone = candidate
+
+        # Decision level and reasons using any evidence source URL in the group
+        url_ctx = None
+        for candidate_contact in (email_best, phone_best, vcard_best):
+            if candidate_contact and candidate_contact.evidence and candidate_contact.evidence.source_url:
+                url_ctx = candidate_contact.evidence.source_url
+                break
+        if url_ctx is None and clist and clist[0].evidence and clist[0].evidence.source_url:
+            url_ctx = clist[0].evidence.source_url
+
+        level, reasons = classify_role(role_final or 'Unknown', url_ctx)
+
+        # Evidence dicts for selected contacts (7 fields)
+        def ev_dict(c: Optional[Contact]) -> Optional[dict]:
+            if not c or not c.evidence:
+                return None
+            ev = c.evidence
+            return {
+                'source_url': ev.source_url,
+                'selector_or_xpath': ev.selector_or_xpath,
+                'verbatim_quote': ev.verbatim_quote,
+                'dom_node_screenshot': ev.dom_node_screenshot,
+                'timestamp': ev.timestamp,
+                'parser_version': ev.parser_version,
+                'content_hash': ev.content_hash,
+            }
+
+        ev_email = ev_dict(email_best)
+        ev_phone = ev_dict(phone_best)
+        ev_vcard = ev_dict(vcard_best)
+
+        present_evs = [ev for ev in (email_best.evidence if email_best else None, phone_best.evidence if phone_best else None, vcard_best.evidence if vcard_best else None) if ev is not None]
+        evidence_complete = bool(present_evs) and all(ev.is_complete() for ev in present_evs)
+        verification_status = 'VERIFIED' if evidence_complete else 'UNVERIFIED'
+
+        row = {
+            'company': company_disp,
+            'person_name': person_disp,
+            'role_title': role_final or 'Unknown',
+            'decision_level': level.name,
+            'decision_reasons': reasons,
+            'email': email_best.contact_value if email_best else '',
+            'phone': out_phone,
+            'vcard': vcard_best.contact_value if vcard_best else '',
+            'evidence_email': ev_email,
+            'evidence_phone': ev_phone,
+            'evidence_vcard': ev_vcard,
+            'evidence_complete': evidence_complete,
+            'verification_status': verification_status,
+        }
+
+        # Apply threshold filter if provided
+        if (min_level is not None) and (level < min_level):
+            continue
+
+        rows.append(row)
+
+    print(f"👤 Consolidation (with evidence): persons={len(rows)}, from_contacts={len(contacts)}")
+    return rows
+
+
 class ContactExporter:
     """
     Exports contact data with evidence packages to CSV/JSON formats.
