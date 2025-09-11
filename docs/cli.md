@@ -50,6 +50,8 @@ python -m egc.run --input <urls_file> --config <config_file> --out <output_dir> 
 |- `--aggressive-static`: Enable aggressive static heuristics (name, email de-obfuscation, text phones with markers, VCF, table extractor first, role stop-list→Unknown)
 |- `--max-pages-per-domain` N: Limit number of candidate pages per domain after normalization (default 10)
 |- `--include-all`: Export UNVERIFIED as well (default: VERIFIED only)
+|- `--decision-only`: Write decision-only people artifacts (per-person rows with evidence and decision level) without affecting base outputs
+|- `--min-level {C_SUITE,VP_PLUS,MGMT}`: Minimum decision level when `--decision-only` is set (default: `VP_PLUS`)
 
 **Examples:**
 ```bash
@@ -80,10 +82,22 @@ python -m egc.run \
 output/
 ├── contacts.csv          # Flattened export with evidence fields (source_url normalized for report)
 ├── contacts.json         # Full Contact records with nested evidence (evidence.source_url normalized for report)
+├── contacts_people_*.csv # Consolidated per-person rows (always produced)
+├── contacts_people_*.json
+├── decision_people_*.csv # Optional: written only when --decision-only is set and matching rows exist
+├── decision_people_*.json
 └── evidence/             # DOM node screenshots
     ├── screenshot_001.png
     └── screenshot_002.png
 ```
+
+#### Decision-only people outputs (optional)
+- JSON fields (each row):
+  `company, person_name, role_title, decision_level, decision_reasons, email, phone, vcard, evidence_email, evidence_phone, evidence_vcard, evidence_complete, verification_status`
+- CSV columns (flat):
+  `company, person_name, role_title, decision_level, has_evidence_email, has_evidence_phone, has_evidence_vcard, verification_status, email, phone, vcard, source_url_email, source_url_phone, source_url_vcard`
+- VERIFIED criterion: `verification_status == "VERIFIED"` only when `evidence_complete == true` for selected contact types.
+- Back-compat: without flags, these files are not created and behavior matches previous versions.
 
 **Exit Codes:**
 - `0`: Success

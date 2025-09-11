@@ -33,6 +33,18 @@ https://example.com/about
 
 ## Output Formats
 
+### Decision-only People (optional)
+
+Written only when CLI flag `--decision-only` is set and decision rows exist. Provides per-person decision level and attaches evidence for selected contact types.
+
+- JSON file pattern: `decision_people_*.json`
+  - Fields per row:
+    `company, person_name, role_title, decision_level, decision_reasons, email, phone, vcard, evidence_email, evidence_phone, evidence_vcard, evidence_complete, verification_status`
+- CSV file pattern: `decision_people_*.csv`
+  - Columns:
+    `company, person_name, role_title, decision_level, has_evidence_email, has_evidence_phone, has_evidence_vcard, verification_status, email, phone, vcard, source_url_email, source_url_phone, source_url_vcard`
+- VERIFIED criterion: `verification_status == "VERIFIED"` only when `evidence_complete == true` for the selected contact types present in the row.
+
 ### 1. Contacts JSON (`contacts.json`)
 
 **Structure:** Full Contact records with nested Evidence objects.
