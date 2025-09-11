@@ -331,6 +331,35 @@ See docs/cli.md for complete command reference and examples.
 out/contacts_*.json and out/contacts_*.csv
 and people consolidation files: out/contacts_people_*.json and out/contacts_people_*.csv.
 
+### Decision‑Only Export
+
+Purpose: decision-maker filtering at export stage (no LLM), per-person with attached evidence.
+
+CLI flags:
+- `--decision-only` — enable writing decision-only people artifacts
+- `--min-level {C_SUITE,VP_PLUS,MGMT}` — minimum decision level (default: VP_PLUS)
+
+Artifacts written (when --decision-only is set and rows exist):
+- `decision_people_*.json` — list of objects with fields:
+  - `company, person_name, role_title, decision_level, decision_reasons, email, phone, vcard, evidence_email, evidence_phone, evidence_vcard, evidence_complete, verification_status`
+- `decision_people_*.csv` — flat columns:
+  - `company, person_name, role_title, decision_level, has_evidence_email, has_evidence_phone, has_evidence_vcard, verification_status, email, phone, vcard, source_url_email, source_url_phone, source_url_vcard`
+
+VERIFIED criterion: `verification_status == "VERIFIED"` only when `evidence_complete == true` for the selected contact types (email/phone/vcard) in the row.
+
+Examples:
+```bash
+# Basic
+python -m egc.run --input input_urls.txt --config config/example.yaml --out ./out \
+  --decision-only --min-level VP_PLUS
+
+# With OPS JSON logs
+EGC_OPS_JSON=1 python -m egc.run --input input_urls.txt --config config/example.yaml --out ./out \
+  --decision-only --min-level VP_PLUS
+```
+
+Backwards compatibility: when run without these flags, behavior is unchanged and no decision_people_* files are created.
+
 
 DOM node screenshots in out/evidence/.
 
