@@ -52,6 +52,8 @@ python -m egc.run --input <urls_file> --config <config_file> --out <output_dir> 
 |- `--include-all`: Export UNVERIFIED as well (default: VERIFIED only)
 |- `--decision-only`: Write decision-only people artifacts (per-person rows with evidence and decision level) without affecting base outputs
 |- `--min-level {C_SUITE,VP_PLUS,MGMT}`: Minimum decision level when `--decision-only` is set (default: `VP_PLUS`)
+|- `--print-ecr-summary`: Print ECR summary after run (computed on all extracted contacts)
+|- `--ecr-threshold` FLOAT: ECR threshold for OK/FAIL tag in summary (default: 0.95)
 
 **Examples:**
 ```bash

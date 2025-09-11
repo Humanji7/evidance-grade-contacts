@@ -160,6 +160,9 @@ def main(argv: list[str] | None = None) -> int:
     # Decision-only flags (do not change default behavior)
     parser.add_argument("--decision-only", action="store_true", help="Write decision-only people artifacts (filtered by --min-level) without affecting base outputs")
     parser.add_argument("--min-level", choices=["C_SUITE","VP_PLUS","MGMT"], default="VP_PLUS", help="Minimum decision level for decision-only people (default: VP_PLUS)")
+    # ECR summary flags (computed from all extracted contacts before export filtering)
+    parser.add_argument("--print-ecr-summary", action="store_true", help="Print ECR summary after run (computed on all extracted contacts)")
+    parser.add_argument("--ecr-threshold", type=float, default=0.95, help="ECR threshold for OK/FAIL tag in summary (default 0.95)")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -409,6 +412,28 @@ def main(argv: list[str] | None = None) -> int:
     print("🏁 Done.")
     print(f"   Processed pages: {total_pages}")
     print(f"   Total contacts: {len(all_contacts)}")
+
+    # Optional: print ECR summary computed from all extracted contacts (pre-export)
+    if getattr(args, "print_ecr_summary", False):
+        try:
+            total_records = len(all_contacts)
+            verified_records = 0
+            for c in all_contacts:
+                try:
+                    ev = getattr(c, "evidence", None)
+                    if ev and callable(getattr(ev, "is_complete", None)) and ev.is_complete():
+                        verified_records += 1
+                except Exception:
+                    # Treat any evidence exception as UNVERIFIED
+                    pass
+            unverified_records = total_records - verified_records
+            ecr_value = (verified_records / total_records) if total_records > 0 else 0.0
+            thr = float(getattr(args, "ecr_threshold", 0.95) or 0.95)
+            status = "OK" if ecr_value >= thr else f"FAIL@{thr:.2f}"
+            print(f"ECR summary: verified={verified_records}, unverified={unverified_records}, ECR={ecr_value:.1%} ({status})")
+        except Exception as e:
+            print(f"ECR summary: failed to compute ({e})", file=sys.stderr)
+
     return 0
 
 
