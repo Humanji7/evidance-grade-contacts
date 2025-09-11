@@ -71,6 +71,7 @@ _POSITIVE_PATTERNS: list[tuple[re.Pattern[str], DecisionLevel, str]] = [
     (re.compile(r"\bchair\b", re.I), DecisionLevel.C_SUITE, "chair"),
     # VP_PLUS
     (re.compile(r"\bsenior director\b", re.I), DecisionLevel.VP_PLUS, "senior director"),
+    (re.compile(r"\bdirector\b", re.I), DecisionLevel.VP_PLUS, "director"),
     (re.compile(r"\bhead of\b", re.I), DecisionLevel.VP_PLUS, "head of"),
     (re.compile(r"\bvice president\b", re.I), DecisionLevel.VP_PLUS, "vice president"),
     (re.compile(r"\bsvp\b", re.I), DecisionLevel.VP_PLUS, "svp"),
@@ -80,7 +81,6 @@ _POSITIVE_PATTERNS: list[tuple[re.Pattern[str], DecisionLevel, str]] = [
     (re.compile(r"\bprincipal\b", re.I), DecisionLevel.VP_PLUS, "principal"),
     (re.compile(r"\bpartner\b", re.I), DecisionLevel.VP_PLUS, "partner"),
     # MGMT (only if negatives didn't trigger)
-    (re.compile(r"\bdirector\b", re.I), DecisionLevel.MGMT, "director"),
     (re.compile(r"\blead\b", re.I), DecisionLevel.MGMT, "lead"),
     (re.compile(r"\bmanager\b", re.I), DecisionLevel.MGMT, "manager"),
 ]

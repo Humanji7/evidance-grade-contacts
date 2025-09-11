@@ -21,6 +21,7 @@ def test_classification_vp_plus_or_higher():
         "Partner",
         "VP",
         "Head of Marketing",
+        "Director",
     ]
     for t in titles:
         lvl, _ = classify(_rec(t))

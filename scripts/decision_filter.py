@@ -75,6 +75,7 @@ _POS_VP_PLUS = [
     re.compile(r"\bprincipal\b", re.I),
     re.compile(r"\bpartner\b", re.I),
     re.compile(r"\bsenior\s+director\b", re.I),
+    re.compile(r"\bdirector\b", re.I),
     re.compile(r"\bhead\s+of\b", re.I),
     re.compile(r"\bvice\s+president\b", re.I),
     re.compile(r"\bsvp\b", re.I),
@@ -83,7 +84,6 @@ _POS_VP_PLUS = [
 ]
 
 _POS_MGMT = [
-    re.compile(r"\bdirector\b", re.I),
     re.compile(r"\blead\b", re.I),
     re.compile(r"\bmanager\b", re.I),
 ]
@@ -204,8 +204,9 @@ def classify(record: Dict[str, Any]) -> Tuple[DecisionLevel, List[str]]:
     # Structural hints uplift for UNKNOWN/MGMT
     urls = _find_source_urls(record)
     hinted = any(_STRUCT_HINTS.search(urlparse(u).path or "") for u in urls)
-    if hinted and level in (DecisionLevel.UNKNOWN, DecisionLevel.MGMT):
-        level = _uplift(level)
+    if hinted:
+        if level in (DecisionLevel.UNKNOWN, DecisionLevel.MGMT):
+            level = _uplift(level)
         reasons.append("struct:leadership")
 
     return level, reasons
