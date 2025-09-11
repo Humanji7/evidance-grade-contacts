@@ -221,6 +221,84 @@ python scripts/smtp_probe.py --emails-file output/contacts.csv --out test_out/pr
 
 ---
 
+### Decision Filter: `egc.decision.filter`
+
+Post-process people-level outputs to keep only decision-makers at or above a chosen threshold. Also normalizes certain fields and can optionally enrich Unknown titles from .vcf (vCard) files under a strict budget.
+
+**Syntax:**
+```bash
+python scripts/decision_filter.py --input <people.json [people2.json ...]> \
+  [--out-dir <dir>] [--min-level {C_SUITE,VP_PLUS,MGMT}] [--dry-run] \
+  [--fetch-vcard] [--vcard-budget N] [--timeout-s SEC] \
+  [--max-vcard-bytes BYTES] [--site-allow host1 host2 ...]
+```
+
+**Inputs:**
+- `--input` (one or more): people JSON files (each must be a JSON list of objects)
+
+**Options:**
+- `--out-dir` PATH: Output directory (default: `out/`)
+- `--min-level` {`C_SUITE`,`VP_PLUS`,`MGMT`}: Minimum decision-maker threshold (default: `VP_PLUS`)
+- `--dry-run`: Only print summary; do not write outputs
+- `--fetch-vcard`: Attempt to fetch `.vcf` links for records with `role_title == "Unknown"` to extract TITLE/ROLE; controlled by budget and allowlist
+- `--vcard-budget` N: Max number of vCards to fetch per run (default: 50)
+- `--timeout-s` SEC: HTTP timeout for vCard requests (default: 2.5)
+- `--max-vcard-bytes` BYTES: Maximum vCard size (default: 65536)
+- `--site-allow` HOST [HOST...]: Only fetch vCards for these hostnames (skip others)
+
+**Behavior:**
+- Classification levels: `C_SUITE` > `VP_PLUS` > `MGMT` > `NON_DM` > `UNKNOWN`
+- Signals:
+  - Title patterns for positives (e.g., President, Managing Director, General Counsel, VP, Head of ...)
+  - Negative guard (e.g., Associate, Counsel, Paralegal, Intern)
+  - Structural uplift if any source URL path contains leadership/management-like segments
+  - Email heuristic flags generic inboxes (e.g., info@, support@)
+- Normalization:
+  - Email: basic de-obfuscation and lowercase (e.g., "[name](at)example(dot)com" → "name@example.com")
+  - Phone: digits-only normalized to E.164-like format, default +1 if no country code (heuristic)
+- Outputs per input file (unless `--dry-run`):
+  - `decision_<basename>.json` and `decision_<basename>.csv` written to `--out-dir`
+- Summary line printed to stdout:
+  - `total=<n> kept=<n> dropped=<n> levels={C_SUITE:x, MGMT:y, ...} drop_reasons=[reason1:cnt, reason2:cnt, ...]`
+
+**Exit Codes:**
+- `0`: Success
+- `1`: Configuration error (e.g., invalid `--min-level`)
+- `2`: Input data error (malformed JSON or wrong shape)
+- `3`: Runtime error (per-file processing failure)
+
+**Examples:**
+```bash
+# Filter single file at default threshold (VP_PLUS), write to ./output/decision/
+python scripts/decision_filter.py \
+  --input output/contacts_people_20250911_*.json \
+  --out-dir output/decision
+
+# Strict threshold: keep only C-Suite
+python scripts/decision_filter.py \
+  --input output/contacts_people_*.json \
+  --out-dir output/decision \
+  --min-level C_SUITE
+
+# Enrich Unknown titles via vCard for allowed hosts only (budget=10)
+python scripts/decision_filter.py \
+  --input output/contacts_people_lawfirms.json \
+  --out-dir output/decision \
+  --fetch-vcard --vcard-budget 10 --site-allow example.com lawfirm.com
+
+# Dry-run over multiple inputs (no files written; summary only)
+python scripts/decision_filter.py \
+  --input output/contacts_people_a.json output/contacts_people_b.json \
+  --min-level MGMT --dry-run
+```
+
+**Notes:**
+- Inputs must exist; globs should be expanded by the shell beforehand
+- vCard fetching uses simple stdlib HTTP (HEAD/GET) with size/time guards and will skip hosts not in `--site-allow` if provided
+- Non-fatal errors during enrichment are recorded in `decision_reasons` and do not abort processing
+
+---
+
 ### Schema Export: `egc.schemas.export`
 
 Generate JSON Schema files from Pydantic models.
