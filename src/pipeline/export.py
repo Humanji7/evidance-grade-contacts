@@ -586,6 +586,104 @@ class ContactExporter:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
     
+    def to_decision_people_json(self, rows: list[dict], filename: Optional[str] = None, pretty: bool = True) -> str:
+        """Write decision-only people rows to JSON.
+        Fields included per row:
+        company, person_name, role_title, decision_level, decision_reasons,
+        email, phone, vcard, evidence_email, evidence_phone, evidence_vcard,
+        evidence_complete, verification_status
+        Returns the path as a string.
+        """
+        if filename is None:
+            timestamp = dt.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"decision_people_{timestamp}.json"
+        path = self.output_dir / filename
+        with open(path, 'w', encoding='utf-8') as f:
+            if pretty:
+                json.dump(rows or [], f, indent=2, ensure_ascii=False, default=str)
+            else:
+                json.dump(rows or [], f, ensure_ascii=False, default=str)
+        print(f"💾 Decision JSON exported: {path} ({len(rows or [])} persons)")
+        return str(path)
+
+    def to_decision_people_csv(self, rows: list[dict], filename: Optional[str] = None) -> str:
+        """Write decision-only people rows to CSV.
+        Flat columns:
+        company,person_name,role_title,decision_level,has_evidence_email,has_evidence_phone,has_evidence_vcard,verification_status,
+        email,phone,vcard,source_url_email,source_url_phone,source_url_vcard
+        Returns the path as a string.
+        """
+        if filename is None:
+            timestamp = dt.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"decision_people_{timestamp}.csv"
+        path = self.output_dir / filename
+
+        def _has_full(ev: Optional[dict]) -> int:
+            if not isinstance(ev, dict):
+                return 0
+            keys = {
+                'source_url','selector_or_xpath','verbatim_quote','dom_node_screenshot','timestamp','parser_version','content_hash'
+            }
+            if not keys.issubset(set(ev.keys())):
+                return 0
+            # consider non-empty values (timestamp allowed as datetime or str)
+            for k in keys:
+                v = ev.get(k)
+                if v is None:
+                    return 0
+                if isinstance(v, str) and not v.strip():
+                    return 0
+            return 1
+
+        columns = [
+            'company','person_name','role_title','decision_level',
+            'has_evidence_email','has_evidence_phone','has_evidence_vcard',
+            'verification_status','email','phone','vcard',
+            'source_url_email','source_url_phone','source_url_vcard'
+        ]
+        with open(path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=columns)
+            w.writeheader()
+            for r in rows or []:
+                ev_email = r.get('evidence_email')
+                ev_phone = r.get('evidence_phone')
+                ev_vcard = r.get('evidence_vcard')
+                out_row = {
+                    'company': r.get('company',''),
+                    'person_name': r.get('person_name',''),
+                    'role_title': r.get('role_title',''),
+                    'decision_level': r.get('decision_level','UNKNOWN'),
+                    'has_evidence_email': _has_full(ev_email),
+                    'has_evidence_phone': _has_full(ev_phone),
+                    'has_evidence_vcard': _has_full(ev_vcard),
+                    'verification_status': r.get('verification_status','UNVERIFIED'),
+                    'email': r.get('email',''),
+                    'phone': r.get('phone',''),
+                    'vcard': r.get('vcard',''),
+                    'source_url_email': (ev_email or {}).get('source_url','') if isinstance(ev_email, dict) else '',
+                    'source_url_phone': (ev_phone or {}).get('source_url','') if isinstance(ev_phone, dict) else '',
+                    'source_url_vcard': (ev_vcard or {}).get('source_url','') if isinstance(ev_vcard, dict) else '',
+                }
+                w.writerow(out_row)
+        print(f"💾 Decision CSV exported: {path} ({len(rows or [])} persons)")
+        return str(path)
+    """
+    Exports contact data with evidence packages to CSV/JSON formats.
+    
+    Automatically filters to include only VERIFIED contacts with complete
+    Mini Evidence Packages per PoC specification.
+    """
+    
+    def __init__(self, output_dir: Union[str, Path] = "output"):
+        """
+        Initialize Contact Exporter.
+        
+        Args:
+            output_dir: Directory for output files (created if doesn't exist)
+        """
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+    
     def filter_verified_contacts(self, contacts: List[Contact]) -> List[Contact]:
         """
         Filter contacts to include only VERIFIED records.

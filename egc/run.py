@@ -157,6 +157,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-pages-per-domain", type=int, default=10, help="Limit number of candidate pages per domain (default 10)")
     parser.add_argument("--consolidate-per-person", action="store_true", help="Produce consolidated per-person exports (1 row per person)")
     parser.add_argument("--exact-input-only", action="store_true", help="Process only URLs from --input; disable discovery and include_paths expansion")
+    # Decision-only flags (do not change default behavior)
+    parser.add_argument("--decision-only", action="store_true", help="Write decision-only people artifacts (filtered by --min-level) without affecting base outputs")
+    parser.add_argument("--min-level", choices=["C_SUITE","VP_PLUS","MGMT"], default="VP_PLUS", help="Minimum decision level for decision-only people (default: VP_PLUS)")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -362,6 +365,36 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as e:
         print(f"Consolidation export error: {e}", file=sys.stderr)
         return 3
+
+    # Decision-only people artifacts (optional; default off)
+    try:
+        from src.pipeline.roles import DecisionLevel
+        from src.pipeline.export import consolidate_per_person_with_evidence
+        # Build unfiltered decision rows to compute baseline count M
+        dm_all_rows = consolidate_per_person_with_evidence(deduped, min_level=None)
+        # Apply threshold only when flag is on
+        level = DecisionLevel.from_str(args.min_level)
+        dm_rows = consolidate_per_person_with_evidence(deduped, min_level=(level if args.decision_only else None))
+        if args.decision_only and dm_rows:
+            # Write artifacts
+            dm_csv = exporter.to_decision_people_csv(dm_rows)
+            dm_json = exporter.to_decision_people_json(dm_rows)
+            print(f"🧭 Decision CSV: {dm_csv}")
+            print(f"🧭 Decision JSON: {dm_json}")
+        # Summary line
+        try:
+            from collections import Counter
+            kept = len(dm_rows)
+            total = len(dm_all_rows)
+            dist = Counter([r.get('decision_level','UNKNOWN') for r in (dm_rows if args.decision_only else dm_all_rows)])
+            def _g(k):
+                return dist.get(k, 0)
+            print(f"Decision-only: kept {kept if args.decision_only else total} of {total} persons | C_SUITE={_g('C_SUITE')} VP_PLUS={_g('VP_PLUS')} MGMT={_g('MGMT')} NON_DM={_g('NON_DM')} UNKNOWN={_g('UNKNOWN')}")
+        except Exception:
+            pass
+    except Exception as e:
+        print(f"Decision-only export error: {e}", file=sys.stderr)
+        # Do not fail the run due to optional feature
 
     # Export to SQLite if enabled (use the same filtered set)
     if db_path:
