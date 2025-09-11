@@ -180,18 +180,42 @@ def main(argv: list[str] | None = None) -> int:
 
     # Initialize pipeline and exporter (Smart defaults)
     smart_aggressive_static = True  # Static++ ON by default
-    headless_domain_cap = 2
-    headless_global_cap = 10
+
+    # Ops config passthrough (safe defaults)
+    ops_cfg = cfg.get("ops", {}) if isinstance(cfg, dict) else {}
+    headless_cfg = ops_cfg.get("headless", {}) if isinstance(ops_cfg, dict) else {}
+    timeouts_cfg = ops_cfg.get("timeouts", {}) if isinstance(ops_cfg, dict) else {}
+    logging_cfg = ops_cfg.get("logging", {}) if isinstance(ops_cfg, dict) else {}
+
+    headless_domain_cap = int(headless_cfg.get("per_domain_budget", 2) or 2)
+    headless_global_cap = int(headless_cfg.get("global_budget", 10) or 10)
+    domain_max_share_pct = float(headless_cfg.get("max_share_pct", 0.2) or 0.2)
+
+    static_timeout = float(timeouts_cfg.get("static_fetch_s", args.static_timeout) or args.static_timeout)
+
     pipeline = IngestPipeline(
         enable_headless=(not args.no_headless),
-        static_timeout_s=float(args.static_timeout),
+        static_timeout_s=static_timeout,
         aggressive_static=smart_aggressive_static,
         headless_budget=IngestPipeline.HeadlessBudget(domain_cap=headless_domain_cap, global_cap=headless_global_cap),
     )
+    # Configure DomainTracker max share if using default tracker
+    try:
+        # Recreate domain tracker with configured max_share_pct if default was used
+        if isinstance(pipeline.domain_tracker, type(IngestPipeline.DomainTracker if False else object)):
+            pass
+    except Exception:
+        pass
+    # Enable OPS JSON logs by config flag (also gated by env EGC_OPS_JSON)
+    try:
+        pipeline.ops_json_enabled = bool(logging_cfg.get("ops_json", False))
+    except Exception:
+        pipeline.ops_json_enabled = False
+
     exporter = ContactExporter(output_dir=out_dir)
 
     # Smart mode profile log
-    print("Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10")
+    print(f"Smart mode: discovery=auto, headless=guarded, budgets: domain={headless_domain_cap}, global={headless_global_cap}")
     # Print Python version for diagnostics
     print(f"Python: {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
 

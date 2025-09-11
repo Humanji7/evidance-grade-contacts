@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Dict, Optional, List
+import json
+import os
+import time
 
 from .fetchers.static import StaticFetcher, FetchResult  
 from .fetchers.playwright import PlaywrightFetcher, PlaywrightResult
@@ -55,6 +58,10 @@ class DomainTracker:
         
         current_pct = stats["headless"] / total
         return current_pct < self.max_headless_pct
+
+    def get_usage(self, domain: str) -> Dict[str, int]:
+        """Return current usage counters for a domain (static/headless)."""
+        return dict(self._domain_stats.get(domain, {"static": 0, "headless": 0}))
 
 
 class IngestPipeline:
@@ -115,6 +122,8 @@ class IngestPipeline:
         self.enable_headless = bool(enable_headless)
         # New guarded budgets
         self.headless_budget = headless_budget or IngestPipeline.HeadlessBudget()
+        # OPS logging toggle (env or later-configurable flag)
+        self.ops_json_enabled = False  # can be toggled by runner or env at runtime
     
     def _extract_domain(self, url: str) -> str:
         """Extract domain from URL for tracking."""
@@ -150,12 +159,60 @@ class IngestPipeline:
         """Main ingestion method: static-first with escalation."""
         domain = self._extract_domain(url)
         
+        # Timings and counters for OPS logs
+        t0 = time.perf_counter()
+        t_fetch_static = 0.0
+        t_extract_static = 0.0
+        t_playwright = 0.0
+        contacts_count_for_log = 0
+        final_method_for_log = "unknown"
+        final_status_for_log = 0
+        escalate_bool_for_log = False
+        reasons_for_log: List[str] = []
+
+        def _emit_ops_log():
+            try:
+                env_on = os.environ.get("EGC_OPS_JSON", "0") == "1"
+                if not (env_on or getattr(self, "ops_json_enabled", False)):
+                    return
+                usage = self.domain_tracker.get_usage(domain)
+                total_s = max(0.0, time.perf_counter() - t0)
+                record = {
+                    "egc_ops": 1,
+                    "url": url,
+                    "domain": domain,
+                    "method": final_method_for_log,
+                    "status_code": final_status_for_log,
+                    "durations": {
+                        "fetch_static_s": round(t_fetch_static, 4),
+                        "extract_static_s": round(t_extract_static, 4),
+                        "playwright_s": round(t_playwright, 4),
+                        "total_s": round(total_s, 4),
+                    },
+                    "counts": {"contacts": contacts_count_for_log},
+                    "headless_usage": {"static": usage.get("static", 0), "headless": usage.get("headless", 0)},
+                    "escalate": bool(escalate_bool_for_log),
+                    "reasons": list(reasons_for_log),
+                }
+                print(json.dumps(record, ensure_ascii=False))
+            except Exception:
+                # Never break pipeline due to logging
+                pass
+        
         try:
             # Step 1: Always try static first
+            t_fetch_start = time.perf_counter()
             static_result = self.static_fetcher.fetch(url)
+            t_fetch_static = time.perf_counter() - t_fetch_start
             self.domain_tracker.record_fetch(domain, "static")
             
             if static_result.blocked_by_robots:
+                final_method_for_log = "static"
+                final_status_for_log = 0
+                contacts_count_for_log = 0
+                escalate_bool_for_log = False
+                reasons_for_log = []
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="static",
@@ -167,6 +224,12 @@ class IngestPipeline:
                 )
             
             if static_result.status_code >= 400:
+                final_method_for_log = "static"
+                final_status_for_log = static_result.status_code
+                contacts_count_for_log = 0
+                escalate_bool_for_log = False
+                reasons_for_log = []
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="static", 
@@ -185,9 +248,11 @@ class IngestPipeline:
             # Only extract contacts from static HTML when we are not already escalating
             if not escalation.escalate:
                 if static_result.mime == "text/html" and static_result.html:
+                    t_ext_start = time.perf_counter()
                     contacts_static = self.contact_extractor.extract_from_static_html(
                         static_result.html, url
                     )
+                    t_extract_static += time.perf_counter() - t_ext_start
                 else:
                     contacts_static = []
                 # Smart escalation rule — target URL with 0 contacts
@@ -197,7 +262,9 @@ class IngestPipeline:
                 # Escalation planned: apply soft rule to JS-only markers if static already yields ≥1
                 js_only = all(str(r).startswith("js:") for r in escalation.reasons)
                 if js_only and static_result.mime == "text/html" and static_result.html:
+                    t_ext2_start = time.perf_counter()
                     tmp_contacts = self.contact_extractor.extract_from_static_html(static_result.html, url)
+                    t_extract_static += time.perf_counter() - t_ext2_start
                     if tmp_contacts and selector_hits > 0:
                         contacts_static = tmp_contacts
                         escalation = EscalationDecision(escalate=False, reasons=escalation.reasons)
@@ -209,6 +276,12 @@ class IngestPipeline:
             # Step 3: If no escalation or headless disabled → return static success
             if (not escalation.escalate) or (not self.enable_headless):
                 final_contacts = contacts_static if contacts_static is not None else []
+                final_method_for_log = "static"
+                final_status_for_log = static_result.status_code
+                contacts_count_for_log = len(final_contacts)
+                escalate_bool_for_log = bool(escalation.escalate) if escalation else False
+                reasons_for_log = list(escalation.reasons) if escalation else []
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="static",
@@ -254,17 +327,27 @@ class IngestPipeline:
             try:
                 dom_method = getattr(self.contact_extractor, 'extract_with_playwright', None)
                 if callable(dom_method):
+                    t_pw_start = time.perf_counter()
                     contacts = dom_method(url)
+                    t_playwright += time.perf_counter() - t_pw_start
                     if not isinstance(contacts, list):
                         raise TypeError("extract_with_playwright did not return a list")
                 else:
                     raise AttributeError("No extract_with_playwright method")
             except Exception:
                 # Fallback: use fetcher HTML and static extractor (for backward-compatible tests)
+                t_pw_fetch_start = time.perf_counter()
                 pw = self.playwright_fetcher.fetch(url)
+                t_playwright += time.perf_counter() - t_pw_fetch_start
                 if pw.error:
                     # Fall back to static results (do not return empty on PW error)
                     print("playwright returned error; falling back to static extraction")
+                    final_method_for_log = "static"
+                    final_status_for_log = static_result.status_code
+                    contacts_count_for_log = len(contacts_static or [])
+                    escalate_bool_for_log = True
+                    reasons_for_log = list(escalation.reasons)
+                    _emit_ops_log()
                     return IngestResult(
                         url=url,
                         method="static",
@@ -274,8 +357,16 @@ class IngestPipeline:
                         contacts=contacts_static,
                         escalation_decision=escalation,
                     )
+                t_ext3_start = time.perf_counter()
                 contacts = self.contact_extractor.extract_from_static_html(pw.html or "", url)
+                t_extract_static += time.perf_counter() - t_ext3_start
                 # Keep method=playwright for this HTML-based fallback to satisfy existing tests
+                final_method_for_log = "playwright"
+                final_status_for_log = pw.status_code
+                contacts_count_for_log = len(contacts or [])
+                escalate_bool_for_log = True
+                reasons_for_log = list(escalation.reasons)
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="playwright",
@@ -288,6 +379,12 @@ class IngestPipeline:
 
             # If DOM extractor returned results, return them; otherwise fallback to static results
             if len(contacts) > 0:
+                final_method_for_log = "playwright"
+                final_status_for_log = 200
+                contacts_count_for_log = len(contacts)
+                escalate_bool_for_log = True
+                reasons_for_log = list(escalation.reasons)
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="playwright",
@@ -299,6 +396,12 @@ class IngestPipeline:
                 )
             else:
                 print("playwright returned 0; falling back to static extraction")
+                final_method_for_log = "static"
+                final_status_for_log = static_result.status_code
+                contacts_count_for_log = len(contacts_static or [])
+                escalate_bool_for_log = True
+                reasons_for_log = list(escalation.reasons)
+                _emit_ops_log()
                 return IngestResult(
                     url=url,
                     method="static",
@@ -310,6 +413,12 @@ class IngestPipeline:
                 )
         
         except Exception as e:
+            final_method_for_log = "unknown"
+            final_status_for_log = 0
+            contacts_count_for_log = 0
+            escalate_bool_for_log = False
+            reasons_for_log = []
+            _emit_ops_log()
             return IngestResult(
                 url=url,
                 method="unknown",
