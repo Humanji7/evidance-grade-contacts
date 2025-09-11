@@ -122,6 +122,12 @@ Static → headless per the conditions above. Enforce:
   - Global dedupe by (company_norm, person_norm, contact_type, contact_value_norm) with quality tie-breaks: anchor>text, semantic URL (/leadership|/our-team|/team), role!=Unknown, shorter canonical URL, fresher captured_at
   - Normalized source_url in CSV/JSON outputs (report-only; Evidence models remain unchanged)
   - Log line: "🧹 Dedupe: kept X of Y"
+- Decision Filter (post-processing CLI):
+  - DecisionLevel classification with thresholding: C_SUITE > VP_PLUS > MGMT > NON_DM > UNKNOWN (default min-level: VP_PLUS)
+  - Signals: positive title patterns (President, Managing Director, General Counsel, VP, Head of ...), negative guards (Associate, Counsel, Paralegal, Intern), structural uplift (leadership/management paths), generic inbox flag (info@, support@)
+  - Normalization: email de-obfuscation and phone normalization to E.164-like format (+1 default when no country code)
+  - Optional vCard enrichment: guarded by budget/timeout/max-bytes and `--site-allow` hostname allowlist; non-fatal errors recorded in decision_reasons
+  - Outputs per input: decision_<basename>.json/.csv and a summary line (total/kept/dropped, level counts, top drop reasons)
 
 ### Smart mode (default)
 
@@ -206,6 +212,34 @@ python -m pytest tests/regression/ --gold-data=data/gold_datasets/
 # SMTP deliverability check
 python scripts/smtp_probe.py --emails-file output/contacts.csv
 ```
+
+#### Decision Filter (post-processing)
+```bash
+# Keep VP+ and C-Suite only, write outputs next to ./output/decision
+python3 scripts/decision_filter.py \
+  --input output/contacts_people_*.json \
+  --out-dir output/decision \
+  --min-level VP_PLUS
+
+# Strict: only C-Suite
+python3 scripts/decision_filter.py \
+  --input output/contacts_people_*.json \
+  --out-dir output/decision \
+  --min-level C_SUITE
+
+# Enrich Unknown titles via vCard for allowed hosts (budget=10)
+python3 scripts/decision_filter.py \
+  --input output/contacts_people.json \
+  --out-dir output/decision \
+  --fetch-vcard --vcard-budget 10 --site-allow example.com lawfirm.com
+
+# Dry-run (summary only; no files written)
+python3 scripts/decision_filter.py \
+  --input output/contacts_people_a.json output/contacts_people_b.json \
+  --min-level MGMT --dry-run
+```
+
+See docs/cli.md for full CLI contract and exit codes.
 
 ### Mini-check: SMTP Probe (≤ 1 minute)
 Use when you need to verify the module quickly without thinking.
@@ -361,7 +395,8 @@ python -m pytest tests/e2e/ --slow
 - ✅ **Contact Extractor**: Semantic selectors for names, titles, emails, phones
 - ✅ **Pipeline Orchestration**: IngestPipeline with domain tracking and quotas
 - ✅ **Export Pipeline**: ContactExporter with CSV/JSON output and VERIFIED filtering
-- ✅ **Unit Test Coverage**: 49 tests passing with complete evidence validation
+- ✅ Decision Filter CLI: post-extraction classifier and filter (`--min-level`, normalization, optional vCard enrichment)
+- ✅ **Unit Test Coverage**: 52 tests passing with complete evidence validation
 
 ### Testing Infrastructure
 - ✅ **Evidence Builder Tests**: 11 tests covering all 7 required fields
@@ -370,6 +405,7 @@ python -m pytest tests/e2e/ --slow
 - ✅ **Export Pipeline Tests**: 14 tests for CSV/JSON export with evidence
 - ✅ **Static Fetcher Tests**: 2 tests for robots.txt compliance
 - ✅ **Escalation Tests**: 4 tests for anti-bot detection logic
+- ✅ **Decision Filter Tests**: 3 tests (CLI invocation, classification rules, vCard enrichment budget)
 
 ### Data Quality Metrics
 - Duplicate Export Key Rate: < 1% (based on key: company_norm, person_norm, contact_type, contact_value_norm)
