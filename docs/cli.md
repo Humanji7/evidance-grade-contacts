@@ -39,24 +39,40 @@ python -m egc.run --input <urls_file> --config <config_file> --out <output_dir> 
 - `--out` / `-o`: Output directory for results
 
 **Optional Arguments:**
-- `--verbose` / `-v`: Enable verbose logging
-- `--dry-run`: Validate configuration without processing
-- `--no-discovery`: Disable adaptive link discovery; use only include_paths expansion
-- `--no-prefilter`: Disable pre-filter HTTP checks
-- `--no-headless`: Disable Playwright escalation (static-only)
-- `--static-timeout` SECONDS: Static fetch timeout (default 12.0)
-- `--prefilter-timeout` SECONDS: Prefilter HEAD timeout (default 5.0)
-- `--aggressive-static`: Enable aggressive static heuristics (name, email de-obfuscation, text phones with markers, VCF, table extractor first, role stop-list→Unknown)
-- `--max-pages-per-domain` N: Limit number of candidate pages per domain after normalization (default 10)
-- `--include-all`: Export UNVERIFIED as well (default: VERIFIED only)
+|- `--verbose` / `-v`: Enable verbose logging
+|- `--dry-run`: Validate configuration without processing
+|- `--no-discovery`: Disable adaptive link discovery; use only include_paths expansion
+|- `--exact-input-only`: Process only URLs provided in `--input` (disables discovery and `include_paths` expansion), also skips prefilter (HEAD) and preserves trailing slash in URLs
+|- `--no-prefilter`: Disable pre-filter HTTP checks
+|- `--no-headless`: Disable Playwright escalation (static-only)
+|- `--static-timeout` SECONDS: Static fetch timeout (default 12.0)
+|- `--prefilter-timeout` SECONDS: Prefilter HEAD timeout (default 5.0)
+|- `--aggressive-static`: Enable aggressive static heuristics (name, email de-obfuscation, text phones with markers, VCF, table extractor first, role stop-list→Unknown)
+|- `--max-pages-per-domain` N: Limit number of candidate pages per domain after normalization (default 10)
+|- `--include-all`: Export UNVERIFIED as well (default: VERIFIED only)
 
-**Example:**
+**Examples:**
 ```bash
+# Default Smart mode
 python -m egc.run \
   --input input_urls.txt \
   --config config/example.yaml \
   --out ./output \
   --verbose
+
+# Exact-only: process only URLs from input (no discovery, no include_paths expansion)
+python -m egc.run \
+  --input input_urls.txt \
+  --config config/example.yaml \
+  --out ./output \
+  --exact-input-only
+
+# No discovery but keep include_paths expansion from config
+python -m egc.run \
+  --input input_urls.txt \
+  --config config/example.yaml \
+  --out ./output \
+  --no-discovery
 ```
 
 **Output Structure:**
@@ -275,7 +291,7 @@ export EGC_HEADLESS_BUDGET=10000              # Override headless timeout (ms)
 
 ### Behavior Notes
 
-- Candidate URL normalization: host lowercased, drop query/fragment, trim trailing slash; discovery skips facet links (?/#)
+- Candidate URL normalization: host lowercased, drop query/fragment; trim trailing slash except when running with `--exact-input-only` (where trailing slash is preserved). Discovery skips facet links (?/#)
 - Per-domain limit: `--max-pages-per-domain` caps candidates after normalization
 - Export-layer dedupe: removes duplicates by (company_norm, person_norm, contact_type, contact_value_norm); logs "🧹 Dedupe: kept X of Y"
 - Reporting-only normalization: `source_url` is normalized in exported files; Evidence models remain unchanged

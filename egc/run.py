@@ -89,16 +89,20 @@ def read_input_urls(input_path: Path) -> List[str]:
     return urls
 
 
-def normalize_url(u: str) -> str:
-    """Canonicalize a URL: lowercase host, drop query/fragment, trim trailing slash (except root)."""
+def normalize_url(u: str, keep_trailing_slash: bool = False) -> str:
+    """Canonicalize a URL: lowercase host, drop query/fragment.
+
+    By default, also trim trailing slash (except for root path). When
+    keep_trailing_slash=True, preserve the path exactly as provided.
+    """
     try:
         p = urlparse(u)
         if not p.scheme:
             return u  # not a URL; leave untouched
         netloc = (p.netloc or '').lower()
         path = p.path or ''
-        # trim trailing slash except root
-        if path.endswith('/') and path != '/':
+        # Trim trailing slash except root, unless explicitly preserved
+        if (not keep_trailing_slash) and path.endswith('/') and path != '/':
             path = path.rstrip('/')
         newp = p._replace(netloc=netloc, path=path, query='', fragment='')
         return urlunparse(newp)
@@ -152,6 +156,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--aggressive-static", action="store_true", help="Enable static++ heuristics (Smart mode enables this by default)")
     parser.add_argument("--max-pages-per-domain", type=int, default=10, help="Limit number of candidate pages per domain (default 10)")
     parser.add_argument("--consolidate-per-person", action="store_true", help="Produce consolidated per-person exports (1 row per person)")
+    parser.add_argument("--exact-input-only", action="store_true", help="Process only URLs from --input; disable discovery and include_paths expansion")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -264,26 +269,37 @@ def main(argv: list[str] | None = None) -> int:
             # Smart discovery:
             # - If input URL already target → do not run discovery; process only this URL
             # - Otherwise → discover links to target pages (limit 4) with fast HEAD prefilter (2s)
-            discovered: list[str] = []
-            if (not args.no_discovery) and (base.startswith("http://") or base.startswith("https://")) and (not _is_target_url(base)):
-                try:
-                    discovered = discover_from_root(base)
-                except Exception:
-                    discovered = []
-                # Limit discovery to first 4 target-like pages
-                discovered = discovered[:4]
-            # Build candidates
-            candidates = ([] if _is_target_url(base) else (discovered or [])) + expand_candidate_urls(base, include_paths)
+            # Build candidates honoring exact-input-only first
+            if getattr(args, "exact_input_only", False):
+                candidates = []
+                # Preserve trailing slash in exact-input-only mode
+                nu = normalize_url(base, keep_trailing_slash=True)
+                if nu and nu.startswith(("http://", "https://")):
+                    candidates.append(nu)
+            else:
+                discovered: list[str] = []
+                if (not args.no_discovery) and (base.startswith("http://") or base.startswith("https://")) and (not _is_target_url(base)):
+                    try:
+                        discovered = discover_from_root(base)
+                    except Exception:
+                        discovered = []
+                    # Limit discovery to first 4 target-like pages
+                    discovered = discovered[:4]
+                # Build candidates
+                candidates = ([] if _is_target_url(base) else (discovered or [])) + expand_candidate_urls(base, include_paths)
             # Normalize and dedupe candidates
             norm_seen = set()
             norm_candidates: list[str] = []
+            # Preserve trailing slash for exact-input-only normalization to avoid breaking servers
+            keep_slash = bool(getattr(args, "exact_input_only", False))
             for u in candidates:
-                nu = normalize_url(u)
+                nu = normalize_url(u, keep_trailing_slash=keep_slash)
                 if nu and nu.startswith(('http://','https://')) and nu not in norm_seen:
                     norm_seen.add(nu)
                     norm_candidates.append(nu)
             # Pre-filter candidates quickly (2s for Smart mode)
-            if args.no_prefilter:
+            # In exact-input-only mode, skip prefilter to avoid false negatives (e.g., HEAD 403/405)
+            if args.no_prefilter or args.exact_input_only:
                 prefiltered = norm_candidates
             else:
                 prefiltered = [u for u in norm_candidates if _quick_url_ok(u, timeout_s=2.0)]
