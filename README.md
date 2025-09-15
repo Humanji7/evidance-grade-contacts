@@ -34,6 +34,8 @@ Outputs:
 - out/contacts_*.{csv,json} — VERIFIED-only
 - out/contacts_people_*.{csv,json} — people-level consolidation
 - out/evidence/ — node screenshots
+- out/time_summary.json — run timing summary in seconds (always written)
+- out/cost_summary.json — optional cost summary (written only if rates/fees provided or CLI overrides)
 
 Tip: Enable Aggressive Static mode for tougher sites: add --aggressive-static.
 
@@ -74,6 +76,48 @@ Example:
 4) Guarded headless (Playwright) only on clear triggers (SPA mime, tiny pages with 0 hits, anti‑bot markers, “cards present, no contacts”) with budgets (per‑domain/global caps)
 5) Extract names/titles/emails/phones (+ vCard when allowed)
 6) Build Mini Evidence Packages → export VERIFIED-only CSV/JSON
+
+## Timing & Cost summaries
+
+- Seconds-only summary (always on):
+
+```bash
+python -m egc.run \
+  --input input_urls.txt \
+  --config config.yaml \
+  --out ./out \
+  --time-only  # печатает строку со сводкой секунд и пишет out/time_summary.json
+```
+
+Example time_summary.json:
+```json path=null start=null
+{
+  "seconds": {
+    "static_fetch_s": 12.34,
+    "extract_static_s": 5.67,
+    "headless_s": 8.9,
+    "total_s": 28.91
+  },
+  "pages": {
+    "total": 6,
+    "static": 4,
+    "headless": 2
+  }
+}
+```
+
+- Optional cost summary (if заданы ставки):
+
+```bash
+python -m egc.run \
+  --input input_urls.txt \
+  --config config.yaml \
+  --out ./out \
+  --rate-static-per-min 0.02 \
+  --rate-headless-per-min 0.20 \
+  --fee-headless-per-page 0.005
+# => дополнительно пишет out/cost_summary.json и печатает строку со стоимостью
+```
 
 ## Decision Filter (optional)
 

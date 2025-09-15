@@ -153,6 +153,8 @@ Operational logs:
 - At start of run: "Smart mode: discovery=auto, headless=guarded, budgets: domain=2, global=10"
 - On escalation: "via playwright: reasons=[…]"
 - On exhausted budgets: "headless budget exhausted"
+- Time summary: CLI печатает строку с секундами и пишет out/time_summary.json
+- Cost summary: опционально, если заданы ставки/пошлины (rates/fees), пишет out/cost_summary.json и печатает строку со стоимостью
 
 ### Initial Setup
 ```bash
@@ -190,6 +192,13 @@ echo "https://example.com" > input_urls.txt
 
 # Run the pipeline (default Smart mode, no flags required)
 python -m egc.run --input input_urls.txt --config config.yaml --out ./out
+
+# Seconds-only timing summary (skip cost)
+python -m egc.run --input input_urls.txt --config config.yaml --out ./out --time-only
+
+# Optional: with cost rates/fees overrides
+python -m egc.run --input input_urls.txt --config config.yaml --out ./out \
+  --rate-static-per-min 0.02 --rate-headless-per-min 0.20 --fee-headless-per-page 0.005
 ```
 
 Expected outputs:
