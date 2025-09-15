@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import json
 from pathlib import Path
 from typing import List
 from urllib.parse import urljoin, urlparse, urlunparse
@@ -165,6 +166,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ecr-threshold", type=float, default=0.95, help="ECR threshold for OK/FAIL tag in summary (default 0.95)")
     parser.add_argument("--ops-log", default=None, help="Path to ops JSONL log file (default: <out>/ops.log)")
     parser.add_argument("--ops-stdout", action="store_true", help="Also mirror ops JSON to stdout")
+    # Timing-only output
+    parser.add_argument("--time-only", action="store_true", help="Print time summary in seconds and skip cost calculation/output")
+    # Cost model overrides (optional; fallback to config ops.cost or 0)
+    parser.add_argument("--rate-static-per-min", type=float, default=None, help="Override static cost rate ($/min). Defaults to config ops.cost.rate_static_per_min or 0")
+    parser.add_argument("--rate-headless-per-min", type=float, default=None, help="Override headless cost rate ($/min). Defaults to config ops.cost.rate_headless_per_min or 0")
+    parser.add_argument("--fee-static-per-page", type=float, default=None, help="Override static per-page fee ($). Defaults to config ops.cost.fee_static_per_page or 0")
+    parser.add_argument("--fee-headless-per-page", type=float, default=None, help="Override headless per-page fee ($). Defaults to config ops.cost.fee_headless_per_page or 0")
     args = parser.parse_args(argv)
 
     input_path = Path(args.input)
@@ -199,12 +207,19 @@ def main(argv: list[str] | None = None) -> int:
     headless_cfg = ops_cfg.get("headless", {}) if isinstance(ops_cfg, dict) else {}
     timeouts_cfg = ops_cfg.get("timeouts", {}) if isinstance(ops_cfg, dict) else {}
     logging_cfg = ops_cfg.get("logging", {}) if isinstance(ops_cfg, dict) else {}
+    cost_cfg = ops_cfg.get("cost", {}) if isinstance(ops_cfg, dict) else {}
 
     headless_domain_cap = int(headless_cfg.get("per_domain_budget", 2) or 2)
     headless_global_cap = int(headless_cfg.get("global_budget", 10) or 10)
     domain_max_share_pct = float(headless_cfg.get("max_share_pct", 0.2) or 0.2)
 
     static_timeout = float(timeouts_cfg.get("static_fetch_s", args.static_timeout) or args.static_timeout)
+
+    # Resolve cost parameters (CLI overrides > config > 0)
+    rate_static_per_min = float(args.rate_static_per_min) if args.rate_static_per_min is not None else float(cost_cfg.get("rate_static_per_min", 0) or 0)
+    rate_headless_per_min = float(args.rate_headless_per_min) if args.rate_headless_per_min is not None else float(cost_cfg.get("rate_headless_per_min", 0) or 0)
+    fee_static_per_page = float(args.fee_static_per_page) if args.fee_static_per_page is not None else float(cost_cfg.get("fee_static_per_page", 0) or 0)
+    fee_headless_per_page = float(args.fee_headless_per_page) if args.fee_headless_per_page is not None else float(cost_cfg.get("fee_headless_per_page", 0) or 0)
 
     pipeline = IngestPipeline(
         enable_headless=(not args.no_headless),
@@ -282,6 +297,16 @@ def main(argv: list[str] | None = None) -> int:
     total_pages = 0
     import time as _time
     proc_start = _time.perf_counter()
+    # Cost aggregation accumulators
+    cost_acc = {
+        "static_s": 0.0,
+        "extract_s": 0.0,
+        "headless_s": 0.0,
+        "total_s": 0.0,
+        "pages": 0,
+        "pages_static": 0,
+        "pages_headless": 0,
+    }
     try:
         for base in urls:
             # Smart discovery:
@@ -330,8 +355,29 @@ def main(argv: list[str] | None = None) -> int:
                 result = pipeline.ingest(url)
                 # Emit per-URL ops record to file if available
                 try:
-                    if ops_logger and getattr(pipeline, "_last_ops_record", None):
-                        ops_logger.emit(pipeline._last_ops_record)
+                    ops_rec = getattr(pipeline, "_last_ops_record", None)
+                    if ops_rec:
+                        # Aggregate durations for cost model
+                        durs = ops_rec.get("durations", {}) if isinstance(ops_rec, dict) else {}
+                        try:
+                            cost_acc["static_s"] += float(durs.get("fetch_static_s", 0) or 0)
+                            cost_acc["extract_s"] += float(durs.get("extract_static_s", 0) or 0)
+                            cost_acc["headless_s"] += float(durs.get("playwright_s", 0) or 0)
+                            cost_acc["total_s"] += float(durs.get("total_s", 0) or 0)
+                        except Exception:
+                            pass
+                        # Page method counts
+                        try:
+                            m = str(ops_rec.get("method", "")).lower()
+                            cost_acc["pages"] += 1
+                            if m == "playwright":
+                                cost_acc["pages_headless"] += 1
+                            elif m == "static":
+                                cost_acc["pages_static"] += 1
+                        except Exception:
+                            pass
+                        if ops_logger:
+                            ops_logger.emit(ops_rec)
                 except Exception:
                     pass
                 # Surface escalation reasons in logs
@@ -426,6 +472,74 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as e:
             print(f"SQLite export error: {e}", file=sys.stderr)
             return 3
+
+    # Always compute and write time summary (seconds-only)
+    try:
+        time_summary = {
+            "seconds": {
+                "static_fetch_s": round(cost_acc["static_s"], 2),
+                "extract_static_s": round(cost_acc["extract_s"], 2),
+                "headless_s": round(cost_acc["headless_s"], 2),
+                "total_s": round(cost_acc["total_s"], 2),
+            },
+            "pages": {
+                "total": int(cost_acc["pages"]),
+                "static": int(cost_acc["pages_static"]),
+                "headless": int(cost_acc["pages_headless"]),
+            },
+        }
+        time_path = out_dir / "time_summary.json"
+        with time_path.open("w", encoding="utf-8") as f:
+            json.dump(time_summary, f, ensure_ascii=False, indent=2)
+        print(
+            "⏱ Time: static_fetch={sf}s, extract_static={se}s, headless={ph}s, total={tt}s | pages: {pt} (static {ps}, headless {phg})".format(
+                sf=time_summary["seconds"]["static_fetch_s"],
+                se=time_summary["seconds"]["extract_static_s"],
+                ph=time_summary["seconds"]["headless_s"],
+                tt=time_summary["seconds"]["total_s"],
+                pt=time_summary["pages"]["total"],
+                ps=time_summary["pages"]["static"],
+                phg=time_summary["pages"]["headless"],
+            )
+        )
+        print(f"⏱ Time summary JSON: {time_path}")
+    except Exception as e:
+        print(f"Time summary error: {e}", file=sys.stderr)
+
+    # Compute and write cost summary only when enabled (non-zero rates/fees) and not time-only
+    try:
+        if not args.time_only and any([rate_static_per_min, rate_headless_per_min, fee_static_per_page, fee_headless_per_page]):
+            static_minutes = (cost_acc["static_s"] + cost_acc["extract_s"]) / 60.0
+            headless_minutes = (cost_acc["headless_s"]) / 60.0
+            cost_static = static_minutes * rate_static_per_min + cost_acc["pages_static"] * fee_static_per_page
+            cost_headless = headless_minutes * rate_headless_per_min + cost_acc["pages_headless"] * fee_headless_per_page
+            total_cost = cost_static + cost_headless
+            cost_summary = {
+                "seconds": time_summary["seconds"],
+                "minutes": {
+                    "static_min": round(static_minutes, 2),
+                    "headless_min": round(headless_minutes, 2),
+                },
+                "pages": time_summary["pages"],
+                "rates": {
+                    "rate_static_per_min": rate_static_per_min,
+                    "rate_headless_per_min": rate_headless_per_min,
+                    "fee_static_per_page": fee_static_per_page,
+                    "fee_headless_per_page": fee_headless_per_page,
+                },
+                "costs": {
+                    "static": round(cost_static, 2),
+                    "headless": round(cost_headless, 2),
+                },
+                "total_cost": round(total_cost, 2),
+            }
+            cost_path = out_dir / "cost_summary.json"
+            with cost_path.open("w", encoding="utf-8") as f:
+                json.dump(cost_summary, f, ensure_ascii=False, indent=2)
+            print(f"💲 Cost: static=${cost_summary['costs']['static']:.2f}, headless=${cost_summary['costs']['headless']:.2f}, total=${cost_summary['total_cost']:.2f}")
+            print(f"💲 Cost summary JSON: {cost_path}")
+    except Exception as e:
+        print(f"Cost summary error: {e}", file=sys.stderr)
 
     print("🏁 Done.")
     # Emit final summary ops record
