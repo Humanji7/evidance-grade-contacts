@@ -22,6 +22,12 @@ JS_MARKERS = [
     r"data-phone\s*=",
     r"data-reactroot",
     r"ng-app",
+    # Hidden email triggers (text/buttons) that suggest JS-reveal behavior
+    r"show\s*(e-?mail|email)",
+    r"reveal\s*(e-?mail|email)",
+    r"display\s*(e-?mail|email)",
+    r"показать\s*(e-?mail|email|почт\w+)",
+    r"открыть\s*(e-?mail|email|почт\w+)",
 ]
 
 TARGET_CARD_CLASS_RE = re.compile(r'class\s*=\s*"[^"]*(team|member|profile|person)[^"]*"', re.IGNORECASE)

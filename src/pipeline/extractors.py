@@ -19,6 +19,7 @@ import difflib
 import time
 from typing import List, Dict, Optional, Union, Tuple
 from urllib.parse import urljoin, urlparse
+from collections import Counter
 
 from selectolax.parser import HTMLParser, Node
 from playwright.sync_api import Page, ElementHandle, Locator
@@ -48,6 +49,31 @@ class ContactExtractor:
         
         # D=1 follow-up budget (reset per top-level extract call)
         self._d1_budget: Optional[int] = None
+        
+        # Cross-domain acceptance scoring (hardcoded weights and threshold; no new configs)
+        self._XDOM_THRESHOLD: int = 5  # moderate threshold
+        self._XDOM_W: Dict[str, int] = {
+            'in_person_card': 0,  # do not count this unless strict boundary checks are added
+            'has_title': 1,
+            'mailto': 2,
+            'has_phone': 2,
+            'has_vcard': 2,
+            'show_email_trigger': 1,
+            'domain_repeat_2plus': 1,
+            'domain_repeat_3plus': 2,
+            'domain_in_footer': 2,
+            'site_repeat_3plus': 1,
+            'site_repeat_5plus': 2,
+            'negative_zone': -2,
+        }
+        # Per-page context caches (reset each extract call)
+        self._page_mailto_counts: Counter[str] = Counter()
+        self._footer_contact_text: str = ""
+        # Site-level domain frequency (reset when site changes)
+        self._site_host: Optional[str] = None
+        self._site_mailto_counts: Counter[str] = Counter()
+        # Trigger patterns for hidden/revealed emails (used as a signal)
+        self._show_email_re = re.compile(r"\b(show|reveal|display|показать|открыть)\s*(e-?mail|email|почт\w+|адрес)\b", re.I)
         
         # Common selectors for person information
         self.person_selectors = [
@@ -159,6 +185,191 @@ class ContactExtractor:
                 return m.group(0)
         return None
 
+    # -------------------------
+    # Cross-domain acceptance helpers (static context)
+    # -------------------------
+    def _xdom_prepare_context_static(self, parser: HTMLParser, source_url: str) -> None:
+        """Compute per-page domain counts and footer/contact text for cross-domain signals.
+        Stored in instance fields; reset per extract call.
+        """
+        counts: Counter[str] = Counter()
+        try:
+            for a in parser.css("a[href*='mailto:']"):
+                try:
+                    href = (a.attrs.get('href', '') or '').strip()
+                    txt = (a.text() or '').strip()
+                    email = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+                    if not email or '@' not in email:
+                        continue
+                    edom = email.split('@')[-1].lower()
+                    counts[edom] += 1
+                except Exception:
+                    continue
+        except Exception:
+            counts = Counter()
+        # Footer/contact blocks text
+        parts: List[str] = []
+        try:
+            for f in (parser.css('footer') or []):
+                t = f.text() or ''
+                if t:
+                    parts.append(t)
+        except Exception:
+            pass
+        try:
+            for blk in (parser.css("address, .contact, .contacts, .contact-info, .contact-us, [class*='contact']") or []):
+                t = blk.text() or ''
+                if t:
+                    parts.append(t)
+        except Exception:
+            pass
+        low = '\n'.join(parts).lower()
+        self._page_mailto_counts = counts
+        self._footer_contact_text = low
+        # Update site-level counters
+        self._xdom_reset_or_update_site_counts(source_url)
+
+    def _xdom_page_domain_count(self, domain: str) -> int:
+        return int(self._page_mailto_counts.get((domain or '').strip().lower(), 0))
+
+    def _xdom_reset_or_update_site_counts(self, source_url: str) -> None:
+        try:
+            host = urlparse(source_url).netloc.lower().replace('www.', '')
+        except Exception:
+            host = ''
+        if host and host != self._site_host:
+            # New site → reset counters
+            self._site_host = host
+            self._site_mailto_counts = Counter()
+        # Accumulate per-page counts into site-level counts
+        for dom, cnt in (self._page_mailto_counts or {}).items():
+            if dom:
+                self._site_mailto_counts[dom] += int(cnt)
+
+    def _xdom_site_domain_count(self, domain: str) -> int:
+        return int(self._site_mailto_counts.get((domain or '').strip().lower(), 0))
+
+    def _xdom_min_confirmation(self,
+                               *,
+                               has_phone: bool,
+                               has_vcard: bool,
+                               page_repeat: int,
+                               in_footer: bool,
+                               site_repeat: int) -> tuple[bool, list[str]]:
+        """Strong-signal gate: require at least one of the following:
+        - phone in same card
+        - vCard in same card
+        - page-level domain repeat >= 2
+        - domain mentioned in footer/contact block
+        - site-level domain repeat >= 3
+        Returns (ok, missing_signals_list)
+        """
+        ok = bool(has_phone or has_vcard or page_repeat >= 2 or in_footer or site_repeat >= 3)
+        missing: list[str] = []
+        if not has_phone:
+            missing.append('phone')
+        if not has_vcard:
+            missing.append('vcard')
+        if page_repeat < 2:
+            missing.append('page_repeat>=2')
+        if not in_footer:
+            missing.append('footer_mention')
+        if site_repeat < 3:
+            missing.append('site_repeat>=3')
+        return ok, missing
+
+    def _xdom_log_accept(self, *, email: str, domain: str, source_url: str, score: int, signals: list[str]) -> None:
+        try:
+            print(f"cross-domain: accepted (email={email}, domain={domain}, score={score}) signals={','.join(signals)} @ {source_url}")
+        except Exception:
+            pass
+
+    def _xdom_domain_in_footer_or_contacts(self, domain: str) -> bool:
+        dom = (domain or '').strip().lower()
+        if not dom:
+            return False
+        txt = self._footer_contact_text or ''
+        return (dom in txt) or (('@' + dom) in txt)
+
+    def _is_negative_zone_path(self, source_url: str) -> bool:
+        try:
+            p = urlparse(source_url).path.lower()
+        except Exception:
+            p = ''
+        NEG = ('/press', '/news', '/media', '/newsroom', '/careers', '/jobs', '/vacancies', '/employment', '/agency')
+        return any(seg in p for seg in NEG)
+
+    def _node_has_show_email_trigger(self, node: Node) -> bool:
+        try:
+            text = (node.text() or '').lower()
+            if self._show_email_re.search(text):
+                return True
+            # Also look at buttons/anchors specifically
+            for a in node.css('a, button, span, div'):
+                t = (a.text() or '').lower()
+                if t and self._show_email_re.search(t):
+                    return True
+        except Exception:
+            pass
+        return False
+
+    def _node_has_phone_hint(self, node: Node) -> bool:
+        try:
+            if node.css_first("a[href*='tel:']") is not None:
+                return True
+            text = node.text() or ''
+            return bool(self.phone_pattern.search(text))
+        except Exception:
+            return False
+
+    def _node_has_vcf_hint(self, node: Node) -> bool:
+        try:
+            return node.css_first("a[href$='.vcf']") is not None
+        except Exception:
+            return False
+
+    def _xdom_score_static(self,
+                            email_domain: str,
+                            *,
+                            in_person_card: bool,
+                            has_title: bool,
+                            from_mailto: bool,
+                            has_phone: bool,
+                            has_vcard: bool,
+                            has_show_trigger: bool,
+                            page_domain_count: int,
+                            site_domain_count: int,
+                            domain_in_footer: bool,
+                            negative_zone: bool) -> tuple[int, List[str]]:
+        """Compute cross-domain score and return (score, signal_names)."""
+        s = 0
+        signals: List[str] = []
+        if in_person_card and self._XDOM_W['in_person_card']:
+            s += self._XDOM_W['in_person_card']; signals.append('card')
+        if has_title:
+            s += self._XDOM_W['has_title']; signals.append('title')
+        if from_mailto:
+            s += self._XDOM_W['mailto']; signals.append('mailto')
+        if has_phone:
+            s += self._XDOM_W['has_phone']; signals.append('phone')
+        if has_vcard:
+            s += self._XDOM_W['has_vcard']; signals.append('vcard')
+        if has_show_trigger:
+            s += self._XDOM_W['show_email_trigger']; signals.append('show-email')
+        if page_domain_count >= 3:
+            s += self._XDOM_W['domain_repeat_3plus']; signals.append('repeat>=3')
+        elif page_domain_count >= 2:
+            s += self._XDOM_W['domain_repeat_2plus']; signals.append('repeat>=2')
+        if site_domain_count >= 5:
+            s += self._XDOM_W['site_repeat_5plus']; signals.append('site>=5')
+        elif site_domain_count >= 3:
+            s += self._XDOM_W['site_repeat_3plus']; signals.append('site>=3')
+        if domain_in_footer:
+            s += self._XDOM_W['domain_in_footer']; signals.append('footer')
+        if negative_zone:
+            s += self._XDOM_W['negative_zone']; signals.append('neg-zone')
+        return s, signals
+
     def _emails_from_text(self, node: Node) -> List[str]:
         """Find emails in raw text within a node, including deobfuscated ones."""
         found: set[str] = set()
@@ -213,6 +424,15 @@ class ContactExtractor:
         """
         parser = HTMLParser(html)
         contacts: List[Contact] = []
+        
+        # Prepare per-page cross-domain context
+        try:
+            self._xdom_prepare_context_static(parser, source_url)
+        except Exception:
+            # Fail-quietly; context signals simply unavailable
+            self._page_mailto_counts = Counter()
+            self._footer_contact_text = ""
+            self._xdom_reset_or_update_site_counts(source_url)
         
         # Top-level call budget reset for D=1 profile follow-ups
         local_reset = False
@@ -282,6 +502,14 @@ class ContactExtractor:
         
         # Extract company name from page
         company_name = self._extract_company_name_playwright(page, source_url)
+        
+        # Prepare per-page cross-domain context (mailto domain counts, footer/contact text)
+        try:
+            self._xdom_prepare_context_playwright(page, source_url)
+        except Exception:
+            self._page_mailto_counts = Counter()
+            self._footer_contact_text = ""
+            self._xdom_reset_or_update_site_counts(source_url)
         
         # Find person containers
         for selector in self.person_selectors:
@@ -393,6 +621,13 @@ class ContactExtractor:
 
         # 1) Emails: prefer mailto; if absent, use aria/title/icon or text-only within card root
         candidate_emails: List[tuple[str, Optional[Node], str]] = []  # (email, node, selector)
+        
+        # Cross-domain signal hints available at card-level
+        has_phone_hint = self._node_has_phone_hint(person_node)
+        has_vcf_hint = self._node_has_vcf_hint(person_node)
+        has_show_trigger = self._node_has_show_email_trigger(person_node)
+        negative_zone = self._is_negative_zone_path(source_url)
+        # If show-email trigger is present and we didn't capture an email here, leave card as valid via other signals; dynamic path may reveal later.
         email_link = self._nearest_link(person_node, name_node, "a[href*='mailto:']") if name_node else None
         if email_link:
             href = (email_link.attrs.get('href','') or '').strip()
@@ -441,11 +676,54 @@ class ContactExtractor:
                 continue
             email_domain = email_val.split('@')[-1].lower() if '@' in email_val else ''
             same_domain = email_domain.endswith(site_domain)
-            domain_ok = same_domain or self._email_domain_matches_site(email_domain, site_domain) or (allow_free_env and (email_domain in self.free_email_domains))
-            if domain_ok:
+            brand_match = same_domain or self._email_domain_matches_site(email_domain, site_domain)
+            # Free email acceptance remains behind env guard
+            free_ok = (allow_free_env and (email_domain in self.free_email_domains))
+
+            accept = False
+
+            if brand_match or free_ok:
+                accept = True
+            else:
+                # Cross-domain scoring path
+                from_mailto = ("mailto:" in sel) or (node_for_ev is not None and getattr(node_for_ev, 'attrs', None) and str((node_for_ev.attrs.get('href','') or '')).lower().startswith('mailto:'))
+                page_count = self._xdom_page_domain_count(email_domain)
+                site_count = self._xdom_site_domain_count(email_domain)
+                in_footer = self._xdom_domain_in_footer_or_contacts(email_domain)
+                score, sigs = self._xdom_score_static(
+                    email_domain,
+                    in_person_card=True,
+                    has_title=bool(person_title and person_title.strip()),
+                    from_mailto=bool(from_mailto),
+                    has_phone=bool(has_phone_hint),
+                    has_vcard=bool(has_vcf_hint),
+                    has_show_trigger=bool(has_show_trigger),
+                    page_domain_count=int(page_count),
+                    site_domain_count=int(site_count),
+                    domain_in_footer=bool(in_footer),
+                    negative_zone=bool(negative_zone),
+                )
+                if score >= self._XDOM_THRESHOLD:
+                    # Minimal confirmation strong-signal gate
+                    strong_ok, missing = self._xdom_min_confirmation(
+                        has_phone=bool(has_phone_hint),
+                        has_vcard=bool(has_vcf_hint),
+                        page_repeat=int(page_count),
+                        in_footer=bool(in_footer),
+                        site_repeat=int(site_count),
+                    )
+                    if strong_ok:
+                        accept = True
+                        self._xdom_log_accept(email=email_val, domain=email_domain, source_url=source_url, score=score, signals=sigs)
+                    else:
+                        print(f"cross-domain: недостаточно подтверждающих сигналов (email={email_val}, domain={email_domain}). Нет: {', '.join(missing)}")
+                else:
+                    print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={email_domain})")
+
+            if accept:
                 evidence = self.evidence_builder.create_evidence_static(
                     source_url=source_url,
-                    selector=sel,
+                    selector=sel,  # keep selector clean; notes go to logs only
                     node=node_for_ev or person_node,
                     verbatim_text=(node_for_ev.text() if (node_for_ev and hasattr(node_for_ev, 'text')) else None) or email_val
                 )
@@ -870,18 +1148,56 @@ class ContactExtractor:
                             if not email:
                                 continue
                             email = email.lower()
-                            edom = email.split('@')[-1]
-                            if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
-                                ev = self.evidence_builder.create_evidence_playwright(
-                                    source_url=url,
-                                    selector="a[href*='mailto:']",
-                                    page=page,
-                                    element=a,
-                                    verbatim_text=txt or email,
+                            edom = (email.split('@')[-1] or '').lower()
+                            brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+                            free_ok = (allow_free_env and (edom in self.free_email_domains))
+                            accept = False
+                            if brand_match or free_ok:
+                                accept = True
+                            else:
+                                page_count = self._xdom_page_domain_count(edom)
+                                site_count = self._xdom_site_domain_count(edom)
+                                in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                                score, sigs = self._xdom_score_static(
+                                    edom,
+                                    in_person_card=True,
+                                    has_title=bool(title and title.strip() and (title.lower() != 'unknown')),
+                                    from_mailto=True,
+                                    has_phone=self._element_has_phone_hint_pw(el),
+                                    has_vcard=self._element_has_vcf_hint_pw(el),
+                                    has_show_trigger=self._element_has_show_email_trigger_pw(el),
+                                    page_domain_count=int(page_count),
+                                    site_domain_count=int(site_count),
+                                    domain_in_footer=bool(in_footer),
+                                    negative_zone=self._is_negative_zone_path(url),
                                 )
-                                out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=email, evidence=ev, captured_at=ev.timestamp))
-                                found_email = True
-                                break
+                                if score >= self._XDOM_THRESHOLD:
+                                    strong_ok, missing = self._xdom_min_confirmation(
+                                        has_phone=self._element_has_phone_hint_pw(el),
+                                        has_vcard=self._element_has_vcf_hint_pw(el),
+                                        page_repeat=int(page_count),
+                                        in_footer=bool(in_footer),
+                                        site_repeat=int(site_count),
+                                    )
+                                    if strong_ok:
+                                        accept = True
+                                        self._xdom_log_accept(email=email, domain=edom, source_url=url, score=score, signals=sigs)
+                                    else:
+                                        print(f"cross-domain: недостаточно подтверждающих сигналов (email={email}, domain={edom}). Нет: {', '.join(missing)}")
+                                else:
+                                    print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+                            if not accept:
+                                continue
+                            ev = self.evidence_builder.create_evidence_playwright(
+                                source_url=url,
+                                selector="a[href*='mailto:']",
+                                page=page,
+                                element=a,
+                                verbatim_text=txt or email,
+                            )
+                            out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=email, evidence=ev, captured_at=ev.timestamp))
+                            found_email = True
+                            break
 
                         # EMAIL via aria/title
                         if not found_email:
@@ -898,18 +1214,56 @@ class ContactExtractor:
                                     m2 = self.email_pattern.search((el.text_content() or '').lower())
                                     cand = m2.group(0) if m2 else None
                                 if cand:
-                                    edom = cand.split('@')[-1]
-                                    if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
-                                        ev = self.evidence_builder.create_evidence_playwright(
-                                            source_url=url,
-                                            selector="a[aria|title*=email]",
-                                            page=page,
-                                            element=a,
-                                            verbatim_text=txt or cand,
+                                    edom = (cand.split('@')[-1] or '').lower()
+                                    brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+                                    free_ok = (allow_free_env and (edom in self.free_email_domains))
+                                    accept = False
+                                    if brand_match or free_ok:
+                                        accept = True
+                                    else:
+                                        page_count = self._xdom_page_domain_count(edom)
+                                        site_count = self._xdom_site_domain_count(edom)
+                                        in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                                        score, sigs = self._xdom_score_static(
+                                            edom,
+                                            in_person_card=True,
+                                            has_title=bool(title and title.strip() and (title.lower() != 'unknown')),
+                                            from_mailto=False,
+                                            has_phone=self._element_has_phone_hint_pw(el),
+                                            has_vcard=self._element_has_vcf_hint_pw(el),
+                                            has_show_trigger=self._element_has_show_email_trigger_pw(el),
+                                            page_domain_count=int(page_count),
+                                            site_domain_count=int(site_count),
+                                            domain_in_footer=bool(in_footer),
+                                            negative_zone=self._is_negative_zone_path(url),
                                         )
-                                        out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
-                                        found_email = True
-                                        break
+                                        if score >= self._XDOM_THRESHOLD:
+                                            strong_ok, missing = self._xdom_min_confirmation(
+                                                has_phone=self._element_has_phone_hint_pw(el),
+                                                has_vcard=self._element_has_vcf_hint_pw(el),
+                                                page_repeat=int(page_count),
+                                                in_footer=bool(in_footer),
+                                                site_repeat=int(site_count),
+                                            )
+                                            if strong_ok:
+                                                accept = True
+                                                self._xdom_log_accept(email=cand, domain=edom, source_url=url, score=score, signals=sigs)
+                                            else:
+                                                print(f"cross-domain: недостаточно подтверждающих сигналов (email={cand}, domain={edom}). Нет: {', '.join(missing)}")
+                                        else:
+                                            print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+                                    if not accept:
+                                        continue
+                                    ev = self.evidence_builder.create_evidence_playwright(
+                                        source_url=url,
+                                        selector="a[aria|title*=email]",
+                                        page=page,
+                                        element=a,
+                                        verbatim_text=txt or cand,
+                                    )
+                                    out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
+                                    found_email = True
+                                    break
 
                         # EMAIL via icon envelope
                         if not found_email:
@@ -919,18 +1273,56 @@ class ContactExtractor:
                                 if not m:
                                     continue
                                 cand = m.group(0)
-                                edom = cand.split('@')[-1]
-                                if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
-                                    ev = self.evidence_builder.create_evidence_playwright(
-                                        source_url=url,
-                                        selector="i[class*='envelope']~a",
-                                        page=page,
-                                        element=a,
-                                        verbatim_text=txt or cand,
+                                edom = (cand.split('@')[-1] or '').lower()
+                                brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+                                free_ok = (allow_free_env and (edom in self.free_email_domains))
+                                accept = False
+                                if brand_match or free_ok:
+                                    accept = True
+                                else:
+                                    page_count = self._xdom_page_domain_count(edom)
+                                    site_count = self._xdom_site_domain_count(edom)
+                                    in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                                    score, sigs = self._xdom_score_static(
+                                        edom,
+                                        in_person_card=True,
+                                        has_title=bool(title and title.strip() and (title.lower() != 'unknown')),
+                                        from_mailto=False,
+                                        has_phone=self._element_has_phone_hint_pw(el),
+                                        has_vcard=self._element_has_vcf_hint_pw(el),
+                                        has_show_trigger=self._element_has_show_email_trigger_pw(el),
+                                        page_domain_count=int(page_count),
+                                        site_domain_count=int(site_count),
+                                        domain_in_footer=bool(in_footer),
+                                        negative_zone=self._is_negative_zone_path(url),
                                     )
-                                    out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
-                                    found_email = True
-                                    break
+                                    if score >= self._XDOM_THRESHOLD:
+                                        strong_ok, missing = self._xdom_min_confirmation(
+                                            has_phone=self._element_has_phone_hint_pw(el),
+                                            has_vcard=self._element_has_vcf_hint_pw(el),
+                                            page_repeat=int(page_count),
+                                            in_footer=bool(in_footer),
+                                            site_repeat=int(site_count),
+                                        )
+                                        if strong_ok:
+                                            accept = True
+                                            self._xdom_log_accept(email=cand, domain=edom, source_url=url, score=score, signals=sigs)
+                                        else:
+                                            print(f"cross-domain: недостаточно подтверждающих сигналов (email={cand}, domain={edom}). Нет: {', '.join(missing)}")
+                                    else:
+                                        print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+                                if not accept:
+                                    continue
+                                ev = self.evidence_builder.create_evidence_playwright(
+                                    source_url=url,
+                                    selector="i[class*='envelope']~a",
+                                    page=page,
+                                    element=a,
+                                    verbatim_text=txt or cand,
+                                )
+                                out.append(Contact(company=company_name, person_name=name, role_title=title or 'Unknown', contact_type=ContactType.EMAIL, contact_value=cand.lower(), evidence=ev, captured_at=ev.timestamp))
+                                found_email = True
+                                break
 
                         # EMAIL via text
                         if not found_email:
@@ -938,8 +1330,47 @@ class ContactExtractor:
                             m = self.email_pattern.search(card_text.lower())
                             if m:
                                 cand = m.group(0)
-                                edom = cand.split('@')[-1]
-                                if edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain) or (allow_free_env and (edom in self.free_email_domains)):
+                                edom = (cand.split('@')[-1] or '').lower()
+                                brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+                                free_ok = (allow_free_env and (edom in self.free_email_domains))
+                                accept = False
+                                if brand_match or free_ok:
+                                    accept = True
+                                else:
+                                    page_count = self._xdom_page_domain_count(edom)
+                                    site_count = self._xdom_site_domain_count(edom)
+                                    in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                                    score, sigs = self._xdom_score_static(
+                                        edom,
+                                        in_person_card=True,
+                                        has_title=bool(title and title.strip() and (title.lower() != 'unknown')),
+                                        from_mailto=False,
+                                        has_phone=self._element_has_phone_hint_pw(el),
+                                        has_vcard=self._element_has_vcf_hint_pw(el),
+                                        has_show_trigger=self._element_has_show_email_trigger_pw(el),
+                                        page_domain_count=int(page_count),
+                                        site_domain_count=int(site_count),
+                                        domain_in_footer=bool(in_footer),
+                                        negative_zone=self._is_negative_zone_path(url),
+                                    )
+                                    if score >= self._XDOM_THRESHOLD:
+                                        strong_ok, missing = self._xdom_min_confirmation(
+                                            has_phone=self._element_has_phone_hint_pw(el),
+                                            has_vcard=self._element_has_vcf_hint_pw(el),
+                                            page_repeat=int(page_count),
+                                            in_footer=bool(in_footer),
+                                            site_repeat=int(site_count),
+                                        )
+                                        if strong_ok:
+                                            accept = True
+                                            self._xdom_log_accept(email=cand, domain=edom, source_url=url, score=score, signals=sigs)
+                                        else:
+                                            print(f"cross-domain: недостаточно подтверждающих сигналов (email={cand}, domain={edom}). Нет: {', '.join(missing)}")
+                                    else:
+                                        print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+                                if not accept:
+                                    pass
+                                else:
                                     ev = self.evidence_builder.create_evidence_playwright(
                                         source_url=url,
                                         selector=":text-email(card)",
@@ -1078,6 +1509,14 @@ class ContactExtractor:
             except Exception:
                 phone_anchors = []
 
+        # Prepare per-page cross-domain context for fast sweep
+            try:
+                self._xdom_prepare_context_playwright(page, url)
+            except Exception:
+                self._page_mailto_counts = Counter()
+                self._footer_contact_text = ""
+                self._xdom_reset_or_update_site_counts(url)
+
             def _clean_name(txt: Optional[str]) -> Optional[str]:
                 if not txt:
                     return None
@@ -1128,15 +1567,63 @@ class ContactExtractor:
                                         break
                             except Exception:
                                 continue
-                    # Domain policy: accept if domain matches OR we have a valid person name nearby
-                    edom = email.split('@')[-1]
-                    domain_ok = (
-                        edom.endswith(site_domain)
-                        or self._email_domain_matches_site(edom, site_domain)
-                        or (allow_free_env and (edom in self.free_email_domains))
-                        or bool(name)
-                    )
-                    if not domain_ok:
+                    # Domain policy: accept brand OR score-based cross-domain
+                    edom = (email.split('@')[-1] or '').lower()
+                    brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+                    free_ok = (allow_free_env and (edom in self.free_email_domains))
+                    accept = False
+                    if brand_match or free_ok:
+                        accept = True
+                    else:
+                        # Signals: treat as person card if we found a nearby name
+                        page_count = self._xdom_page_domain_count(edom)
+                        in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                        has_phone_hint = False
+                        has_vcf_hint = False
+                        has_show_trigger = False
+                        try:
+                            container_txt = (container.text_content() or '') if container else ''
+                            has_show_trigger = bool(self._show_email_re.search(container_txt.lower())) if container_txt else False
+                            if container:
+                                try:
+                                    has_phone_hint = container.query_selector("a[href*='tel:']") is not None
+                                except Exception:
+                                    has_phone_hint = False
+                                try:
+                                    has_vcf_hint = container.query_selector("a[href$='.vcf']") is not None
+                                except Exception:
+                                    has_vcf_hint = False
+                        except Exception:
+                            pass
+                        score, sigs = self._xdom_score_static(
+                            edom,
+                            in_person_card=bool(name),
+                            has_title=bool(role and role.strip()),
+                            from_mailto=True,
+                            has_phone=bool(has_phone_hint),
+                            has_vcard=bool(has_vcf_hint),
+                            has_show_trigger=bool(has_show_trigger),
+                            page_domain_count=int(page_count),
+                            site_domain_count=int(self._xdom_site_domain_count(edom)),
+                            domain_in_footer=bool(in_footer),
+                            negative_zone=self._is_negative_zone_path(url),
+                        )
+                        if score >= self._XDOM_THRESHOLD:
+                            strong_ok, missing = self._xdom_min_confirmation(
+                                has_phone=bool(has_phone_hint),
+                                has_vcard=bool(has_vcf_hint),
+                                page_repeat=int(page_count),
+                                in_footer=bool(in_footer),
+                                site_repeat=int(self._xdom_site_domain_count(edom)),
+                            )
+                            if strong_ok:
+                                accept = True
+                                self._xdom_log_accept(email=email, domain=edom, source_url=url, score=score, signals=sigs)
+                            else:
+                                print(f"cross-domain: недостаточно подтверждающих сигналов (email={email}, domain={edom}). Нет: {', '.join(missing)}")
+                        else:
+                            print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+                    if not accept:
                         continue
                     if not name:
                         continue
@@ -1217,6 +1704,76 @@ class ContactExtractor:
         except Exception:
             return []
 
+    def _xdom_prepare_context_playwright(self, page: Page, source_url: str) -> None:
+        """Populate domain counts and footer/contact text from a Playwright Page."""
+        counts: Counter[str] = Counter()
+        try:
+            anchors = page.query_selector_all("a[href^='mailto']")
+        except Exception:
+            anchors = []
+        for a in anchors or []:
+            try:
+                href = (a.get_attribute('href') or '').strip()
+                txt = (a.text_content() or '').strip()
+                email = self._sanitize_mailto(href, txt) or self._deobfuscate_email(href) or self._deobfuscate_email(txt)
+                if not email or '@' not in email:
+                    continue
+                edom = email.split('@')[-1].lower()
+                counts[edom] += 1
+            except Exception:
+                continue
+        parts: List[str] = []
+        try:
+            for sel in ['footer', 'address', '.contact', '.contacts', '.contact-info', '.contact-us', "[class*='contact']"]:
+                try:
+                    for el in page.locator(sel).all():
+                        t = (el.text_content() or '').strip()
+                        if t:
+                            parts.append(t)
+                except Exception:
+                    continue
+        except Exception:
+            pass
+        self._page_mailto_counts = counts
+        self._footer_contact_text = '\n'.join(parts).lower()
+        self._xdom_reset_or_update_site_counts(source_url)
+
+    def _element_has_show_email_trigger_pw(self, el: Locator) -> bool:
+        try:
+            txt = (el.text_content() or '').lower()
+            if self._show_email_re.search(txt):
+                return True
+            # Also check visible button/anchor descendants
+            try:
+                nodes = el.locator('a, button, span, div').all()
+                for n in nodes:
+                    t = (n.text_content() or '').lower()
+                    if t and self._show_email_re.search(t):
+                        return True
+            except Exception:
+                pass
+        except Exception:
+            pass
+        return False
+
+    def _element_has_phone_hint_pw(self, el: Locator) -> bool:
+        try:
+            try:
+                if el.locator("a[href*='tel:']").count() > 0:
+                    return True
+            except Exception:
+                pass
+            txt = (el.text_content() or '')
+            return bool(self.phone_pattern.search(txt))
+        except Exception:
+            return False
+
+    def _element_has_vcf_hint_pw(self, el: Locator) -> bool:
+        try:
+            return el.locator("a[href$='.vcf']").count() > 0
+        except Exception:
+            return False
+
     def _extract_person_contacts_playwright(
         self,
         person_element: Locator,
@@ -1235,15 +1792,65 @@ class ContactExtractor:
         if not person_name or not person_title:
             return contacts
         
+        # Cross-domain signals at card level
+        has_phone_hint = self._element_has_phone_hint_pw(person_element)
+        has_vcf_hint = self._element_has_vcf_hint_pw(person_element)
+        has_show_trigger = self._element_has_show_email_trigger_pw(person_element)
+        negative_zone = self._is_negative_zone_path(source_url)
+        site_domain = urlparse(source_url).netloc.lower().replace('www.', '')
+        allow_free_env = os.getenv('EGC_ALLOW_FREE_EMAIL', '0') == '1'
+        
         # Extract emails
         emails = self._extract_emails_playwright(person_element)
         for email, email_element in emails:
             # Get verbatim text from the email element
             verbatim_text = email_element.text_content() or email
             
+            # Domain acceptance with cross-domain scoring
+            edom = (email.split('@')[-1] or '').lower()
+            brand_match = edom.endswith(site_domain) or self._email_domain_matches_site(edom, site_domain)
+            free_ok = (allow_free_env and (edom in self.free_email_domains))
+            accept = False
+            if brand_match or free_ok:
+                accept = True
+            else:
+                page_count = self._xdom_page_domain_count(edom)
+                site_count = self._xdom_site_domain_count(edom)
+                in_footer = self._xdom_domain_in_footer_or_contacts(edom)
+                score, sigs = self._xdom_score_static(
+                    edom,
+                    in_person_card=True,
+                    has_title=bool(person_title and person_title.strip()),
+                    from_mailto=True,
+                    has_phone=bool(has_phone_hint),
+                    has_vcard=bool(has_vcf_hint),
+                    has_show_trigger=bool(has_show_trigger),
+                    page_domain_count=int(page_count),
+                    site_domain_count=int(site_count),
+                    domain_in_footer=bool(in_footer),
+                    negative_zone=bool(negative_zone),
+                )
+                if score >= self._XDOM_THRESHOLD:
+                    strong_ok, missing = self._xdom_min_confirmation(
+                        has_phone=bool(has_phone_hint),
+                        has_vcard=bool(has_vcf_hint),
+                        page_repeat=int(page_count),
+                        in_footer=bool(in_footer),
+                        site_repeat=int(site_count),
+                    )
+                    if strong_ok:
+                        accept = True
+                        self._xdom_log_accept(email=email, domain=edom, source_url=source_url, score=score, signals=sigs)
+                    else:
+                        print(f"cross-domain: недостаточно подтверждающих сигналов (email={email}, domain={edom}). Нет: {', '.join(missing)}")
+                else:
+                    print(f"cross-domain: score ниже порога (score={score}, threshold={self._XDOM_THRESHOLD}, domain={edom})")
+            if not accept:
+                continue
+            
             evidence = self.evidence_builder.create_evidence_playwright(
                 source_url=source_url,
-                selector=f"{base_selector} a[href*='mailto:']",  # Generic email selector
+                selector=f"{base_selector} a[href*='mailto:']",  # keep selector clean
                 page=page,
                 element=email_element,
                 verbatim_text=verbatim_text
